@@ -1,9 +1,6 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 
-import type React from "react"
-
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState, useRef, useCallback } from "react"
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion"
 import { Particles } from "./particles"
 import { Card } from "@/components/ui/card"
@@ -13,29 +10,34 @@ import { Progress } from "@/components/ui/progress"
 export default function WorkInProgressPage() {
   const [mounted, setMounted] = useState(false)
   const [progress, setProgress] = useState(0)
+  const [height, setHeight] = useState(1000)
+  const [width, setWidth] = useState(1000)
+
   const containerRef = useRef<HTMLDivElement>(null)
 
-  // Mouse follow effect
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
 
   const smoothMouseX = useSpring(mouseX, { damping: 50, stiffness: 400 })
   const smoothMouseY = useSpring(mouseY, { damping: 50, stiffness: 400 })
 
-  const rotateX = useTransform(smoothMouseY, [0, window?.innerHeight || 1000], [5, -5])
-  const rotateY = useTransform(smoothMouseX, [0, window?.innerWidth || 1000], [-5, 5])
+  const rotateX = useTransform(smoothMouseY, [0, height], [5, -5])
+  const rotateY = useTransform(smoothMouseX, [0, width], [-5, 5])
 
-  // Handle mouse movement
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement> | MouseEvent) => {
+  const handleMouseMove = useCallback((e: MouseEvent) => {
     const { clientX, clientY } = e
     mouseX.set(clientX)
     mouseY.set(clientY)
-  }
+  }, [mouseX, mouseY])
 
   useEffect(() => {
     setMounted(true)
+    if (typeof window !== "undefined") {
+      setHeight(window.innerHeight)
+      setWidth(window.innerWidth)
+      window.addEventListener("mousemove", handleMouseMove)
+    }
 
-    // Simulate progress
     const timer = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 75) {
@@ -46,23 +48,18 @@ export default function WorkInProgressPage() {
       })
     }, 50)
 
-    // Add mouse move event listener to the window
-    window.addEventListener("mousemove", handleMouseMove)
-
     return () => {
       clearInterval(timer)
       window.removeEventListener("mousemove", handleMouseMove)
     }
-  }, [])
+  }, [handleMouseMove])
 
   if (!mounted) return null
 
   return (
     <div ref={containerRef} className="relative h-screen w-full overflow-hidden bg-black text-white">
-      {/* Particle background */}
       <Particles className="absolute inset-0" />
 
-      {/* Glowing orb that follows mouse with delay */}
       <motion.div
         className="pointer-events-none absolute h-64 w-64 rounded-full bg-gradient-to-r from-purple-500/30 to-cyan-500/30 blur-3xl"
         style={{
@@ -73,13 +70,9 @@ export default function WorkInProgressPage() {
         }}
       />
 
-      {/* Content card */}
       <div className="relative z-10 flex h-full w-full items-center justify-center px-4">
         <motion.div
-          style={{
-            rotateX,
-            rotateY,
-          }}
+          style={{ rotateX, rotateY }}
           className="perspective-1000"
         >
           <Card className="w-full max-w-md border border-white/10 bg-black/60 p-8 backdrop-blur-xl">
@@ -112,17 +105,6 @@ export default function WorkInProgressPage() {
                 </div>
                 <Progress value={progress} className="h-2 bg-white/10" />
               </div>
-
-              {/* <div className="grid grid-cols-2 gap-2">
-                <Button variant="outline" className="border-white/10 bg-white/5 hover:bg-white/10">
-                  <Mail className="mr-2 h-4 w-4" />
-                  Contact
-                </Button>
-                <Button variant="outline" className="border-white/10 bg-white/5 hover:bg-white/10">
-                  <ExternalLink className="mr-2 h-4 w-4" />
-                  Updates
-                </Button>
-              </div> */}
 
               <div className="flex justify-center space-x-4 pt-2">
                 <motion.a

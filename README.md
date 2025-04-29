@@ -1,76 +1,59 @@
-# 👋 Hello! I'm Ezequiel Vazquez
+<h1 align="center">Hi there, I'm Ezequiel 👋</h1>
 
-**Digital & IT Project Manager** | **Exploring Web Development**  
-📍 Based in Buenos Aires, Argentina  
-📫 [ezejvaz@gmail.com](mailto:ezejvaz@gmail.com) • [LinkedIn](https://www.linkedin.com/in/ezevazquez) • [GitHub](https://github.com/ezevazquez)
-
----
-
-## 🚀 About Me
-
-I'm a **Project Manager and Product Owner** with experience leading IT and digital projects across multiple industries. I specialize in managing cross-functional teams, aligning business goals with technical execution, and delivering high-impact digital products.
-
-While I lead large-scale projects by day, I explore **web development** by night — diving into **React**, **Next.js**, **TypeScript**, and **Django** to build tools, dashboards, and personal projects that expand my technical skillset.
+<p align="center">
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=22&pause=1000&color=7F61F6&center=true&vCenter=true&width=435&lines=Digital+PM+exploring+code;Web+Dev+%E2%9C%94;React%2C+Next.js%2C+Tailwind+%2B+TypeScript;Always+learning+something+new!" alt="Typing SVG" />
+</p>
 
 ---
 
-## 💼 Experience
+## 🧑‍💻 About Me
 
-### 🟣 Revolt Digital (Dec 2024 – Present)  
-**IT Project Manager**
-- Led planning and execution of large-scale Big Data pipeline initiatives.
-- Managed roadmaps, milestones, and stakeholder communication.
-- Oversaw cross-functional teams and resource planning.
-
-### 🟡 Aerolab Digital (Apr 2022 – Dec 2024)  
-**Digital Project Manager**
-- Directed client-facing digital product development from kickoff to launch.
-- Balanced strategic planning, team leadership, and risk mitigation.
-- Improved workflows and strengthened long-term client relationships.
-
-### 🔵 TA Telecomunicaciones (Jan 2017 – Apr 2022)  
-**Project Manager Assistant**
-- Supported IT, IoT, and DevOps initiatives with planning and coordination.
-- Assisted with vendor management, analytics, and reporting.
+- 🧭 **Digital & IT Project Manager** with a growing focus on **fullstack web development**
+- 🛠️ Currently diving deeper into **Next.js**, **TailwindCSS**, and **Sanity CMS**
+- 🌎 Building things for the web — clean UIs, developer tools, automations
+- 📍 Based in Buenos Aires, Argentina
 
 ---
 
-## 🛠️ Skills
+## 🧰 Tech Stack
 
-**Project Management**:  
-- Agile (Scrum, Kanban), Waterfall  
-- Roadmaps, stakeholder alignment, remote team leadership  
-- Risk, budget, and resource management
-
-**Technical Knowledge**:  
-- Web Dev: TypeScript, React (Next.js), Tailwind, Django  
-- Tools: Notion, Asana, Jira, GitHub, Bitbucket  
-- Platforms: Vercel, CMS (Sanity, Odoo)
-
-**Languages**:  
-- 🇪🇸 Spanish (Native)  
-- 🇬🇧 English (B2 - Intermediate)
+<p align="center">
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" />
+  <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white" />
+  <img src="https://img.shields.io/badge/React-20232a?style=for-the-badge&logo=react&logoColor=61DAFB" />
+  <img src="https://img.shields.io/badge/TailwindCSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" />
+  <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" />
+  <img src="https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white" />
+  <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" />
+</p>
 
 ---
 
-## 🎓 Education
+## 📊 GitHub Stats
 
-**Degree in Business Administration** (Advanced Student)  
-*Universidad Nacional de Córdoba*  
-(Expected 2025–2026)
-
-**Bachelor's Degree in English**  
-*International Baccalaureate – Feb 2013*
+<p align="center">
+  <img src="https://github-readme-stats.vercel.app/api?username=ezevazquez&show_icons=true&theme=tokyonight&hide=contribs,prs" height="160"/>
+  <img src="https://streak-stats.demolab.com?user=ezevazquez&theme=tokyonight" height="160"/>
+</p>
 
 ---
 
-## 🌱 Currently Exploring
+## 🔭 Projects & Goals
 
-- Building fullstack web apps with **Next.js**, **Tailwind**, and **Sanity CMS**
-- Improving cloud deployment and CI/CD workflows via **Vercel**
-- Enhancing PM processes with lightweight tools and automation
+- ✨ Build and publish side projects using my growing fullstack stack  
+- 🧠 Keep exploring **clean architecture**, **micro-frontends**, and **CMS workflows**
+- 💼 Apply my PM experience to ship better personal tech tools and automations
 
 ---
 
-Thanks for stopping by! 👇  
-If you're working on something exciting — whether it's product, tech, or digital strategy — let's connect!
+## 📬 Get In Touch
+
+- [LinkedIn](https://www.linkedin.com/in/ezevazquez)
+- [Personal Website](https://ezevazquez.vercel.app)
+- [GitHub](https://github.com/ezevazquez)
+
+---
+
+<p align="center">
+  <img src="https://komarev.com/ghpvc/?username=ezevazquez&label=Profile%20views&color=7f61f6&style=flat" alt="ezevazquez" />
+</p>

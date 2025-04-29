@@ -1,7 +1,7 @@
 <h1 align="center">Hi there, I'm Ezequiel 👋</h1>
 
 <p align="center">
-  <img src="https://git.io/typing-svg"><img src="https://readme-typing-svg.demolab.com?font=Fira+Code&pause=500&color=8744F7&center=true&width=435&lines=Turning+ideas+into+products;Driving+tech+and+product+delivery;From+roadmap+to+real+product;Building+scalable+digital+solutions" alt="Typing SVG" />
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&pause=500&color=8744F7&center=true&width=435&lines=Turning+ideas+into+products;Driving+tech+and+product+delivery;From+roadmap+to+real+product;Building+scalable+digital+solutions" alt="Typing SVG" />
 </p>
 
 ---

@@ -71,7 +71,7 @@
 
 <p align="center">
   <img src="https://github-readme-stats.vercel.app/api?username=ezevazquez&show_icons=true&theme=tokyonight&hide=contribs,prs&rank_icon=github" height="160" />
-  <img src="https://streak-stats.demolab.com?user=ezevazquez&theme=tokyonight" height="160" />
+  <!-- <img src="https://streak-stats.demolab.com?user=ezevazquez&theme=tokyonight" height="160" /> -->
   <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=ezevazquez&layout=compact&theme=tokyonight" height="160" />
 </p>
 

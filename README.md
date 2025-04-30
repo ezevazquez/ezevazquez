@@ -48,15 +48,6 @@
 
 ---
 
-## 📊 GitHub Stats
-
-<p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=ezevazquez&show_icons=true&theme=tokyonight&hide=contribs,prs" height="160"/>
-  <img src="https://streak-stats.demolab.com?user=ezevazquez&theme=tokyonight" height="160"/>
-</p>
-
----
-
 ## 📬 Get In Touch
 
 <p align="center">
@@ -72,6 +63,16 @@
   <a href="mailto:ezejvaz@gmail.com" target="_blank">
     <img src="https://img.shields.io/badge/Email-EA4335?style=for-the-badge&logo=gmail&logoColor=white" />
   </a>
+</p>
+
+---
+
+## 📊 GitHub Stats
+
+<p align="center">
+  <img src="https://github-readme-stats.vercel.app/api?username=ezevazquez&show_icons=true&theme=tokyonight&hide=contribs,prs&rank_icon=github" height="160" />
+  <img src="https://streak-stats.demolab.com?user=ezevazquez&theme=tokyonight" height="160" />
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=ezevazquez&layout=compact&theme=tokyonight" height="160" />
 </p>
 
 ---

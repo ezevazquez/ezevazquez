@@ -8,10 +8,10 @@
 
 ## 🧑‍💻 About me
 
-- 🧭 **Digital & IT Project Manager** with strong focus on **tech strategy, product design, and fullstack web development**
-- 🧠 Bridging the gap between business, design, and engineering teams
-- 🚀 Building clean UIs, developer tools, and digital automations
-- 🌎 Based in Buenos Aires, Argentina
+🧭 **Digital & IT Project Manager** with strong focus on **tech strategy, product design, and fullstack web development**
+🧠 Bridging the gap between business, design, and engineering teams
+🚀 Building clean UIs, developer tools, and digital automations
+🌎 Based in Buenos Aires, Argentina
 
 ---
 

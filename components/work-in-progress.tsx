@@ -6,6 +6,8 @@ import { Particles } from "./particles"
 import { Card } from "@/components/ui/card"
 import { Github, Mail, Linkedin } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+
 
 export default function WorkInProgressPage() {
   const [mounted, setMounted] = useState(false)
@@ -83,15 +85,10 @@ export default function WorkInProgressPage() {
               className="space-y-6"
             >
               <div className="space-y-2 text-center">
-                <motion.div
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ delay: 0.2, duration: 0.5 }}
-                  className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-purple-600 to-cyan-500"
-                >
-                  <div className="text-2xl font-bold">EV</div>
-                </motion.div>
-
+                <Avatar className="mx-auto mb-4 h-20 w-20 rounded-full p-1 shadow-lg">
+                  <AvatarImage src="/profile.png" className="rounded-full object-cover" />
+                  <AvatarFallback className="text-white">EV</AvatarFallback>
+                </Avatar>
                 <h1 className="text-3xl font-bold tracking-tight">Work in Progress</h1>
                 <p className="text-muted-foreground">
                   My personal website is currently under construction. Something amazing is coming soon.

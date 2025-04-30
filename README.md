@@ -6,7 +6,7 @@
 
 ---
 
-## 🧑‍💻 About Me
+## 🧑‍💻 About me
 
 - 🧭 **Digital & IT Project Manager** with strong focus on **tech strategy, product design, and fullstack web development**
 - 🧠 Bridging the gap between business, design, and engineering teams
@@ -15,7 +15,7 @@
 
 ---
 
-## 🧰 Tech Stack
+## 🧰 Tech stack
 
 <p align="center">
   <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" />
@@ -32,7 +32,7 @@
 
 ---
 
-## 🧩 Project & Productivity Tools
+## 🧩 Project & productivity tools
 
 <p align="center">
   <img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white" />
@@ -48,7 +48,7 @@
 
 ---
 
-## 📬 Get In Touch
+## 📬 Get in touch
 
 <p align="center">
   <a href="https://www.linkedin.com/in/ezevazquez" target="_blank">
@@ -67,7 +67,7 @@
 
 ---
 
-## 📊 GitHub Stats
+## 📊 GitHub stats
 
 <p align="center">
   <img src="https://github-readme-stats.vercel.app/api?username=ezevazquez&show_icons=true&theme=tokyonight&hide=contribs,prs&rank_icon=github" height="160" />

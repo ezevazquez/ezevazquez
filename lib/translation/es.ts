@@ -1,100 +1,96 @@
 export const es = {
-    nav: {
-      about: "Sobre mí",
-      experience: "Experiencia",
-      tools: "Herramientas",
-      contact: "Contacto",
-    },
-    hero: {
-      greeting: "Hola, soy",
-      name: "Ezequiel Vazquez",
-      title: "Gerente de Proyectos Digitales y TI",
-      subtitle: "Especializado en estrategia tecnológica, diseño de productos y desarrollo web full-stack",
-      cta: "Contáctame",
-      downloadCV: "Descargar CV",
-    },
-    about: {
-      title: "Sobre Mí",
-      content: [
-        "Soy un Gerente de Proyectos Digitales y TI con amplia experiencia en liderar equipos multifuncionales para entregar soluciones tecnológicas innovadoras.",
-        "Mi experiencia abarca el desarrollo de estrategias tecnológicas, diseño de productos y desarrollo web full-stack, lo que me permite cerrar la brecha entre la implementación técnica y los objetivos comerciales.",
-        "Me apasiona utilizar la tecnología para resolver problemas complejos y crear experiencias de usuario significativas. Mi enfoque combina conocimientos técnicos con pensamiento estratégico para impulsar resultados exitosos en los proyectos.",
-      ],
-    },
-    experience: {
-      title: "Experiencia",
-      downloadCV: "Descargar mi CV",
-      items: [
-        {
-          period: "2020 - Presente",
-          role: "Gerente Senior de Proyectos TI",
-          company: "Tech Innovations Inc.",
-          description:
-            "Liderando iniciativas de transformación digital y gestionando equipos multifuncionales para entregar soluciones tecnológicas a escala empresarial.",
-          achievements: [
-            "Entregué con éxito un importante proyecto de implementación de ERP, resultando en una mejora del 30% en la eficiencia operativa",
-            "Dirigí el desarrollo de una aplicación móvil orientada al cliente con más de 100,000 descargas",
-            "Implementé metodologías ágiles en toda la organización, reduciendo el tiempo de entrega de proyectos en un 25%",
-          ],
-        },
-        {
-          period: "2017 - 2020",
-          role: "Gerente de Producto",
-          company: "Digital Solutions Ltd.",
-          description:
-            "Gestioné el ciclo de vida del producto para soluciones SaaS, desde el concepto hasta el lanzamiento al mercado.",
-          achievements: [
-            "Desarrollé hojas de ruta y estrategias de productos que aumentaron la adopción de usuarios en un 40%",
-            "Colaboré con equipos de UX/UI para rediseñar productos principales, mejorando las puntuaciones de satisfacción del usuario en un 35%",
-            "Coordiné con equipos de desarrollo para implementar nuevas funciones basadas en comentarios de usuarios y tendencias del mercado",
-          ],
-        },
-        {
-          period: "2014 - 2017",
-          role: "Desarrollador Web",
-          company: "Creative Web Agency",
-          description: "Desarrollé aplicaciones web full-stack para clientes de diversas industrias.",
-          achievements: [
-            "Construí sitios web responsivos y fáciles de usar utilizando frameworks modernos de JavaScript",
-            "Implementé soluciones backend utilizando Node.js y Express",
-            "Colaboré con diseñadores para traducir conceptos visuales en aplicaciones web funcionales",
-          ],
-        },
-      ],
-    },
-    tools: {
-      title: "Herramientas y Stack Tecnológico",
-      categories: [
-        {
-          name: "Gestión de Proyectos",
-          items: ["Jira", "Asana", "Trello", "Microsoft Project", "Confluence", "Notion"],
-        },
-        {
-          name: "Desarrollo",
-          items: ["JavaScript", "TypeScript", "React", "Next.js", "Node.js", "Express", "HTML/CSS"],
-        },
-        {
-          name: "Diseño",
-          items: ["Figma", "Adobe XD", "Sketch", "Photoshop", "Illustrator"],
-        },
-        {
-          name: "DevOps",
-          items: ["Git", "GitHub", "GitLab", "Docker", "CI/CD", "AWS", "Vercel"],
-        },
-      ],
-    },
-    contact: {
-      title: "Contacto",
-      description: "No dudes en contactarme si deseas colaborar en un proyecto o simplemente quieres conectar!",
-      email: "ezejvaz@gmail.com",
-      social: {
-        github: "GitHub",
-        linkedin: "LinkedIn",
-        email: "Correo",
+  nav: {
+    about: "Sobre mí",
+    experience: "Experiencia",
+    tools: "Herramientas y Tecnología",
+    contact: "Contacto",
+  },
+  hero: {
+    greeting: "Hola, soy",
+    name: "Ezequiel Vazquez",
+    title: "Project Manager / Product Owner",
+    subtitle: "Desde Buenos Aires. Enfocado en estrategia tecnológica, entregas ágiles y ejecución de productos digitales.",
+    cta: "Contactame",
+    downloadCV: "Descargar CV",
+  },
+  about: {
+    title: "Sobre mí",
+    content: [
+      "Soy Project Manager y Product Owner especializado en proyectos digitales y de IT. Lidero equipos multidisciplinarios y entrego soluciones alineadas con los objetivos de negocio.",
+      "Tengo experiencia en metodologías ágiles, coordinación técnica y planificación estratégica para iniciativas de transformación digital y manejo de datos.",
+      "Con sólidos conocimientos en tecnologías web y herramientas cloud, actúo como puente entre los equipos técnicos y los stakeholders para asegurar transparencia y éxito.",
+    ],
+  },
+  experience: {
+    title: "Experiencia",
+    downloadCV: "Descargar mi CV",
+    items: [
+      {
+        period: "Dic. 2024 - Presente",
+        role: "IT Project Manager",
+        company: "Revolt Digital",
+        description: "Lidero un proyecto de Big Data a gran escala, aplicando metodologías ágiles y colaboración entre equipos para asegurar una entrega efectiva.",
+        achievements: [
+          "Planificación y ejecución de un pipeline de Big Data con entrega a tiempo",
+          "Desarrollo de roadmaps, hitos y seguimiento de desempeño alineado a la estrategia",
+          "Gestión de equipo multidisciplinario y optimización de flujos de trabajo",
+          "Enlace entre stakeholders y equipos técnicos para garantizar claridad y transparencia"
+        ],
       },
+      {
+        period: "Abr. 2022 - Dic. 2024",
+        role: "Project Manager Digital",
+        company: "Aerolab Digital",
+        description: "Gestión de productos digitales y relaciones con clientes, con foco en planificación, mitigación de riesgos y eficiencia del equipo.",
+        achievements: [
+          "Definición de objetivos y entregables para múltiples servicios digitales",
+          "Liderazgo en planificación de equipos, asignación de recursos y estrategias de mitigación",
+          "Mejora del rendimiento del equipo mediante feedback estructurado y optimización de procesos",
+          "Balance entre satisfacción del cliente y desarrollo de cuentas estratégicas"
+        ],
+      },
+      {
+        period: "Ene. 2018 - Abr. 2022",
+        role: "Asistente de Project Manager",
+        company: "TA Telecomunicaciones",
+        description: "Apoyo en proyectos de IT, IoT y DevOps mediante coordinación de equipos, gestión de proveedores y análisis de riesgos.",
+        achievements: [
+          "Facilitación de la comunicación con clientes y alineación de expectativas",
+          "Asistencia en negociaciones contractuales y coordinación con proveedores",
+          "Entrega de soluciones eficientes y rentables",
+          "Soporte analítico en gestión de riesgos"
+        ],
+      },
+    ],
+  },
+  tools: {
+    title: "Herramientas y Tecnología",
+    categories: [
+      {
+        name: "Gestión de Proyectos",
+        items: ["Notion", "Asana", "Confluence", "Jira"],
+      },
+      {
+        name: "Desarrollo",
+        items: ["Python (Django)", "TypeScript", "React (Next.js)", "CSS-in-JS", "TailwindCSS"],
+      },
+      {
+        name: "DevOps",
+        items: ["GitHub", "GitLab", "Bitbucket", "Vercel", "Sanity", "Odoo"],
+      },
+    ],
+  },
+  contact: {
+    title: "Contacto",
+    description: "No dudes en escribirme si querés colaborar en algún proyecto o simplemente conectar.",
+    email: "ezejvaz@gmail.com",
+    social: {
+      github: "https://github.com/ezevazquez",
+      linkedin: "https://linkedin.com/in/ezevazquez",
+      email: "ezejvaz@gmail.com",
     },
-    footer: {
-      copyright: "© 2024 Ezequiel Vazquez. Todos los derechos reservados.",
-    },
-  }
-  
+  },
+  footer: {
+    copyright: "© 2024 Ezequiel Vazquez. Todos los derechos reservados.",
+  },
+}

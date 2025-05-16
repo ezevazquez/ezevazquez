@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import type React from "react"
 import { createContext, useContext, useState, useEffect } from "react"
-import { translations, type Language } from "@/lib/translations"
+import { translations, type Language } from "@/lib/translation"
 
 type LanguageContextType = {
   language: Language

@@ -1,99 +1,96 @@
 export const en = {
-    nav: {
-      about: "About",
-      experience: "Experience",
-      tools: "Tools & Tech",
-      contact: "Contact",
-    },
-    hero: {
-      greeting: "Hello, I'm",
-      name: "Ezequiel Vazquez",
-      title: "Digital & IT Project Manager",
-      subtitle: "Focused on tech strategy, product design, and full-stack web development",
-      cta: "Get in touch",
-      downloadCV: "Download CV",
-    },
-    about: {
-      title: "About Me",
-      content: [
-        "I'm a Digital & IT Project Manager with extensive experience in leading cross-functional teams to deliver innovative technology solutions.",
-        "My expertise spans across tech strategy development, product design, and full-stack web development, allowing me to bridge the gap between technical implementation and business objectives.",
-        "I'm passionate about leveraging technology to solve complex problems and create meaningful user experiences. My approach combines technical knowledge with strategic thinking to drive successful project outcomes.",
-      ],
-    },
-    experience: {
-      title: "Experience",
-      downloadCV: "Download my CV",
-      items: [
-        {
-          period: "2020 - Present",
-          role: "Senior IT Project Manager",
-          company: "Tech Innovations Inc.",
-          description:
-            "Leading digital transformation initiatives and managing cross-functional teams to deliver enterprise-scale technology solutions.",
-          achievements: [
-            "Successfully delivered a major ERP implementation project, resulting in 30% operational efficiency improvement",
-            "Led the development of a customer-facing mobile application with 100,000+ downloads",
-            "Implemented agile methodologies across the organization, reducing project delivery time by 25%",
-          ],
-        },
-        {
-          period: "2017 - 2020",
-          role: "Product Manager",
-          company: "Digital Solutions Ltd.",
-          description: "Managed the product lifecycle for SaaS solutions, from concept to market launch.",
-          achievements: [
-            "Developed product roadmaps and strategies that increased user adoption by 40%",
-            "Collaborated with UX/UI teams to redesign core products, improving user satisfaction scores by 35%",
-            "Coordinated with development teams to implement new features based on user feedback and market trends",
-          ],
-        },
-        {
-          period: "2014 - 2017",
-          role: "Web Developer",
-          company: "Creative Web Agency",
-          description: "Developed full-stack web applications for clients across various industries.",
-          achievements: [
-            "Built responsive, user-friendly websites using modern JavaScript frameworks",
-            "Implemented backend solutions using Node.js and Express",
-            "Collaborated with designers to translate visual concepts into functional web applications",
-          ],
-        },
-      ],
-    },
-    tools: {
-      title: "Tools & Tech Stack",
-      categories: [
-        {
-          name: "Project Management",
-          items: ["Jira", "Asana", "Trello", "Microsoft Project", "Confluence", "Notion"],
-        },
-        {
-          name: "Development",
-          items: ["JavaScript", "TypeScript", "React", "Next.js", "Node.js", "Express", "HTML/CSS"],
-        },
-        {
-          name: "Design",
-          items: ["Figma", "Adobe XD", "Sketch", "Photoshop", "Illustrator"],
-        },
-        {
-          name: "DevOps",
-          items: ["Git", "GitHub", "GitLab", "Docker", "CI/CD", "AWS", "Vercel"],
-        },
-      ],
-    },
-    contact: {
-      title: "Get in Touch",
-      description: "Feel free to reach out if you'd like to collaborate on a project or just want to connect!",
-      email: "ezejvaz@gmail.com",
-      social: {
-        github: "GitHub",
-        linkedin: "LinkedIn",
-        email: "Email",
+  nav: {
+    about: "About",
+    experience: "Experience",
+    tools: "Tools & Tech",
+    contact: "Contact",
+  },
+  hero: {
+    greeting: "Hello, I'm",
+    name: "Ezequiel Vazquez",
+    title: "Project Manager / Product Owner",
+    subtitle: "Based in Buenos Aires. Focused on tech strategy, agile delivery, and digital product execution.",
+    cta: "Get in touch",
+    downloadCV: "Download CV",
+  },
+  about: {
+    title: "About Me",
+    content: [
+      "I'm a Project Manager and Product Owner specialized in digital and IT projects. I lead cross-functional teams and deliver impactful solutions aligned with business goals.",
+      "My background includes experience in Agile methodologies, technical coordination, and strategic planning for data-intensive and digital transformation initiatives.",
+      "With a strong foundation in web technologies and cloud tools, I act as a bridge between technical teams and business stakeholders to ensure success and transparency.",
+    ],
+  },
+  experience: {
+    title: "Experience",
+    downloadCV: "Download my CV",
+    items: [
+      {
+        period: "Dec. 2024 - Present",
+        role: "IT Project Manager",
+        company: "Revolt Digital",
+        description: "Leading a large-scale Big Data pipeline project and ensuring effective delivery through agile practices and cross-team collaboration.",
+        achievements: [
+          "Planned and executed a Big Data pipeline project with on-time delivery",
+          "Developed roadmaps, milestones, and performance tracking aligned with business strategy",
+          "Led a cross-functional team and optimized workflows",
+          "Acted as liaison between stakeholders and technical teams to ensure clarity and transparency"
+        ],
       },
+      {
+        period: "Apr. 2022 - Dec. 2024",
+        role: "Digital Project Manager",
+        company: "Aerolab Digital",
+        description: "Managed digital products and client relationships with focus on planning, risk mitigation, and team efficiency.",
+        achievements: [
+          "Defined project objectives and deliverables for multiple digital services",
+          "Led team planning, resource allocation, and risk mitigation strategies",
+          "Improved team performance through structured feedback and workflow improvements",
+          "Balanced client satisfaction with strategic account development"
+        ],
+      },
+      {
+        period: "Jan. 2018 - Apr. 2022",
+        role: "Project Manager Assistant",
+        company: "TA Telecomunicaciones",
+        description: "Supported IT, IoT, and DevOps projects by coordinating teams, managing vendors, and analyzing risks.",
+        achievements: [
+          "Facilitated communication and expectation alignment with clients",
+          "Assisted in contract negotiation and vendor coordination",
+          "Ensured cost-effective and timely delivery of solutions",
+          "Provided analytical support for risk management"
+        ],
+      },
+    ],
+  },
+  tools: {
+    title: "Tools & Tech Stack",
+    categories: [
+      {
+        name: "Project Management",
+        items: ["Notion", "Asana", "Confluence", "Jira"],
+      },
+      {
+        name: "Development",
+        items: ["Python (Django)", "TypeScript", "React (Next.js)", "CSS-in-JS", "TailwindCSS"],
+      },
+      {
+        name: "DevOps",
+        items: ["GitHub", "GitLab", "Bitbucket", "Vercel", "Sanity", "Odoo"],
+      },
+    ],
+  },
+  contact: {
+    title: "Get in Touch",
+    description: "Feel free to reach out if you'd like to collaborate on a project or just want to connect!",
+    email: "ezejvaz@gmail.com",
+    social: {
+      github: "https://github.com/ezevazquez",
+      linkedin: "https://linkedin.com/in/ezevazquez",
+      email: "ezejvaz@gmail.com",
     },
-    footer: {
-      copyright: "© 2024 Ezequiel Vazquez. All rights reserved.",
-    },
-  }
-  
+  },
+  footer: {
+    copyright: "© 2024 Ezequiel Vazquez. All rights reserved.",
+  },
+}

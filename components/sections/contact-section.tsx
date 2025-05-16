@@ -4,7 +4,6 @@ import { useRef } from "react"
 import { motion, useInView } from "framer-motion"
 import { useLanguage } from "../language-provider"
 import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import { Github, Linkedin, Mail } from "lucide-react"
 
 export function ContactSection() {
@@ -31,9 +30,33 @@ export function ContactSection() {
     },
   }
 
+  const contactLinks = [
+    {
+      name: "GitHub",
+      icon: <Github className="h-5 w-5" />,
+      url: "https://github.com/ezevazquez",
+      displayUrl: "github.com/ezevazquez",
+      color: "bg-gray-800 hover:bg-gray-700 text-white",
+    },
+    {
+      name: "LinkedIn",
+      icon: <Linkedin className="h-5 w-5" />,
+      url: "https://linkedin.com/in/ezevazquez",
+      displayUrl: "linkedin.com/in/ezevazquez",
+      color: "bg-[#0077B5] hover:bg-[#0066a1] text-white",
+    },
+    {
+      name: "Email",
+      icon: <Mail className="h-5 w-5" />,
+      url: `mailto:${t("contact.email")}`,
+      displayUrl: t("contact.email"),
+      color: "bg-purple-600 hover:bg-purple-700 text-white",
+    },
+  ]
+
   return (
     <section id="contact" className="py-20 px-4 relative bg-black/40">
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         <motion.div
           ref={ref}
           variants={containerVariants}
@@ -45,55 +68,34 @@ export function ContactSection() {
             {t("contact.title")}
           </motion.h2>
 
-          <Card className="border border-white/10 bg-black/60 backdrop-blur-xl overflow-hidden">
-            <CardContent className="p-8 text-center">
-              <motion.p variants={itemVariants} className="text-lg mb-8">
+          <Card className="border border-white/20 bg-gray-900/80 backdrop-blur-xl overflow-hidden shadow-[0_0_15px_rgba(139,92,246,0.1)]">
+            <CardContent className="p-8">
+              <motion.p variants={itemVariants} className="text-lg mb-10 text-center text-gray-200">
                 {t("contact.description")}
               </motion.p>
 
-              <motion.div
-                variants={itemVariants}
-                className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8"
-              >
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="w-full sm:w-auto border-white/20 hover:bg-white/5"
-                  asChild
-                >
-                  <a href="https://github.com/ezevazquez" target="_blank" rel="noopener noreferrer">
-                    <Github className="mr-2 h-5 w-5" />
-                    {t("contact.social.github")}
+              <motion.div variants={itemVariants} className="flex flex-col space-y-4">
+                {contactLinks.map((link, index) => (
+                  <a
+                    key={index}
+                    href={link.url}
+                    target={link.name !== "Email" ? "_blank" : undefined}
+                    rel={link.name !== "Email" ? "noopener noreferrer" : undefined}
+                    className="block w-full"
+                  >
+                    <div
+                      className={`flex items-center p-4 rounded-lg ${link.color} transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg`}
+                    >
+                      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-white/20 mr-4">
+                        {link.icon}
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-sm font-medium opacity-80">{link.name}</span>
+                        <span className="font-medium">{link.displayUrl}</span>
+                      </div>
+                    </div>
                   </a>
-                </Button>
-
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="w-full sm:w-auto border-white/20 hover:bg-white/5"
-                  asChild
-                >
-                  <a href="https://linkedin.com/in/ezevazquez" target="_blank" rel="noopener noreferrer">
-                    <Linkedin className="mr-2 h-5 w-5" />
-                    {t("contact.social.linkedin")}
-                  </a>
-                </Button>
-
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="w-full sm:w-auto border-white/20 hover:bg-white/5"
-                  asChild
-                >
-                  <a href={`mailto:${t("contact.email")}`}>
-                    <Mail className="mr-2 h-5 w-5" />
-                    {t("contact.social.email")}
-                  </a>
-                </Button>
-              </motion.div>
-
-              <motion.div variants={itemVariants} className="text-center">
-                <p className="text-gray-400">{t("contact.email")}</p>
+                ))}
               </motion.div>
             </CardContent>
           </Card>

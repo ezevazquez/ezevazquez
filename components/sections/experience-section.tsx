@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
 import { useRef } from "react"
@@ -10,7 +9,7 @@ import { Badge } from "@/components/ui/badge"
 import { CVDownloadButton } from "../cv-download-button"
 
 export function ExperienceSection() {
-  const { t, language } = useLanguage()
+  const { t } = useLanguage()
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, amount: 0.1 })
 
@@ -63,24 +62,27 @@ export function ExperienceSection() {
           <div className="space-y-8">
             {t("experience.items").map((item: any, index: number) => (
               <motion.div key={index} variants={itemVariants}>
-                <Card className="border border-white/10 bg-black/60 backdrop-blur-xl overflow-hidden">
+                <Card className="border border-white/20 bg-gray-900/80 backdrop-blur-xl overflow-hidden shadow-[0_0_15px_rgba(139,92,246,0.1)]">
                   <CardContent className="p-6 md:p-8">
                     <div className="flex flex-col md:flex-row md:items-start gap-4 md:gap-8">
                       <div className="md:w-1/3">
-                        <Badge variant="outline" className="mb-2 text-xs font-normal">
+                        <Badge
+                          variant="outline"
+                          className="mb-2 text-xs font-normal border-purple-400/30 text-purple-300"
+                        >
                           {item.period}
                         </Badge>
-                        <h3 className="text-xl font-bold mb-1">{item.role}</h3>
+                        <h3 className="text-xl font-bold mb-1 text-white">{item.role}</h3>
                         <p className="text-primary">{item.company}</p>
                       </div>
 
                       <div className="md:w-2/3">
-                        <p className="text-gray-300 mb-4">{item.description}</p>
+                        <p className="text-gray-200 mb-4">{item.description}</p>
                         <div className="space-y-2">
-                          <h4 className="text-sm font-medium text-gray-400">Key Achievements:</h4>
+                          <h4 className="text-sm font-medium text-gray-300">Key Achievements:</h4>
                           <ul className="list-disc pl-5 space-y-1">
                             {item.achievements.map((achievement: string, i: number) => (
-                              <li key={i} className="text-sm text-gray-300">
+                              <li key={i} className="text-sm text-gray-200">
                                 {achievement}
                               </li>
                             ))}

@@ -117,6 +117,6 @@ export const en = {
     },
   },
   footer: {
-    copyright: "© 2024 Ezequiel Vazquez. All rights reserved.",
+    copyright: "Thanks for coming all the way down here :)",
   },
 }

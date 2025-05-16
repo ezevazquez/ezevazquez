@@ -1,5 +1,5 @@
-import WorkInProgressPage from "@/components/work-in-progress"
+import ProfilePage from "@/components/profile-page"
 
 export default function Home() {
-  return <WorkInProgressPage />
+  return <ProfilePage />
 }

@@ -68,18 +68,44 @@ export const es = {
     categories: [
       {
         name: "Gestión de Proyectos",
-        items: ["Notion", "Asana", "Confluence", "Jira"],
+        items: [
+          "Notion",
+          "Asana",
+          "Confluence",
+          "Jira",
+          "Trello",
+          "ClickUp",
+          "Microsoft Suite",
+          "Google Suite",
+          "Miro"
+        ],
       },
       {
-        name: "Desarrollo",
-        items: ["Python (Django)", "TypeScript", "React (Next.js)", "CSS-in-JS", "TailwindCSS"],
-      },
-      {
-        name: "DevOps",
-        items: ["GitHub", "GitLab", "Bitbucket", "Vercel", "Sanity", "Odoo"],
-      },
+        name: "Herramientas IT",
+        items: [
+          "GitHub",
+          "GitLab",
+          "Bitbucket",
+          "Python (Django)",
+          "TypeScript",
+          "React (Next.js)",
+          "TailwindCSS",
+          "CSS-in-JS",
+          "Sanity CMS",
+          "Odoo",
+          "Vercel",
+          "Docker",
+          "CI/CD pipelines",
+          "PostgreSQL",
+          "CMS Headless",
+          "HTML5/CSS3",
+          "REST APIs",
+          "Google Cloud Platform",
+          "Firebase"
+        ],
+      }
     ],
-  },
+  },  
   contact: {
     title: "Contacto",
     description: "No dudes en escribirme si querés colaborar en algún proyecto o simplemente conectar.",

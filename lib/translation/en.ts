@@ -68,18 +68,44 @@ export const en = {
     categories: [
       {
         name: "Project Management",
-        items: ["Notion", "Asana", "Confluence", "Jira"],
+        items: [
+          "Notion",
+          "Asana",
+          "Confluence",
+          "Jira",
+          "Trello",
+          "ClickUp",
+          "Microsoft Teams",
+          "Google Teams",
+          "Miro"
+        ],
       },
       {
-        name: "Development",
-        items: ["Python (Django)", "TypeScript", "React (Next.js)", "CSS-in-JS", "TailwindCSS"],
-      },
-      {
-        name: "DevOps",
-        items: ["GitHub", "GitLab", "Bitbucket", "Vercel", "Sanity", "Odoo"],
-      },
+        name: "IT Tools",
+        items: [
+          "GitHub",
+          "GitLab",
+          "Bitbucket",
+          "Python (Django)",
+          "TypeScript",
+          "React (Next.js)",
+          "TailwindCSS",
+          "CSS-in-JS",
+          "Sanity CMS",
+          "Odoo",
+          "Vercel",
+          "Docker",
+          "CI/CD pipelines",
+          "PostgreSQL",
+          "Headless CMS",
+          "HTML5/CSS3",
+          "REST APIs",
+          "Google Cloud Platform",
+          "Firebase"
+        ],
+      }
     ],
-  },
+  },  
   contact: {
     title: "Get in Touch",
     description: "Feel free to reach out if you'd like to collaborate on a project or just want to connect!",

@@ -43,11 +43,11 @@ export function AboutSection() {
             {t("about.title")}
           </motion.h2>
 
-          <Card className="border border-white/10 bg-black/60 backdrop-blur-xl overflow-hidden">
+          <Card className="border border-white/20 bg-gray-900/80 backdrop-blur-xl overflow-hidden shadow-[0_0_15px_rgba(139,92,246,0.1)]">
             <CardContent className="p-8">
               <div className="space-y-6">
                 {t("about.content").map((paragraph: string, index: number) => (
-                  <motion.p key={index} variants={itemVariants} className="text-lg leading-relaxed">
+                  <motion.p key={index} variants={itemVariants} className="text-lg leading-relaxed text-gray-200">
                     {paragraph}
                   </motion.p>
                 ))}

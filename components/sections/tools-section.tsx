@@ -56,7 +56,7 @@ export function ToolsSection() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {t("tools.categories").map((category: any, index: number) => (
               <motion.div key={index} variants={itemVariants}>
-                <Card className="h-full border border-white/10 bg-black/60 backdrop-blur-xl overflow-hidden">
+                <Card className="h-full border border-white/20 bg-gray-900/80 backdrop-blur-xl overflow-hidden shadow-[0_0_15px_rgba(139,92,246,0.1)]">
                   <CardContent className="p-6">
                     <h3 className="text-xl font-bold mb-4 text-primary">{category.name}</h3>
                     <div className="flex flex-wrap gap-2">
@@ -64,7 +64,7 @@ export function ToolsSection() {
                         <motion.span
                           key={i}
                           variants={toolItemVariants}
-                          className="px-3 py-1.5 bg-white/5 rounded-full text-sm hover:bg-white/10 transition-colors cursor-default"
+                          className="px-3 py-1.5 bg-gray-800/80 rounded-full text-sm hover:bg-gray-700/80 transition-colors cursor-default text-gray-200"
                           whileHover={{ scale: 1.05 }}
                         >
                           {tool}

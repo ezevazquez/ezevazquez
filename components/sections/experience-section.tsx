@@ -9,7 +9,8 @@ import { Badge } from "@/components/ui/badge"
 import { CVDownloadButton } from "../cv-download-button"
 
 export function ExperienceSection() {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
+
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, amount: 0.1 })
 
@@ -79,7 +80,9 @@ export function ExperienceSection() {
                       <div className="md:w-2/3">
                         <p className="text-gray-200 mb-4">{item.description}</p>
                         <div className="space-y-2">
-                          <h4 className="text-sm font-medium text-gray-300">Key Achievements:</h4>
+                          <h4 className="text-sm font-medium text-gray-300">
+                            {language === "es" ? "Experiencias:" : "Key Achievements:"}
+                          </h4>
                           <ul className="list-disc pl-5 space-y-1">
                             {item.achievements.map((achievement: string, i: number) => (
                               <li key={i} className="text-sm text-gray-200">

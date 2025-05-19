@@ -49,19 +49,11 @@ export function Navbar() {
         animate={{ y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <motion.div
-            className="text-xl font-bold"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-          >
-            EV
-          </motion.div>
-
+        <div className="relative max-w-7xl mx-auto flex items-center justify-between">
           {!isMobile ? (
-            <div className="flex items-center space-x-8">
-              <div className="flex space-x-6">
+            <>
+              {/* Nav items centrados */}
+              <div className="absolute left-1/2 transform -translate-x-1/2 flex space-x-8">
                 {navItems.map((item, index) => (
                   <motion.a
                     key={item.href}
@@ -80,18 +72,27 @@ export function Navbar() {
                   </motion.a>
                 ))}
               </div>
-              <CVDownloadButton
-                textKey="hero.downloadCV"
-                variant="outline"
-                size="sm"
-                className="border-white/20 hover:bg-white/10"
-              />
-              <LanguageSwitcher />
-            </div>
+
+              {/* Botones a la derecha */}
+              <div className="flex items-center space-x-4 ml-auto">
+                <CVDownloadButton
+                  textKey="hero.downloadCV"
+                  variant="outline"
+                  size="sm"
+                  className="border-white/20 hover:bg-white/10"
+                />
+                <LanguageSwitcher />
+              </div>
+            </>
           ) : (
             <div className="flex items-center space-x-4">
               <LanguageSwitcher />
-              <Button variant="ghost" size="icon" onClick={() => setMobileMenuOpen(true)} className="lg:hidden">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setMobileMenuOpen(true)}
+                className="lg:hidden"
+              >
                 <Menu className="h-6 w-6" />
               </Button>
             </div>
@@ -99,21 +100,25 @@ export function Navbar() {
         </div>
       </motion.nav>
 
+      {/* Menú mobile */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            className="fixed inset-0 bg-black z-50 flex flex-col p-6"
+            className="fixed inset-0 bg-black z-50 flex flex-col items-center justify-center p-6"
             initial={{ opacity: 0, x: "100%" }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: "100%" }}
             transition={{ duration: 0.3 }}
           >
-            <div className="flex justify-between items-center mb-10">
-              <div className="text-xl font-bold">EV</div>
-              <Button variant="ghost" size="icon" onClick={() => setMobileMenuOpen(false)}>
-                <X className="h-6 w-6" />
-              </Button>
-            </div>
+            <div className="absolute top-4 left-4 text-xl font-bold">EV</div>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setMobileMenuOpen(false)}
+              className="absolute top-4 right-4"
+            >
+              <X className="h-6 w-6" />
+            </Button>
 
             <div className="flex flex-col space-y-6 items-center justify-center flex-1">
               {navItems.map((item, index) => (

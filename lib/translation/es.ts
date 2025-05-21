@@ -29,9 +29,9 @@ export const es = {
         period: "Dic. 2024 - Presente",
         role: "IT Project Manager",
         company: "Revolt Digital",
-        description: "Lidero un proyecto de Big Data a gran escala, aplicando metodologías ágiles y colaboración entre equipos para asegurar una entrega efectiva.",
+        description: "Lidero un proyecto de Big Data a gran escala, aplicando metodologías ágiles y colaboración entre equipos.",
         achievements: [
-          "Planificación y ejecución de un pipeline de Big Data con entrega a tiempo",
+          "Planificación y ejecución de un pipeline de Big Data",
           "Desarrollo de roadmaps, hitos y seguimiento de desempeño alineado a la estrategia",
           "Gestión de equipo multidisciplinario y optimización de flujos de trabajo",
           "Enlace entre stakeholders y equipos técnicos para garantizar claridad y transparencia"

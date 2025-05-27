@@ -11,7 +11,7 @@ export const en = {
     title: "Project Manager / Product Owner",
     subtitle: "Based in Buenos Aires. Focused on tech strategy, agile delivery, and digital product execution.",
     cta: "Get in touch",
-    downloadCV: "Download CV",
+    downloadCV: "My CV",
   },
   about: {
     title: "About Me",
@@ -29,36 +29,39 @@ export const en = {
         period: "Dec. 2024 - Present",
         role: "IT Project Manager",
         company: "Revolt Digital",
-        description: "Leading a large-scale Big Data pipeline project through agile practices and cross-team collaboration.",
+        description:
+          "Leading a large-scale Big Data pipeline project through agile practices and cross-team collaboration.",
         achievements: [
           "Planned and executed a Big Data pipeline project",
           "Developed roadmaps, milestones, and performance tracking aligned with business strategy",
           "Led a cross-functional team and optimized workflows",
-          "Acted as liaison between stakeholders and technical teams to ensure clarity and transparency"
+          "Acted as liaison between stakeholders and technical teams to ensure clarity and transparency",
         ],
       },
       {
         period: "Apr. 2022 - Dec. 2024",
         role: "Digital Project Manager",
         company: "Aerolab Digital",
-        description: "Managed digital products and client relationships with focus on planning, risk mitigation, and team efficiency.",
+        description:
+          "Managed digital products and client relationships with focus on planning, risk mitigation, and team efficiency.",
         achievements: [
           "Defined project objectives and deliverables for multiple digital services",
           "Led team planning, resource allocation, and risk mitigation strategies",
           "Improved team performance through structured feedback and workflow improvements",
-          "Balanced client satisfaction with strategic account development"
+          "Balanced client satisfaction with strategic account development",
         ],
       },
       {
         period: "Jan. 2018 - Apr. 2022",
         role: "Project Manager Assistant",
         company: "TA Telecomunicaciones",
-        description: "Supported IT, IoT, and DevOps projects by coordinating teams, managing vendors, and analyzing risks.",
+        description:
+          "Supported IT, IoT, and DevOps projects by coordinating teams, managing vendors, and analyzing risks.",
         achievements: [
           "Facilitated communication and expectation alignment with clients",
           "Assisted in contract negotiation and vendor coordination",
           "Ensured cost-effective and timely delivery of solutions",
-          "Provided analytical support for risk management"
+          "Provided analytical support for risk management",
         ],
       },
     ],
@@ -78,7 +81,7 @@ export const en = {
           "ClickUp",
           "Microsoft",
           "Google Workspace",
-          "Miro"
+          "Miro",
         ],
       },
       {
@@ -98,11 +101,11 @@ export const en = {
           "Docker",
           "PostgreSQL",
           "Headless CMS",
-          "REST APIs"
+          "REST APIs",
         ],
-      }
+      },
     ],
-  },  
+  },
   contact: {
     title: "Get in Touch",
     description: "Feel free to reach out if you'd like to collaborate on a project or just want to connect!",
@@ -112,6 +115,18 @@ export const en = {
       linkedin: "https://linkedin.com/in/ezevazquez",
       email: "ezejvaz@gmail.com",
     },
+  },
+  cvPreview: {
+    title: "My resume",
+    subtitle: "This is me :)",
+    backToHome: "Back to Home",
+    downloadCV: "Download CV",
+    loading: "Loading CV...",
+    fallbackTitle: "PDF Preview",
+    fallbackMessage:
+      "If the PDF doesn't display properly in your browser, you can download it directly using the button below.",
+    additionalInfo: "Interested in working together? Let's connect!",
+    getInTouch: "Get in Touch",
   },
   footer: {
     copyright: "Thanks for coming all the way down here :)",

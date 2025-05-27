@@ -56,6 +56,7 @@ export function ExperienceSection() {
                 textKey="experience.downloadCV"
                 variant="outline"
                 className="border-white/20 hover:bg-white/10"
+                directDownload={true}
               />
             </motion.div>
           </div>

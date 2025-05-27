@@ -5,27 +5,36 @@ import { Button } from "@/components/ui/button"
 import { FileDown } from "lucide-react"
 import type { ButtonProps } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { useRouter } from "next/navigation"
 
 interface CVDownloadButtonProps extends ButtonProps {
   textKey: string
   className?: string
+  directDownload?: boolean
 }
 
-export function CVDownloadButton({ textKey, className, ...props }: CVDownloadButtonProps) {
+export function CVDownloadButton({ textKey, className, directDownload = false, ...props }: CVDownloadButtonProps) {
   const { t, language } = useLanguage()
+  const router = useRouter()
 
-  const downloadCV = () => {
-    const fileName = language === "en" ? "cv-en.pdf" : "cv-es.pdf"
-    const link = document.createElement("a")
-    link.href = `/cv/${fileName}`
-    link.setAttribute("download", fileName)
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
+  const handleClick = () => {
+    if (directDownload) {
+      // Direct download functionality
+      const fileName = language === "en" ? "cv-en.pdf" : "cv-es.pdf"
+      const link = document.createElement("a")
+      link.href = `/cv/${fileName}`
+      link.setAttribute("download", fileName)
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    } else {
+      // Navigate to CV preview page
+      router.push("/cv")
+    }
   }
 
   return (
-    <Button onClick={downloadCV} className={cn("group", className)} {...props}>
+    <Button onClick={handleClick} className={cn("group", className)} {...props}>
       <FileDown className="mr-2 h-5 w-5 transition-transform group-hover:scale-110" />
       {t(textKey)}
     </Button>

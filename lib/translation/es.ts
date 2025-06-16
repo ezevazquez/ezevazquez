@@ -8,9 +8,9 @@ export const es = {
   hero: {
     greeting: "Hola, soy",
     name: "Ezequiel Vazquez",
-    title: "Project Manager / Product Owner",
+    title: "Project & Product Owner",
     subtitle:
-      "Desde Buenos Aires. Enfocado en estrategia tecnológica, entregas ágiles y ejecución de productos digitales.",
+      "Enfocado en estrategia tecnológica, entregas ágiles y ejecución de productos digitales.",
     cta: "Contactame",
     downloadCV: "Mi CV",
   },
@@ -71,7 +71,7 @@ export const es = {
     title: "Herramientas y Tecnología",
     categories: [
       {
-        name: "Gestión de Proyectos",
+        name: "Gestión de productos",
         items: [
           "Notion",
           "Asana",
@@ -109,7 +109,8 @@ export const es = {
   },
   contact: {
     title: "Contacto",
-    description: "No dudes en escribirme si querés colaborar en algún proyecto o simplemente conectar.",
+    description:
+      "No dudes en escribirme si querés colaborar en algún proyecto o simplemente conectar.",
     email: "ezejvaz@gmail.com",
     social: {
       github: "https://github.com/ezevazquez",
@@ -132,4 +133,4 @@ export const es = {
   footer: {
     copyright: "Gracias por llegar hasta acá abajo :)",
   },
-}
+};

@@ -8,7 +8,7 @@ export const es = {
   hero: {
     greeting: "Hola, soy",
     name: "Ezequiel Vazquez",
-    title: "Project & Product Owner",
+    title: "Project & Product Manager",
     subtitle:
       "Enfocado en estrategia tecnológica, entregas ágiles y ejecución de productos digitales.",
     cta: "Contactame",

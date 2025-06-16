@@ -8,10 +8,11 @@ export const en = {
   hero: {
     greeting: "Hello, I'm",
     name: "Ezequiel Vazquez",
-    title: "Project Manager / Product Owner",
-    subtitle: "Based in Buenos Aires. Focused on tech strategy, agile delivery, and digital product execution.",
+    title: "Project & Product Owner",
+    subtitle:
+      "Based in Buenos Aires. Focused on tech strategy, agile delivery, and digital product execution.",
     cta: "Get in touch",
-    downloadCV: "My CV",
+    downloadCV: "My resume",
   },
   about: {
     title: "About Me",
@@ -23,7 +24,7 @@ export const en = {
   },
   experience: {
     title: "Experience",
-    downloadCV: "Download my CV",
+    downloadCV: "Download my resume",
     items: [
       {
         period: "Dec. 2024 - Present",
@@ -70,7 +71,7 @@ export const en = {
     title: "Tools & Tech Stack",
     categories: [
       {
-        name: "Project Management",
+        name: "Product Management",
         items: [
           "Notion",
           "Asana",
@@ -108,7 +109,8 @@ export const en = {
   },
   contact: {
     title: "Get in Touch",
-    description: "Feel free to reach out if you'd like to collaborate on a project or just want to connect!",
+    description:
+      "Feel free to reach out if you'd like to collaborate on a project or just want to connect!",
     email: "ezejvaz@gmail.com",
     social: {
       github: "https://github.com/ezevazquez",
@@ -120,8 +122,8 @@ export const en = {
     title: "My resume",
     subtitle: "This is me :)",
     backToHome: "Back to Home",
-    downloadCV: "Download CV",
-    loading: "Loading CV...",
+    downloadCV: "Download resume",
+    loading: "Loading resume...",
     fallbackTitle: "PDF Preview",
     fallbackMessage:
       "If the PDF doesn't display properly in your browser, you can download it directly using the button below.",
@@ -131,4 +133,4 @@ export const en = {
   footer: {
     copyright: "Thanks for coming all the way down here :)",
   },
-}
+};

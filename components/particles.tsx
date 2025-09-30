@@ -56,7 +56,7 @@ export const Particles = ({ className = "" }: ParticlesProps) => {
         },
         particles: {
           color: {
-            value: ["#9c27b0", "#00bcd4", "#3f51b5"],
+            value: ["#3b82f6", "#00bcd4", "#1e40af"],
           },
           links: {
             color: "#ffffff",

@@ -70,7 +70,7 @@ export function ExperienceSection() {
                       <div className="md:w-1/3">
                         <Badge
                           variant="outline"
-                          className="mb-2 text-xs font-normal border-purple-400/30 text-purple-300"
+                          className="mb-2 text-xs font-normal border-blue-400/30 text-blue-300"
                         >
                           {item.period}
                         </Badge>

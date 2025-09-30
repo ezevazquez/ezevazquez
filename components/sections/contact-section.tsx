@@ -50,7 +50,7 @@ export function ContactSection() {
       icon: <Mail className="h-5 w-5" />,
       url: `mailto:${t("contact.email")}`,
       displayUrl: t("contact.email"),
-      color: "bg-purple-600 hover:bg-purple-700 text-white",
+      color: "bg-blue-600 hover:bg-blue-700 text-white",
     },
   ]
 
@@ -102,7 +102,7 @@ export function ContactSection() {
         </motion.div>
       </div>
 
-      <div className="absolute top-1/2 left-0 w-[300px] h-[300px] bg-gradient-radial from-purple-500/10 to-transparent rounded-full blur-3xl -z-10" />
+      <div className="absolute top-1/2 left-0 w-[300px] h-[300px] bg-gradient-radial from-blue-500/10 to-transparent rounded-full blur-3xl -z-10" />
     </section>
   )
 }

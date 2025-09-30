@@ -35,7 +35,7 @@ export function HeroSection() {
       style={{ opacity }}
     >
       <motion.div className="absolute inset-0 flex items-center justify-center" style={{ y }}>
-        <div className="absolute inset-0 bg-gradient-radial from-purple-500/10 to-transparent opacity-50" />
+        <div className="absolute inset-0 bg-gradient-radial from-blue-500/10 to-transparent opacity-50" />
       </motion.div>
 
       <div className="relative z-10 max-w-4xl mx-auto text-center">
@@ -61,7 +61,7 @@ export function HeroSection() {
         </motion.p>
 
         <motion.h1
-          className="text-5xl md:text-7xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-purple-300"
+          className="text-5xl md:text-7xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-300"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.5 }}
@@ -101,7 +101,7 @@ export function HeroSection() {
                 contactSection.scrollIntoView({ behavior: "smooth" })
               }
             }}
-            className="bg-gradient-to-r from-purple-600 to-violet-500 hover:from-purple-700 hover:to-violet-600"
+            className="bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600"
           >
             {t("hero.cta")}
           </Button>

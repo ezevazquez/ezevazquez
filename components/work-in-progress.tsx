@@ -63,7 +63,7 @@ export default function WorkInProgressPage() {
       <Particles className="absolute inset-0" />
 
       <motion.div
-        className="pointer-events-none absolute h-64 w-64 rounded-full bg-gradient-to-r from-purple-500/30 to-cyan-500/30 blur-3xl"
+        className="pointer-events-none absolute h-64 w-64 rounded-full bg-gradient-to-r from-blue-500/30 to-cyan-500/30 blur-3xl"
         style={{
           x: smoothMouseX,
           y: smoothMouseY,

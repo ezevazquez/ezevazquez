@@ -66,7 +66,7 @@ export function CVPreviewPage() {
 
               <Button
                 onClick={downloadCV}
-                className="bg-gradient-to-r from-purple-600 to-violet-500 hover:from-purple-700 hover:to-violet-600"
+                className="bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600"
               >
                 <Download className="mr-2 h-4 w-4" />
                 {t("cvPreview.downloadCV")}
@@ -129,8 +129,8 @@ export function CVPreviewPage() {
       </div>
 
       {/* Background gradients */}
-      <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-gradient-radial from-purple-500/10 to-transparent rounded-full blur-3xl -z-10" />
-      <div className="absolute bottom-1/4 right-1/4 w-[300px] h-[300px] bg-gradient-radial from-violet-500/10 to-transparent rounded-full blur-3xl -z-10" />
+      <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-gradient-radial from-blue-500/10 to-transparent rounded-full blur-3xl -z-10" />
+      <div className="absolute bottom-1/4 right-1/4 w-[300px] h-[300px] bg-gradient-radial from-blue-500/10 to-transparent rounded-full blur-3xl -z-10" />
     </div>
   )
 }

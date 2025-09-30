@@ -79,7 +79,7 @@ export function ToolsSection() {
         </motion.div>
       </div>
 
-      <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] bg-gradient-radial from-violet-500/10 to-transparent rounded-full blur-3xl -z-10" />
+      <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] bg-gradient-radial from-blue-500/10 to-transparent rounded-full blur-3xl -z-10" />
     </section>
   )
 }

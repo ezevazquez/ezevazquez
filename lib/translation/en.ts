@@ -8,18 +8,18 @@ export const en = {
   hero: {
     greeting: "Hello, I'm",
     name: "Ezequiel Vazquez",
-    title: "Project & Product Manager",
+    title: "Digital Project & Product Manager",
     subtitle:
-      "Based in Buenos Aires. Focused on tech strategy, agile delivery, and digital product execution.",
+      "Focused on tech strategy, agile delivery, and digital product execution.",
     cta: "Get in touch",
     downloadCV: "My resume",
   },
   about: {
     title: "About Me",
     content: [
-      "I'm a Project Manager and Product Owner specialized in digital and IT projects. I lead cross-functional teams and deliver impactful solutions aligned with business goals.",
-      "My background includes experience in Agile methodologies, technical coordination, and strategic planning for data-intensive and digital transformation initiatives.",
-      "With a strong foundation in web technologies and cloud tools, I act as a bridge between technical teams and business stakeholders to ensure success and transparency.",
+      "I'm a Project and Product Manager specialized in digital and IT projects. I lead cross-functional teams and deliver impactful solutions aligned with business goals.",
+      "My background includes experience in Agile methodologies (Scrum, Kanban), stakeholder alignment, product discovery, and strategic planning for data-intensive and digital transformation initiatives.",
+      "With a strong foundation in web technologies, APIs, and cloud tools, I act as a bridge between technical teams and business stakeholders to ensure clarity, transparency, and value delivery.",
     ],
   },
   experience: {
@@ -28,15 +28,15 @@ export const en = {
     items: [
       {
         period: "Dec. 2024 - Present",
-        role: "IT Project Manager",
+        role: "Product Manager / Project Manager",
         company: "Revolt Digital",
         description:
-          "Leading a large-scale Big Data pipeline project through agile practices and cross-team collaboration.",
+          "Led projects ranging from Big Data pipelines to digital product launches, coordinating multidisciplinary teams and aligning business needs with technical deliverables.",
         achievements: [
-          "Planned and executed a Big Data pipeline project",
-          "Developed roadmaps, milestones, and performance tracking aligned with business strategy",
-          "Led a cross-functional team and optimized workflows",
-          "Acted as liaison between stakeholders and technical teams to ensure clarity and transparency",
+          "Built and tracked project roadmaps with a focus on impact metrics",
+          "Coordinated cross-functional teams (engineering, data, design)",
+          "Prioritized tasks and resources pragmatically to maximize value delivery",
+          "Acted as the link between stakeholders and technical teams",
         ],
       },
       {
@@ -44,12 +44,12 @@ export const en = {
         role: "Digital Project Manager",
         company: "Aerolab Digital",
         description:
-          "Managed digital products and client relationships with focus on planning, risk mitigation, and team efficiency.",
+          "Planned and delivered digital projects of various sizes with Agile practices, focusing on client satisfaction, risk management, and resource optimization.",
         achievements: [
-          "Defined project objectives and deliverables for multiple digital services",
-          "Led team planning, resource allocation, and risk mitigation strategies",
-          "Improved team performance through structured feedback and workflow improvements",
-          "Balanced client satisfaction with strategic account development",
+          "Defined objectives and project roadmaps for multiple digital products",
+          "Organized and prioritized tasks with an Agile approach",
+          "Coordinated teams to ensure clarity on deliverables and timelines",
+          "Maintained client communication and managed expectations",
         ],
       },
       {
@@ -57,10 +57,10 @@ export const en = {
         role: "Project Manager Assistant",
         company: "TA Telecomunicaciones",
         description:
-          "Supported IT, IoT, and DevOps projects by coordinating teams, managing vendors, and analyzing risks.",
+          "Supported IT, IoT, and DevOps projects by coordinating resources, managing vendors, and assisting in risk and cost management.",
         achievements: [
-          "Facilitated communication and expectation alignment with clients",
-          "Assisted in contract negotiation and vendor coordination",
+          "Strengthened client relationships through clear communication",
+          "Assisted in contract negotiations and vendor management",
           "Ensured cost-effective and timely delivery of solutions",
           "Provided analytical support for risk management",
         ],
@@ -71,38 +71,30 @@ export const en = {
     title: "Tools & Tech Stack",
     categories: [
       {
-        name: "Product Management",
+        name: "Product & Project Management",
         items: [
           "Notion",
           "Asana",
           "Trello",
           "Jira",
           "Confluence",
-          "Figma/Figjam",
           "ClickUp",
-          "Microsoft",
-          "Google Workspace",
+          "Figma/Figjam",
           "Miro",
+          "Google Workspace",
+          "Microsoft Office",
         ],
       },
       {
-        name: "IT Tools",
+        name: "Technical Skills",
         items: [
-          "GitHub",
-          "GitLab",
-          "Bitbucket",
-          "Python (Django)",
-          "TypeScript",
-          "React (Next.js)",
-          "Tailwind",
-          "CSS-in-JS",
-          "Sanity CMS",
-          "Odoo",
-          "Vercel",
+          "JavaScript/TypeScript (Next.js, NestJS, ShadCN)",
+          "Python (scripts, basic Django)",
+          "SQL, GROQ, NoSQL",
+          "APIs (REST & GraphQL)",
+          "Postman, Swagger",
+          "Git",
           "Docker",
-          "PostgreSQL",
-          "Headless CMS",
-          "REST APIs",
         ],
       },
     ],
@@ -116,6 +108,7 @@ export const en = {
       github: "https://github.com/ezevazquez",
       linkedin: "https://linkedin.com/in/ezevazquez",
       email: "ezejvaz@gmail.com",
+      website: "https://ezevazquez.com",
     },
   },
   cvPreview: {

@@ -8,18 +8,18 @@ export const es = {
   hero: {
     greeting: "Hola, soy",
     name: "Ezequiel Vazquez",
-    title: "Project & Product Manager Digital",
+    title: "Digital Product & Operations Manager",
     subtitle:
-      "Enfocado en estrategia tecnológica, entrega ágil y ejecución de productos digitales.",
+      "Con base en Buenos Aires, enfocado en entrega de productos digitales, operaciones y excelencia en ejecución.",
     cta: "Hablemos",
     downloadCV: "Mi CV",
   },
   about: {
     title: "Sobre mí",
     content: [
-      "Soy Project y Product Manager especializado en proyectos digitales y de IT. Lidero equipos multidisciplinarios y entrego soluciones de alto impacto alineadas con los objetivos del negocio.",
-      "Mi experiencia incluye metodologías ágiles (Scrum, Kanban), alineación con stakeholders, product discovery y planificación estratégica en iniciativas de transformación digital y proyectos basados en datos.",
-      "Con una sólida base en tecnologías web, APIs y herramientas cloud, actúo como puente entre equipos técnicos y áreas de negocio para asegurar claridad, transparencia y entrega de valor.",
+      "Lidero la entrega end-to-end de productos digitales e iniciativas de datos, alineando objetivos de negocio con ejecución técnica.",
+      "Diseño y mantengo sistemas y workflows de proyecto para mejorar visibilidad, coordinación y eficiencia de entrega entre equipos.",
+      "Mi perfil combina gestión de producto y delivery, optimización de procesos y excelencia operativa con una mirada práctica y orientada a datos.",
     ],
   },
   experience: {
@@ -28,15 +28,15 @@ export const es = {
     items: [
       {
         period: "Dic. 2024 - Presente",
-        role: "Product Manager / Project Manager",
+        role: "Product Manager - Project Manager",
         company: "Revolt Digital",
         description:
-          "Lideré proyectos que van desde pipelines de Big Data hasta lanzamientos de productos digitales, coordinando equipos multidisciplinarios y alineando necesidades de negocio con entregables técnicos.",
+          "Lideré la entrega end-to-end de productos digitales e iniciativas de datos, asegurando alineación entre objetivos de negocio y ejecución técnica.",
         achievements: [
-          "Diseñé y gestioné roadmaps de proyectos enfocados en métricas de impacto",
-          "Coordiné equipos de ingeniería, datos y diseño",
-          "Priorizé tareas y recursos de manera pragmática para maximizar la entrega de valor",
-          "Actué como enlace entre stakeholders y equipos técnicos",
+          "Construí y mantuve sistemas y workflows de proyecto (roadmaps, tracking y documentación)",
+          "Coordiné equipos cross-funcionales (ingeniería, datos y diseño), reduciendo cuellos de botella",
+          "Traducí requerimientos de negocio en workflows estructurados y entregables accionables",
+          "Mejoré la eficiencia del equipo con optimización de procesos, priorización y exploración de workflows asistidos por IA",
         ],
       },
       {
@@ -44,12 +44,12 @@ export const es = {
         role: "Digital Project Manager",
         company: "Aerolab Digital",
         description:
-          "Planifiqué y entregué proyectos digitales de distintos tamaños con prácticas ágiles, priorizando la satisfacción del cliente, la gestión de riesgos y la optimización de recursos.",
+          "Gestioné múltiples proyectos digitales con workflows estructurados y prácticas ágiles para asegurar entregas consistentes.",
         achievements: [
-          "Definí objetivos y roadmaps para múltiples productos digitales",
-          "Organicé y prioricé tareas con un enfoque ágil",
-          "Coordiné equipos asegurando claridad en entregables y plazos",
-          "Mant tuve comunicación constante con clientes y gestioné expectativas",
+          "Diseñé y mantuve sistemas de seguimiento para mejorar claridad, accountability y velocidad de ejecución",
+          "Optimicé procesos internos para reducir fricción en la entrega y mejorar la coordinación",
+          "Actué como principal punto de contacto con clientes, gestionando expectativas e identificando riesgos",
+          "Documenté procesos, aprendizajes y frameworks de delivery para escalar y reutilizar",
         ],
       },
       {
@@ -57,44 +57,48 @@ export const es = {
         role: "Asistente de Project Manager",
         company: "TA Telecomunicaciones",
         description:
-          "Brindé soporte en proyectos de IT, IoT y DevOps, coordinando recursos, gestionando proveedores y asistiendo en la gestión de riesgos y costos.",
+          "Brindé soporte operativo en iniciativas de IT, IoT y DevOps.",
         achievements: [
-          "Fortalecí las relaciones con clientes mediante comunicación clara",
-          "Asistí en negociaciones de contratos y gestión de proveedores",
-          "Aseguré entregas rentables y a tiempo",
-          "Proporcioné soporte analítico para la gestión de riesgos",
+          "Coordiné workflows, cronogramas y stakeholders para asegurar una ejecución fluida",
+          "Asistí en gestión de proveedores y contratos, mejorando la eficiencia operativa",
+          "Contribuí al análisis de riesgos y al seguimiento de procesos",
         ],
       },
     ],
   },
   tools: {
-    title: "Herramientas y Stack Tecnológico",
+    title: "Skills y Herramientas",
     categories: [
       {
-        name: "Gestión de Producto y Proyectos",
+        name: "Operaciones y Sistemas",
         items: [
-          "Notion",
-          "Asana",
-          "Trello",
-          "Jira",
-          "Confluence",
-          "ClickUp",
-          "Figma/Figjam",
-          "Miro",
-          "Google Workspace",
-          "Microsoft Office",
+          "Diseño y optimización de workflows",
+          "Mejora de procesos",
+          "Eficiencia operativa",
+          "Documentación y SOPs",
+          "Toma de decisiones basada en datos",
         ],
       },
       {
-        name: "Habilidades Técnicas",
+        name: "Producto y Delivery",
         items: [
-          "JavaScript/TypeScript (Next.js, NestJS, ShadCN)",
-          "Python (scripts, Django básico)",
-          "SQL, GROQ, NoSQL",
-          "APIs (REST & GraphQL)",
-          "Postman, Swagger",
-          "Git",
-          "Docker",
+          "Product Discovery y Roadmapping",
+          "Agile (Scrum, Kanban)",
+          "Gestión de stakeholders",
+          "Delivery y ejecución",
+          "Gestión de riesgos",
+        ],
+      },
+      {
+        name: "Habilidades técnicas y herramientas",
+        items: [
+          "Notion (bases de datos, workflows y documentación)",
+          "Jira, Confluence, Asana, ClickUp",
+          "APIs (REST, GraphQL)",
+          "SQL",
+          "Git / GitHub",
+          "JavaScript / TypeScript (básico)",
+          "Python (scripting)",
         ],
       },
     ],

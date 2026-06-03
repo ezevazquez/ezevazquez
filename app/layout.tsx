@@ -5,12 +5,16 @@ import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { LanguageProvider } from "@/components/language-provider"
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+})
 
 export const metadata: Metadata = {
-  title: "Ezequiel Vazquez | Digital & IT Project Manager",
+  title: "Eze Vazquez | Digital Builder",
   description:
-    "Digital & IT Project Manager with a focus on tech strategy, product design, and full-stack web development.",
+    "Websites, lead follow-ups and simple automations for small businesses. Stop losing inquiries and repeating the same work.",
 }
 
 export default function RootLayout({
@@ -20,7 +24,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={`${inter.className} ${inter.variable} antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="dark">
           <LanguageProvider>{children}</LanguageProvider>
         </ThemeProvider>

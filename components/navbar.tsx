@@ -1,155 +1,189 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { useLanguage } from "./language-provider"
 import { LanguageSwitcher } from "./language-switch"
 import { Menu, X } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import { useMobile } from "@/hooks/use-mobile"
-import { CVDownloadButton } from "./cv-download-button"
+import { BOOK_CALL_URL } from "@/lib/constants"
+import { PrimaryCTA } from "@/components/shared/cta-buttons"
+import { cn } from "@/lib/utils"
 
 export function Navbar() {
   const { t } = useLanguage()
+  const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const isMobile = useMobile()
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20)
-    }
-
+    const handleScroll = () => setScrolled(window.scrollY > 16)
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
+  useEffect(() => {
+    document.body.style.overflow = mobileMenuOpen ? "hidden" : ""
+    return () => {
+      document.body.style.overflow = ""
+    }
+  }, [mobileMenuOpen])
+
+  const contactHref = pathname === "/" ? "#contact" : "/#contact"
+
   const navItems = [
-    { label: t("nav.about"), href: "#about" },
-    { label: t("nav.experience"), href: "#experience" },
-    { label: t("nav.tools"), href: "#tools" },
-    { label: t("nav.contact"), href: "#contact" },
+    { label: t("nav.home"), href: "/", match: (p: string) => p === "/" },
+    { label: t("nav.work"), href: "/work", match: (p: string) => p.startsWith("/work") },
+    { label: t("nav.about"), href: "/about", match: (p: string) => p.startsWith("/about") },
+    { label: t("nav.contact"), href: contactHref, isContact: true },
   ]
 
-  const scrollToSection = (href: string) => {
+  const scrollToContact = () => {
     setMobileMenuOpen(false)
-    const element = document.querySelector(href)
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
+    if (pathname !== "/") {
+      window.location.href = "/#contact"
+      return
     }
+    document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" })
   }
+
+  const linkClass = (active: boolean) =>
+    cn("nav-link relative py-1", active && "nav-link-active")
 
   return (
     <>
-      <motion.nav
-        className={`fixed top-0 left-0 right-0 z-50 px-6 py-4 transition-all duration-300 ${
-          scrolled ? "bg-black/80 backdrop-blur-md shadow-md" : "bg-transparent"
-        }`}
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="relative max-w-7xl mx-auto flex items-center justify-between">
+      <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 pt-4">
+        <motion.nav
+          className={cn(
+            "max-w-6xl mx-auto flex items-center justify-between gap-4 px-4 sm:px-6 py-3 rounded-2xl transition-all duration-500",
+            scrolled
+              ? "bg-black/75 backdrop-blur-xl border border-white/[0.08] shadow-[0_8px_32px_-8px_rgba(0,0,0,0.6)]"
+              : "bg-transparent border border-transparent"
+          )}
+          initial={{ y: -24, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <Link
+            href="/"
+            className="text-sm font-bold tracking-tight text-white hover:text-primary transition-colors shrink-0"
+          >
+            {t("nav.brand")}
+          </Link>
+
           {!isMobile ? (
             <>
-              {/* Nav items centrados */}
-              <div className="absolute left-1/2 transform -translate-x-1/2 flex space-x-8">
-                {navItems.map((item, index) => (
-                  <motion.a
-                    key={item.href}
-                    href={item.href}
-                    onClick={(e) => {
-                      e.preventDefault()
-                      scrollToSection(item.href)
-                    }}
-                    className="text-sm hover:text-primary transition-colors"
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 * index }}
-                    whileHover={{ y: -2 }}
-                  >
-                    {item.label}
-                  </motion.a>
-                ))}
+              <div className="flex items-center gap-7">
+                {navItems.map((item) => {
+                  const active = !item.isContact && item.match?.(pathname)
+                  if (item.isContact) {
+                    return (
+                      <a
+                        key="contact"
+                        href={contactHref}
+                        onClick={(e) => {
+                          e.preventDefault()
+                          scrollToContact()
+                        }}
+                        className={linkClass(false)}
+                      >
+                        {item.label}
+                      </a>
+                    )
+                  }
+                  return (
+                    <Link key={item.href} href={item.href} className={linkClass(!!active)}>
+                      {item.label}
+                      {active && (
+                        <span className="absolute -bottom-0.5 left-0 right-0 h-px bg-primary/80" />
+                      )}
+                    </Link>
+                  )
+                })}
               </div>
 
-              {/* Botones a la derecha */}
-              <div className="flex items-center space-x-4 ml-auto">
-                <CVDownloadButton
-                  textKey="hero.downloadCV"
-                  variant="outline"
-                  size="sm"
-                  className="border-white/20 hover:bg-white/10"
-                />
+              <div className="flex items-center gap-3 shrink-0">
                 <LanguageSwitcher />
+                <PrimaryCTA href={BOOK_CALL_URL} className="!h-10 !px-5 !text-xs">
+                  {t("nav.bookCall")}
+                </PrimaryCTA>
               </div>
             </>
           ) : (
-            <div className="flex items-center space-x-4">
-              <LanguageSwitcher />
-              <Button
-                variant="ghost"
-                size="icon"
+            <div className="flex items-center gap-2">
+              <LanguageSwitcher compact />
+              <button
+                type="button"
                 onClick={() => setMobileMenuOpen(true)}
-                className="lg:hidden"
+                className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 text-white hover:bg-white/5 transition-colors"
+                aria-label="Open menu"
               >
-                <Menu className="h-6 w-6" />
-              </Button>
+                <Menu className="h-5 w-5" />
+              </button>
             </div>
           )}
-        </div>
-      </motion.nav>
+        </motion.nav>
+      </header>
 
-      {/* Menú mobile */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            className="fixed inset-0 bg-black z-50 flex flex-col items-center justify-center p-6"
-            initial={{ opacity: 0, x: "100%" }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: "100%" }}
-            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-[60] bg-black/95 backdrop-blur-xl flex flex-col p-6 pt-24"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
           >
-            <div className="absolute top-4 left-4 text-xl font-bold">EV</div>
-            <Button
-              variant="ghost"
-              size="icon"
+            <button
+              type="button"
               onClick={() => setMobileMenuOpen(false)}
-              className="absolute top-4 right-4"
+              className="absolute top-6 right-6 flex h-10 w-10 items-center justify-center rounded-xl border border-white/10"
+              aria-label="Close menu"
             >
-              <X className="h-6 w-6" />
-            </Button>
+              <X className="h-5 w-5" />
+            </button>
 
-            <div className="flex flex-col space-y-6 items-center justify-center flex-1">
+            <nav className="flex flex-col gap-2 flex-1">
               {navItems.map((item, index) => (
-                <motion.a
+                <motion.div
                   key={item.href}
-                  href={item.href}
-                  onClick={(e) => {
-                    e.preventDefault()
-                    scrollToSection(item.href)
-                  }}
-                  className="text-xl font-medium hover:text-primary transition-colors"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 * index }}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.05 * index }}
                 >
-                  {item.label}
-                </motion.a>
+                  {item.isContact ? (
+                    <a
+                      href={contactHref}
+                      onClick={(e) => {
+                        e.preventDefault()
+                        scrollToContact()
+                      }}
+                      className="block py-4 text-2xl font-semibold tracking-tight hover:text-primary transition-colors"
+                    >
+                      {item.label}
+                    </a>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={cn(
+                        "block py-4 text-2xl font-semibold tracking-tight transition-colors",
+                        item.match?.(pathname) ? "text-primary" : "text-white hover:text-primary"
+                      )}
+                    >
+                      {item.label}
+                    </Link>
+                  )}
+                </motion.div>
               ))}
+            </nav>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 * navItems.length }}
-              >
-                <CVDownloadButton
-                  textKey="hero.downloadCV"
-                  variant="outline"
-                  className="mt-4 border-white/20 hover:bg-white/10"
-                />
-              </motion.div>
-            </div>
+            <PrimaryCTA href={BOOK_CALL_URL} className="w-full justify-center !h-12">
+              {t("nav.bookCall")}
+            </PrimaryCTA>
           </motion.div>
         )}
       </AnimatePresence>

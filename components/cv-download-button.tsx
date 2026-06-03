@@ -14,13 +14,13 @@ interface CVDownloadButtonProps extends ButtonProps {
 }
 
 export function CVDownloadButton({ textKey, className, directDownload = false, ...props }: CVDownloadButtonProps) {
-  const { t, language } = useLanguage()
+  const { t } = useLanguage()
   const router = useRouter()
 
   const handleClick = () => {
     if (directDownload) {
       // Direct download functionality
-      const fileName = language === "en" ? "cv-en.pdf" : "cv-es.pdf"
+      const fileName = "cv-en.pdf"
       const link = document.createElement("a")
       link.href = `/cv/${fileName}`
       link.setAttribute("download", fileName)

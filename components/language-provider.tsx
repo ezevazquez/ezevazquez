@@ -1,9 +1,11 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type React from "react"
-import { createContext, useContext, useState, useEffect } from "react"
+import { createContext, useContext, useEffect, useState } from "react"
 import { translations, type Language } from "@/lib/translation"
+
+const STORAGE_KEY = "ezevazquez-language"
 
 type LanguageContextType = {
   language: Language
@@ -13,20 +15,29 @@ type LanguageContextType = {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
 
+function isLanguage(value: string | null): value is Language {
+  return value === "en" || value === "es"
+}
+
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguage] = useState<Language>("en")
+  const [hydrated, setHydrated] = useState(false)
 
   useEffect(() => {
-    const savedLanguage = localStorage.getItem("language") as Language
-    if (savedLanguage && (savedLanguage === "en" || savedLanguage === "es")) {
-      setLanguage(savedLanguage)
+    const saved = localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem("language")
+    if (isLanguage(saved)) {
+      setLanguage(saved)
     }
+    setHydrated(true)
   }, [])
 
   useEffect(() => {
+    if (!hydrated) return
+    localStorage.setItem(STORAGE_KEY, language)
+    // Keep the legacy key in sync for older sessions.
     localStorage.setItem("language", language)
     document.documentElement.lang = language
-  }, [language])
+  }, [language, hydrated])
 
   const t = (key: string) => {
     const keys = key.split(".")
@@ -40,7 +51,11 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     return value === undefined ? key : value
   }
 
-  return <LanguageContext.Provider value={{ language, setLanguage, t }}>{children}</LanguageContext.Provider>
+  return (
+    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+      {children}
+    </LanguageContext.Provider>
+  )
 }
 
 export function useLanguage() {

@@ -22,6 +22,7 @@ export const es = {
     downloadCV: "Descargar CV",
     viewLinkedIn: "Ver LinkedIn",
     contactMe: "Contactame",
+    skipToContent: "Ir al contenido",
     conceptDemo: "Ejemplo",
     sampleSystem: "Ejemplo",
   },
@@ -30,33 +31,28 @@ export const es = {
   },
   home: {
     hero: {
-      eyebrow: "Para negocios chicos que crecieron en el desorden",
-      title: "Convertí tu negocio desordenado en un sistema digital simple.",
+      eyebrow: "Sistemas digitales para negocios en movimiento",
+      title: "Tu negocio no necesita más herramientas. Necesita que trabajen juntas.",
       subtitle:
-        "Te ayudo a no perder consultas, hacer seguimiento a tiempo y gastar menos tiempo en tareas repetitivas. No es solo una web. Es todo el flujo detrás.",
+        "Diseño el sistema que saca el trabajo repetido del medio y hace que cada consulta avance.",
       outcomes: [
         "Cada consulta queda en un solo lugar",
         "Menos seguimientos olvidados",
         "Menos copiar y pegar entre apps",
       ],
-      ctaHint: "Llamada gratis de 20 min · Sin presión · En criollo",
-      trust: "Pensado para quienes son buenos en su trabajo, no en pelearse con apps.",
-      visualBefore: "Hoy",
-      visualAfter: "Con un sistema simple",
-      messy: ["WhatsApp", "Instagram", "Email", "Planillas", "Seguimientos olvidados"],
-      organized: [
-        "Web clara",
-        "Formulario de contacto",
-        "Consultas en una lista",
-        "Respuesta rápida",
-        "Recordatorios",
-        "Vista simple",
-      ],
+      ctaHint: "Consulta breve · Sin presión · En criollo",
+      trust: "No es otra app. Es la forma en que las que ya usás empiezan a trabajar juntas.",
+      visualStatus: "Sistema activo",
+      sources: ["WhatsApp", "Email", "Excel", "Instagram", "Trello", "LinkedIn"],
+      systemLabel: "Todo conectado",
+      systemTitle: "Sistema claro",
+      systemBullets: ["Consultas en un lugar", "Seguimiento simple", "Menos trabajo manual"],
     },
     problem: {
-      eyebrow: "¿Te suena?",
-      title: "Tu negocio funciona. Tus sistemas, no.",
-      copy: "No necesitás diez apps más. Necesitás una forma simple de conseguir clientes, ordenarte y dejar de hacer lo mismo a mano.",
+      eyebrow: "Diagnóstico",
+      title: "Si todo pasa por vos, no tenés un sistema.",
+      copy: "Elegí un bloqueo. El problema no es trabajar mucho: es que la información no avanza sola.",
+      signal: "Bloqueo detectado",
       cards: [
         "Las consultas se pierden entre WhatsApp, Instagram y email.",
         "Respondés las mismas preguntas una y otra vez.",
@@ -92,9 +88,9 @@ export const es = {
       },
     },
     systemFlow: {
-      eyebrow: "Por qué es distinto",
-      title: "No es solo una web. Es un sistema que maneja tus consultas.",
-      copy: "Muchos te entregan una página y listo. Yo conecto cómo te encuentran, cómo te contactan y qué pasa después, para que no se pierda nada.",
+      eyebrow: "El método",
+      title: "Ordeno el caos y lo hago trabajar.",
+      copy: "Conecto el camino completo, desde que alguien te descubre hasta que sabés qué hacer después.",
       callout:
         "Pensalo como el camino de \"alguien se interesa\" a \"respondiste y hiciste seguimiento\" sin vivir en el inbox.",
       nodes: [
@@ -114,9 +110,9 @@ export const es = {
       secondary: "Mandame un email",
     },
     whatIBuild: {
-      eyebrow: "Qué obtenés",
-      title: "Qué construyo para vos",
-      subtitle: "Podés empezar con una pieza o conectar todo el flujo. Siempre explicado en simple.",
+      eyebrow: "Resultados",
+      title: "Menos seguimiento. Más avance.",
+      subtitle: "Cada pieza tiene un trabajo claro: atraer, mover o resolver.",
       cards: [
         {
           title: "Una web que vende y captura consultas",
@@ -151,21 +147,19 @@ export const es = {
       ],
     },
     whyMe: {
-      eyebrow: "Por qué confiar",
-      title: "Pienso el sistema detrás de tu negocio, no solo una página linda.",
-      copy: "Tengo años liderando proyectos digitales en agencias y startups. Ahora uso esa experiencia para que negocios chicos tengan la misma claridad, sin jerga ni sorpresas.",
+      eyebrow: "Cómo pienso",
+      title: "No vendo horas. Resuelvo bloqueos.",
+      copy: "Experiencia en proyectos digitales, aplicada a lo que frena tu negocio hoy.",
       points: [
         "Empiezo por tu proceso, no por una plantilla",
         "Explicaciones claras, sin clase de tecnología",
-        "Experiencia real entregando proyectos con clientes",
-        "Sabés qué vas a recibir antes de construir",
-        "IA solo cuando claramente te ahorra tiempo",
+        "Una solución entendible antes de construir",
       ],
       cta: "Ver mi experiencia y trayectoria",
     },
     finalCta: {
-      title: "¿Listo para simplificar?",
-      copy: "Agendá una llamada gratis o mandame una nota sobre qué te resulta desordenado. Te respondo con próximos pasos honestos.",
+      title: "¿Qué está trabando tu negocio?",
+      copy: "Contame dónde se pierde tiempo. Te propongo el próximo paso más simple.",
     },
   },
   work: {

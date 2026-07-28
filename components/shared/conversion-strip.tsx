@@ -38,7 +38,7 @@ export function ConversionStrip({
     >
       <h3 className="text-xl md:text-2xl font-bold text-white tracking-tight mb-3">{title}</h3>
       <p className="text-subhead text-base md:text-lg max-w-xl mx-auto mb-7">{copy}</p>
-      <div className="flex flex-col sm:flex-row gap-3 justify-center items-stretch sm:items-center">
+      <div className="flex flex-col sm:flex-row gap-2.5 justify-center items-center">
         <PrimaryCTA href={BOOK_CALL_URL} className="w-full sm:w-auto justify-center">
           {primaryLabel}
         </PrimaryCTA>

@@ -37,7 +37,7 @@ export default function AboutPage() {
   return (
     <SiteShell>
       <PageHero title={t("about.hero.title")} subtitle={t("about.hero.subtitle")}>
-        <div className="flex flex-col sm:flex-row flex-wrap gap-4 justify-center">
+        <div className="flex flex-col sm:flex-row flex-wrap gap-2.5 justify-center items-center">
           <CVDownloadButton
             textKey="common.downloadCV"
             directDownload

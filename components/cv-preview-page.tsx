@@ -53,7 +53,7 @@ export function CVPreviewPage() {
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2.5 justify-center sm:justify-end items-center">
               <SecondaryCTA href="/" className="!h-11 !px-5 text-sm inline-flex items-center gap-2">
                 <ArrowLeft className="h-4 w-4" />
                 {t("cvPreview.backToHome")}

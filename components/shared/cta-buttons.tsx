@@ -17,15 +17,21 @@ type CTAButtonProps = {
 function SoftPress({
   children,
   className,
+  fullOnMobile = false,
 }: {
   children: ReactNode
   className?: string
+  fullOnMobile?: boolean
 }) {
   const reduced = useReducedMotion()
 
   return (
     <motion.span
-      className={cn("inline-flex", className)}
+      className={cn(
+        "inline-flex justify-center",
+        fullOnMobile && "w-full sm:w-auto",
+        className
+      )}
       whileHover={reduced ? undefined : { y: -1 }}
       whileTap={reduced ? undefined : { scale: 0.98 }}
       transition={{ type: "spring", stiffness: 500, damping: 32 }}
@@ -35,13 +41,17 @@ function SoftPress({
   )
 }
 
+function isFullWidthOnMobile(className?: string) {
+  return Boolean(className?.includes("w-full"))
+}
+
 export function PrimaryCTA({ children, className, href, asChild }: CTAButtonProps) {
   const classes = cn("btn-primary-glow inline-flex items-center justify-center", className)
-  const wrapClass = className?.includes("w-full") ? "w-full" : undefined
+  const fullOnMobile = isFullWidthOnMobile(className)
 
   if (href) {
     return (
-      <SoftPress className={wrapClass}>
+      <SoftPress fullOnMobile={fullOnMobile}>
         <a href={href} className={classes}>
           {children}
         </a>
@@ -51,14 +61,14 @@ export function PrimaryCTA({ children, className, href, asChild }: CTAButtonProp
 
   if (asChild) {
     return (
-      <SoftPress className={wrapClass}>
+      <SoftPress fullOnMobile={fullOnMobile}>
         <Slot className={classes}>{children}</Slot>
       </SoftPress>
     )
   }
 
   return (
-    <SoftPress className={wrapClass}>
+    <SoftPress fullOnMobile={fullOnMobile}>
       <button type="button" className={classes}>
         {children}
       </button>
@@ -68,11 +78,11 @@ export function PrimaryCTA({ children, className, href, asChild }: CTAButtonProp
 
 export function SecondaryCTA({ children, className, href, asChild }: CTAButtonProps) {
   const classes = cn("btn-outline-glass inline-flex items-center justify-center", className)
-  const wrapClass = className?.includes("w-full") ? "w-full" : undefined
+  const fullOnMobile = isFullWidthOnMobile(className)
 
   if (href) {
     return (
-      <SoftPress className={wrapClass}>
+      <SoftPress fullOnMobile={fullOnMobile}>
         <a href={href} className={classes}>
           {children}
         </a>
@@ -82,14 +92,14 @@ export function SecondaryCTA({ children, className, href, asChild }: CTAButtonPr
 
   if (asChild) {
     return (
-      <SoftPress className={wrapClass}>
+      <SoftPress fullOnMobile={fullOnMobile}>
         <Slot className={classes}>{children}</Slot>
       </SoftPress>
     )
   }
 
   return (
-    <SoftPress className={wrapClass}>
+    <SoftPress fullOnMobile={fullOnMobile}>
       <button type="button" className={classes}>
         {children}
       </button>
@@ -107,7 +117,7 @@ export function SecondaryCTALink({
   href: string
 }) {
   return (
-    <SoftPress className={className?.includes("w-full") ? "w-full" : undefined}>
+    <SoftPress fullOnMobile={isFullWidthOnMobile(className)}>
       <Link href={href} className={cn("btn-outline-glass inline-flex items-center justify-center", className)}>
         {children}
       </Link>

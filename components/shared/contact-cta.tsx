@@ -56,7 +56,7 @@ export function ContactCTA({
           <h2 className="text-headline mb-5">{title}</h2>
           <p className="text-subhead mb-10 max-w-xl mx-auto">{copy}</p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-stretch sm:items-center">
+          <div className="flex flex-col sm:flex-row gap-2.5 justify-center items-center">
             <PrimaryCTA href={BOOK_CALL_URL} className="w-full sm:w-auto justify-center">
               {t("common.bookCall")}
             </PrimaryCTA>
@@ -88,7 +88,7 @@ export function ContactCTA({
               </>
             )}
             {showCvLink && (
-              <div className="flex flex-col sm:flex-row flex-wrap gap-3 justify-center">
+              <div className="flex flex-col sm:flex-row flex-wrap gap-2.5 justify-center items-center">
                 <SecondaryCTA href="/cv" className="!h-11 !px-6 text-sm">
                   {t("common.downloadCV")}
                 </SecondaryCTA>

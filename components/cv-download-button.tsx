@@ -34,7 +34,7 @@ export function CVDownloadButton({ textKey, className, directDownload = false, .
   }
 
   return (
-    <Button onClick={handleClick} className={cn("group", className)} {...props}>
+    <Button onClick={handleClick} className={cn("group !rounded-full", className)} {...props}>
       <FileDown className="mr-2 h-5 w-5 transition-transform group-hover:scale-110" />
       {t(textKey)}
     </Button>

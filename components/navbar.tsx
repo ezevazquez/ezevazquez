@@ -56,16 +56,13 @@ export function Navbar() {
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 pt-4">
-        <motion.nav
+        <nav
           className={cn(
             "max-w-6xl mx-auto flex items-center justify-between gap-4 px-4 sm:px-6 py-3 rounded-2xl transition-all duration-500",
             scrolled
               ? "bg-black/75 backdrop-blur-xl border border-white/[0.08] shadow-[0_8px_32px_-8px_rgba(0,0,0,0.6)]"
               : "bg-transparent border border-transparent"
           )}
-          initial={{ y: -24, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         >
           <Link
             href="/"
@@ -125,7 +122,7 @@ export function Navbar() {
               </button>
             </div>
           )}
-        </motion.nav>
+        </nav>
       </header>
 
       <AnimatePresence>

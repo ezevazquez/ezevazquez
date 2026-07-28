@@ -51,8 +51,7 @@ export const es = {
     problem: {
       eyebrow: "Diagnóstico",
       title: "Si todo pasa por vos, no tenés un sistema.",
-      copy: "Elegí un bloqueo. El problema no es trabajar mucho: es que la información no avanza sola.",
-      signal: "Bloqueo detectado",
+      copy: "El problema no es trabajar mucho: es que la información no avanza sola.",
       cards: [
         "Las consultas se pierden entre WhatsApp, Instagram y email.",
         "Respondés las mismas preguntas una y otra vez.",

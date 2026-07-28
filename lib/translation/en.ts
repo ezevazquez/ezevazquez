@@ -51,8 +51,7 @@ export const en = {
     problem: {
       eyebrow: "Diagnosis",
       title: "If everything goes through you, you do not have a system.",
-      copy: "Pick a bottleneck. The issue is not working hard; it is that information cannot move by itself.",
-      signal: "Bottleneck detected",
+      copy: "The issue is not working hard; it is that information cannot move by itself.",
       cards: [
         "Inquiries get lost between WhatsApp, Instagram and email.",
         "You answer the same questions again and again.",

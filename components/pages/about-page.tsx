@@ -41,10 +41,14 @@ export default function AboutPage() {
           <CVDownloadButton
             textKey="common.downloadCV"
             directDownload
-            className="btn-primary-glow !border-0"
+            className="btn-primary-glow !border-0 !h-12 !min-w-[11.5rem] justify-center"
           />
-          <SecondaryCTA href={EMAIL_URL}>{t("common.contactMe")}</SecondaryCTA>
-          <SecondaryCTA href={LINKEDIN_URL}>{t("common.viewLinkedIn")}</SecondaryCTA>
+          <SecondaryCTA href={EMAIL_URL} className="!min-w-[11.5rem] justify-center">
+            {t("common.contactMe")}
+          </SecondaryCTA>
+          <SecondaryCTA href={LINKEDIN_URL} className="!min-w-[11.5rem] justify-center">
+            {t("common.viewLinkedIn")}
+          </SecondaryCTA>
         </div>
       </PageHero>
 

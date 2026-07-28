@@ -68,7 +68,7 @@ export function HomeHeroSection() {
             </motion.ul>
 
             <motion.div
-              className="flex flex-col sm:flex-row gap-2.5 justify-center lg:justify-start"
+              className="flex flex-col sm:flex-row gap-2.5 justify-center lg:justify-start items-center lg:items-start"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.24, duration: 0.5 }}

@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react"
 import { motion, useInView } from "framer-motion"
-import { ArrowRight } from "lucide-react"
 import { useReducedMotion } from "@/hooks/use-reduced-motion"
 import { cn } from "@/lib/utils"
 
@@ -57,12 +56,7 @@ export function SystemFlow({ nodes, className }: SystemFlowProps) {
                 </p>
               )}
             </motion.div>
-            {i < nodes.length - 1 && (
-              <ArrowRight
-                className="h-3.5 w-3.5 text-primary/40 shrink-0 mx-0.5"
-                aria-hidden
-              />
-            )}
+            {i < nodes.length - 1 && <FlowConnector active={activeIndex > i} reduced={reduced} />}
           </div>
         ))}
       </div>
@@ -107,6 +101,27 @@ export function SystemFlow({ nodes, className }: SystemFlowProps) {
           </motion.div>
         ))}
       </div>
+    </div>
+  )
+}
+
+function FlowConnector({ active, reduced }: { active: boolean; reduced: boolean }) {
+  return (
+    <div className="relative mx-1 h-5 w-7 shrink-0 overflow-hidden" aria-hidden>
+      <motion.span
+        className="absolute left-0 top-1/2 h-px w-full origin-left bg-primary/45"
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: active || reduced ? 1 : 0 }}
+        transition={{ duration: reduced ? 0 : 0.35 }}
+      />
+      {!reduced && active && (
+        <motion.span
+          className="absolute top-[7px] h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_10px_rgba(59,130,246,0.9)]"
+          initial={{ left: 0, opacity: 0 }}
+          animate={{ left: ["0%", "100%"], opacity: [0, 1, 1, 0] }}
+          transition={{ duration: 0.7, ease: "easeInOut", repeat: Infinity, repeatDelay: 1.2 }}
+        />
+      )}
     </div>
   )
 }

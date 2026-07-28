@@ -22,6 +22,7 @@ export const en = {
     downloadCV: "Download CV",
     viewLinkedIn: "View LinkedIn",
     contactMe: "Contact me",
+    skipToContent: "Skip to content",
     conceptDemo: "Example",
     sampleSystem: "Example",
   },
@@ -30,33 +31,28 @@ export const en = {
   },
   home: {
     hero: {
-      eyebrow: "For small businesses that outgrew chaos",
-      title: "Turn your messy business into a simple digital system.",
+      eyebrow: "Digital systems for businesses in motion",
+      title: "Your business does not need more tools. It needs them working together.",
       subtitle:
-        "I help you capture every inquiry, follow up on time, and spend less time on repetitive tasks. Not just a website. The whole flow behind it.",
+        "I design the system that gets repetitive work out of the way and keeps every inquiry moving.",
       outcomes: [
         "Every inquiry lands in one place",
         "Fewer forgotten follow-ups",
         "Less copy-paste between apps",
       ],
-      ctaHint: "Free 20-minute call · No pressure · Plain language",
-      trust: "Built for owners who are great at their work, not at juggling apps.",
-      visualBefore: "Today",
-      visualAfter: "With a simple system",
-      messy: ["WhatsApp", "Instagram", "Email", "Spreadsheets", "Forgotten follow-ups"],
-      organized: [
-        "Clear website",
-        "Contact form",
-        "Leads in one list",
-        "Quick auto-reply",
-        "Follow-up reminders",
-        "Simple overview",
-      ],
+      ctaHint: "Short consultation · No pressure · Plain language",
+      trust: "Not another app. The way the ones you use start working together.",
+      visualStatus: "System active",
+      sources: ["WhatsApp", "Email", "Excel", "Instagram", "Trello", "LinkedIn"],
+      systemLabel: "Everything connected",
+      systemTitle: "Clear system",
+      systemBullets: ["Leads in one place", "Simple follow-up", "Less manual work"],
     },
     problem: {
-      eyebrow: "Sound familiar?",
-      title: "Your business works. Your systems don't.",
-      copy: "You do not need ten more apps. You need one simple way to get clients, stay organized, and stop doing the same tasks by hand.",
+      eyebrow: "Diagnosis",
+      title: "If everything goes through you, you do not have a system.",
+      copy: "Pick a bottleneck. The issue is not working hard; it is that information cannot move by itself.",
+      signal: "Bottleneck detected",
       cards: [
         "Inquiries get lost between WhatsApp, Instagram and email.",
         "You answer the same questions again and again.",
@@ -92,9 +88,9 @@ export const en = {
       },
     },
     systemFlow: {
-      eyebrow: "Why this is different",
-      title: "Not just a website. A system that runs your inquiries.",
-      copy: "Most people hand you a page and disappear. I connect how clients find you, how they contact you, and what happens next so nothing falls through the cracks.",
+      eyebrow: "The method",
+      title: "I turn chaos into something that works.",
+      copy: "I connect the full path, from someone discovering you to knowing what happens next.",
       callout:
         "Think of it as the path from \"someone is interested\" to \"you replied and followed up\" without living in your inbox.",
       nodes: [
@@ -114,9 +110,9 @@ export const en = {
       secondary: "Send me an email",
     },
     whatIBuild: {
-      eyebrow: "What you get",
-      title: "What I build for you",
-      subtitle: "Pick one piece or connect the full flow. Always explained in plain language.",
+      eyebrow: "Outcomes",
+      title: "Less follow-up. More momentum.",
+      subtitle: "Every piece has one clear job: attract, move, or resolve.",
       cards: [
         {
           title: "A website that sells and captures leads",
@@ -151,21 +147,19 @@ export const en = {
       ],
     },
     whyMe: {
-      eyebrow: "Why trust me",
-      title: "I plan the system behind your business, not just a pretty page.",
-      copy: "I have years leading digital projects for agencies and startups. Now I use that experience to help small businesses get the same clarity, without agency jargon or surprise costs.",
+      eyebrow: "How I think",
+      title: "I do not sell hours. I solve bottlenecks.",
+      copy: "Experience shipping digital projects, applied to what is slowing your business down today.",
       points: [
         "I start with your process, not a template",
         "Plain explanations, no tech lecture",
-        "Real experience delivering client projects",
-        "You know what you are getting before we build",
-        "AI only when it clearly saves you time",
+        "A clear solution before we build",
       ],
       cta: "See my background and experience",
     },
     finalCta: {
-      title: "Ready to make things simpler?",
-      copy: "Book a free call or send me a short note about what feels messy. I will reply with honest next steps.",
+      title: "What is holding your business back?",
+      copy: "Tell me where time is getting lost. I will suggest the simplest next step.",
     },
   },
   work: {

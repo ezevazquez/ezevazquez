@@ -124,11 +124,17 @@
   }
 
   .btn-primary-glow {
-    @apply relative overflow-hidden rounded-full bg-gradient-to-r from-blue-600 to-blue-500 px-8 h-12 text-sm font-semibold tracking-wide text-white shadow-[0_0_0_1px_rgba(255,255,255,0.1)_inset,0_8px_32px_-8px_rgba(59,130,246,0.55)] transition-all duration-300 hover:from-blue-500 hover:to-blue-400 hover:shadow-[0_0_0_1px_rgba(255,255,255,0.15)_inset,0_12px_40px_-8px_rgba(59,130,246,0.65)] hover:-translate-y-0.5 active:translate-y-0;
+    @apply relative overflow-hidden rounded-full bg-gradient-to-r from-blue-600 to-blue-500 px-8 h-12 text-sm font-semibold tracking-wide text-white shadow-[0_0_0_1px_rgba(255,255,255,0.1)_inset,0_8px_32px_-8px_rgba(59,130,246,0.55)] transition-colors duration-300 hover:from-blue-500 hover:to-blue-400 hover:shadow-[0_0_0_1px_rgba(255,255,255,0.15)_inset,0_12px_40px_-8px_rgba(59,130,246,0.65)];
   }
 
   .btn-outline-glass {
-    @apply rounded-full border border-white/15 bg-white/[0.03] px-8 h-12 text-sm font-medium text-gray-100 backdrop-blur-sm transition-all duration-300 hover:border-white/25 hover:bg-white/[0.07] hover:-translate-y-0.5 active:translate-y-0;
+    @apply relative overflow-hidden rounded-full border border-white/15 bg-white/[0.03] px-8 h-12 text-sm font-medium text-gray-100 backdrop-blur-sm transition-colors duration-300 hover:border-white/25 hover:bg-white/[0.07];
+  }
+
+  .btn-primary-glow:focus-visible,
+  .btn-outline-glass:focus-visible,
+  .glass-card-interactive:focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-black;
   }
 
   .section-glow-top {
@@ -147,6 +153,14 @@
     mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 20%, transparent 75%);
   }
 
+  .system-grid {
+    background-image:
+      linear-gradient(rgba(59, 130, 246, 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(59, 130, 246, 0.08) 1px, transparent 1px);
+    background-size: 72px 72px;
+    mask-image: radial-gradient(ellipse 75% 55% at 50% 0%, black 0%, transparent 72%);
+  }
+
   .nav-link {
     @apply text-sm font-medium text-gray-400 transition-colors duration-200 hover:text-white;
   }
@@ -158,4 +172,15 @@
 
 .perspective-1000 {
   perspective: 1000px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

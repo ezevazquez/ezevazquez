@@ -2,6 +2,22 @@ import type { Variants } from "framer-motion"
 
 const easeOut = [0.22, 1, 0.36, 1] as const
 
+export const motionEase = easeOut
+
+export const microTransition = {
+  type: "spring" as const,
+  stiffness: 380,
+  damping: 24,
+  mass: 0.55,
+}
+
+export const interactiveTransition = {
+  type: "spring" as const,
+  stiffness: 320,
+  damping: 22,
+  mass: 0.6,
+}
+
 export const fadeUp: Variants = {
   hidden: { opacity: 0, y: 28 },
   visible: {
@@ -52,4 +68,22 @@ export const viewportOnce = { once: true, amount: 0.15 as const }
 export const sectionTransition = {
   duration: 0.7,
   ease: easeOut,
+}
+
+export const pathReveal: Variants = {
+  hidden: { pathLength: 0, opacity: 0 },
+  visible: {
+    pathLength: 1,
+    opacity: 1,
+    transition: { duration: 0.9, ease: easeOut },
+  },
+}
+
+export const signalReveal: Variants = {
+  hidden: { opacity: 0, scale: 0.7 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: microTransition,
+  },
 }

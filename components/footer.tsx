@@ -3,17 +3,19 @@
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { useLanguage } from "./language-provider"
+import { useReducedMotion } from "@/hooks/use-reduced-motion"
 
 export function Footer() {
   const { t } = useLanguage()
+  const reduced = useReducedMotion()
 
   return (
     <footer className="relative py-12 px-4 sm:px-6 border-t border-white/[0.06] bg-black/80">
       <div className="section-glow-top top-0" aria-hidden />
       <div className="section-container">
         <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={reduced ? false : { opacity: 0, y: 12 }}
+          whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
           className="flex flex-col md:flex-row items-center justify-between gap-6"

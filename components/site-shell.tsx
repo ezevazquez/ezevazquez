@@ -1,21 +1,29 @@
 "use client"
 
 import type { ReactNode } from "react"
-import { Particles } from "./particles"
+import { MotionConfig } from "framer-motion"
+import { SystemBackground } from "./system-background"
 import { Navbar } from "./navbar"
 import { Footer } from "./footer"
+import { useLanguage } from "./language-provider"
 
 export function SiteShell({ children }: { children: ReactNode }) {
+  const { t } = useLanguage()
+
   return (
-    <div className="relative min-h-screen bg-black text-white overflow-x-hidden selection:bg-primary/30">
-      <div
-        className="fixed inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(59,130,246,0.12),transparent)] pointer-events-none z-0"
-        aria-hidden
-      />
-      <Particles className="fixed inset-0 pointer-events-none opacity-80" />
-      <Navbar />
-      <main className="relative z-[1]">{children}</main>
-      <Footer />
-    </div>
+    <MotionConfig reducedMotion="user">
+      <div className="relative min-h-screen bg-black text-white overflow-x-hidden selection:bg-primary/30">
+        <SystemBackground />
+        <a
+          href="#main-content"
+          className="sr-only fixed left-4 top-4 z-50 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white focus:not-sr-only"
+        >
+          {t("common.skipToContent")}
+        </a>
+        <Navbar />
+        <main id="main-content" className="relative z-[1]">{children}</main>
+        <Footer />
+      </div>
+    </MotionConfig>
   )
 }

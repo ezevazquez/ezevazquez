@@ -1,43 +1,108 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useReducedMotion } from "@/hooks/use-reduced-motion"
+import { LOADER_STORAGE_KEY } from "@/lib/redesign/config"
 import { useCopy } from "@/lib/redesign/use-copy"
 import { Signature } from "./signature"
 
-const STORAGE_KEY = "eze-loader"
+function shouldSkipLoader() {
+  if (typeof document === "undefined") return false
+  if (document.documentElement.classList.contains("loader-done")) return true
+  if (document.documentElement.classList.contains("reduce-motion")) return true
+  try {
+    return !!sessionStorage.getItem(LOADER_STORAGE_KEY)
+  } catch {
+    return false
+  }
+}
+
+function scramble(from: string, to: string, t: number) {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz…·/"
+  const len = Math.max(from.length, to.length)
+  let out = ""
+  for (let i = 0; i < len; i++) {
+    if (i / len < t) out += to[i] ?? ""
+    else out += chars[Math.floor(Math.random() * chars.length)]
+  }
+  return out
+}
+
+/** Non-linear progress that sticks near 47% for the Jira gag. */
+function mapProgress(raw: number) {
+  if (raw < 0.38) return raw * (47 / 38)
+  if (raw < 0.55) return 47 + (raw - 0.38) * 4
+  return 47 + ((raw - 0.55) / 0.45) * 53
+}
 
 export function Loader() {
   const { t } = useCopy()
   const reduced = useReducedMotion()
-  const [visible, setVisible] = useState(true)
+  const [visible, setVisible] = useState(() => !shouldSkipLoader())
   const [leaving, setLeaving] = useState(false)
   const [count, setCount] = useState(0)
+  const [phrase, setPhrase] = useState("")
+  const phraseIndex = useRef(0)
 
   useEffect(() => {
-    if (reduced || sessionStorage.getItem(STORAGE_KEY)) {
+    if (!visible) return
+    if (reduced || shouldSkipLoader()) {
+      document.documentElement.classList.add("loader-done")
       setVisible(false)
       return
     }
 
     document.documentElement.style.overflow = "hidden"
     const started = performance.now()
-    const duration = 2400
+    const duration = 3200
     let frame = 0
+    const phrases = t.loader
+
+    phraseIndex.current = 0
+    setPhrase(phrases[0] ?? "")
 
     const step = (now: number) => {
-      const progress = Math.min(1, (now - started) / duration)
-      const eased = 1 - Math.pow(1 - progress, 3)
-      setCount(Math.round(eased * 100))
-      if (progress < 1) {
+      const raw = Math.min(1, (now - started) / duration)
+      const mapped = Math.min(100, Math.round(mapProgress(raw)))
+      setCount(mapped)
+
+      const nextPhraseIndex = Math.min(
+        phrases.length - 1,
+        Math.floor(raw * phrases.length),
+      )
+      if (nextPhraseIndex !== phraseIndex.current) {
+        const from = phrases[phraseIndex.current] ?? ""
+        const to = phrases[nextPhraseIndex] ?? ""
+        phraseIndex.current = nextPhraseIndex
+        let scrambleFrame = 0
+        const scrambleSteps = 8
+        const runScramble = () => {
+          scrambleFrame++
+          setPhrase(scramble(from, to, scrambleFrame / scrambleSteps))
+          if (scrambleFrame < scrambleSteps) {
+            window.setTimeout(runScramble, 28)
+          } else {
+            setPhrase(to)
+          }
+        }
+        runScramble()
+      }
+
+      if (raw < 1) {
         frame = requestAnimationFrame(step)
       } else {
         setLeaving(true)
         window.setTimeout(() => {
-          sessionStorage.setItem(STORAGE_KEY, "1")
+          try {
+            sessionStorage.setItem(LOADER_STORAGE_KEY, "1")
+          } catch {
+            /* ignore */
+          }
+          document.documentElement.classList.add("loader-done")
           setVisible(false)
           document.documentElement.style.overflow = ""
-        }, 420)
+          window.dispatchEvent(new CustomEvent("eze:loader-done"))
+        }, 520)
       }
     }
 
@@ -46,29 +111,40 @@ export function Loader() {
       cancelAnimationFrame(frame)
       document.documentElement.style.overflow = ""
     }
-  }, [reduced])
+  }, [reduced, visible, t.loader])
 
   if (!visible) return null
 
-  const phrase = t.loader[Math.min(t.loader.length - 1, Math.floor(count / 34))]
+  const label =
+    count >= 45 && count <= 52
+      ? phrasesAt47(t.loader)
+      : phrase || t.loader[0]
 
   return (
     <div
-      className={`fixed inset-0 z-[80] flex flex-col bg-[#1F4BFF] text-[#F4F1EA] transition-opacity duration-500 ${leaving ? "opacity-0" : "opacity-100"}`}
-      style={{ transitionTimingFunction: "cubic-bezier(0.23, 1, 0.32, 1)" }}
+      data-loader
+      className={`fixed inset-0 z-[80] flex flex-col bg-[#1F4BFF] text-[#F4F1EA] ${
+        leaving ? "loader-curtain" : ""
+      }`}
       role="status"
       aria-live="polite"
-      aria-label={phrase}
+      aria-label={label}
     >
       <div className="flex flex-1 items-center justify-center px-6">
         <Signature className="w-[min(78vw,520px)]" />
       </div>
       <div className="flex items-end justify-between gap-6 px-6 pb-8 sm:px-10">
-        <p className="max-w-[16rem] font-mono text-sm sm:text-base">{phrase}</p>
-        <p className="font-display text-5xl leading-none tracking-[-0.04em] sm:text-7xl">
+        <p className="max-w-[18rem] font-mono text-sm sm:text-base" aria-hidden>
+          {label}
+        </p>
+        <p className="font-display text-5xl leading-none tracking-[-0.04em] sm:text-7xl" aria-hidden>
           {count}
         </p>
       </div>
     </div>
   )
+}
+
+function phrasesAt47(phrases: readonly string[]) {
+  return phrases.find((p) => p.includes("47") || p.includes("Jira")) ?? phrases[phrases.length - 1] ?? ""
 }

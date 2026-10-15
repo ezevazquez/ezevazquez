@@ -1,8 +1,7 @@
 "use client"
 
-import { useEffect, useRef } from "react"
-import { useReducedMotion } from "@/hooks/use-reduced-motion"
-import { refreshScrollTrigger } from "@/hooks/use-gsap"
+import { useEffect } from "react"
+import { refreshScrollTrigger, useGsap } from "@/hooks/use-gsap"
 import { useCopy } from "@/lib/redesign/use-copy"
 import { TransitionLink } from "./transition-link"
 
@@ -53,113 +52,93 @@ function Frame({ index, compact = false }: { index: number; compact?: boolean })
 
 export function WorkView() {
   const { t, language } = useCopy()
-  const rootRef = useRef<HTMLDivElement>(null)
-  const reduced = useReducedMotion()
 
   useEffect(() => {
     void refreshScrollTrigger()
   }, [language])
 
-  useEffect(() => {
-    if (reduced || !rootRef.current) return
-    let ctx: { revert: () => void } | null = null
-    let dead = false
+  const rootRef = useGsap((gsap) => {
+    gsap.utils.toArray<HTMLElement>("[data-parallax]").forEach((node) => {
+      const distance = Number(node.dataset.parallax || 80)
+      gsap.fromTo(
+        node,
+        { y: distance },
+        {
+          y: -distance,
+          ease: "none",
+          scrollTrigger: {
+            trigger: node.parentElement,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+        },
+      )
+    })
 
-    ;(async () => {
-      const gsap = (await import("gsap")).default
-      const { ScrollTrigger } = await import("gsap/ScrollTrigger")
-      if (dead || !rootRef.current) return
-      gsap.registerPlugin(ScrollTrigger)
-      ctx = gsap.context(() => {
-        gsap.utils.toArray<HTMLElement>("[data-parallax]").forEach((node) => {
-          const distance = Number(node.dataset.parallax || 80)
-          gsap.fromTo(
-            node,
-            { y: distance },
-            {
-              y: -distance,
-              ease: "none",
-              scrollTrigger: {
-                trigger: node.parentElement,
-                start: "top bottom",
-                end: "bottom top",
-                scrub: true,
-              },
-            },
-          )
-        })
+    gsap.utils.toArray<HTMLElement>("[data-clip]").forEach((node) => {
+      gsap.fromTo(
+        node,
+        { clipPath: "inset(100% 0 0 0)" },
+        {
+          clipPath: "inset(0% 0 0 0)",
+          ease: "power3.out",
+          duration: 1,
+          scrollTrigger: { trigger: node, start: "top 80%", once: true },
+        },
+      )
+    })
 
-        gsap.utils.toArray<HTMLElement>("[data-clip]").forEach((node) => {
-          gsap.fromTo(
-            node,
-            { clipPath: "inset(100% 0 0 0)" },
-            {
-              clipPath: "inset(0% 0 0 0)",
-              ease: "power3.out",
-              duration: 1,
-              scrollTrigger: { trigger: node, start: "top 80%", once: true },
-            },
-          )
-        })
+    gsap.utils.toArray<HTMLElement>("[data-stroke-word]").forEach((node) => {
+      gsap.fromTo(
+        node,
+        { webkitTextStrokeColor: "rgba(244,241,234,0.35)", color: "transparent" },
+        {
+          webkitTextStrokeColor: "transparent",
+          color: "rgba(244,241,234,0.12)",
+          ease: "none",
+          scrollTrigger: {
+            trigger: node.closest("section"),
+            start: "top 60%",
+            end: "bottom 40%",
+            scrub: true,
+          },
+        },
+      )
+    })
 
-        gsap.utils.toArray<HTMLElement>("[data-stroke-word]").forEach((node) => {
-          gsap.fromTo(
-            node,
-            { webkitTextStrokeColor: "rgba(244,241,234,0.35)", color: "transparent" },
-            {
-              webkitTextStrokeColor: "transparent",
-              color: "rgba(244,241,234,0.12)",
-              ease: "none",
-              scrollTrigger: {
-                trigger: node.closest("section"),
-                start: "top 60%",
-                end: "bottom 40%",
-                scrub: true,
-              },
-            },
-          )
-        })
+    const quoteWords = gsap.utils.toArray<HTMLElement>("[data-quote-word]")
+    quoteWords.forEach((word, i) => {
+      gsap.fromTo(
+        word,
+        { opacity: 0.22 },
+        {
+          opacity: 1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: "[data-quote]",
+            start: `top ${70 - i * 2}%`,
+            end: `top ${55 - i * 2}%`,
+            scrub: true,
+          },
+        },
+      )
+    })
 
-        const quoteWords = gsap.utils.toArray<HTMLElement>("[data-quote-word]")
-        quoteWords.forEach((word, i) => {
-          gsap.fromTo(
-            word,
-            { opacity: 0.22 },
-            {
-              opacity: 1,
-              ease: "none",
-              scrollTrigger: {
-                trigger: "[data-quote]",
-                start: `top ${70 - i * 2}%`,
-                end: `top ${55 - i * 2}%`,
-                scrub: true,
-              },
-            },
-          )
-        })
-
-        const marquee = document.querySelector<HTMLElement>("[data-speed-marquee]")
-        if (marquee) {
-          gsap.to(marquee, {
-            xPercent: -50,
-            ease: "none",
-            scrollTrigger: {
-              trigger: marquee.parentElement,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: 0.4,
-            },
-          })
-        }
-      }, rootRef)
-      ScrollTrigger.refresh()
-    })()
-
-    return () => {
-      dead = true
-      ctx?.revert()
+    const marquee = document.querySelector<HTMLElement>("[data-speed-marquee]")
+    if (marquee) {
+      gsap.to(marquee, {
+        xPercent: -50,
+        ease: "none",
+        scrollTrigger: {
+          trigger: marquee.parentElement,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 0.4,
+        },
+      })
     }
-  }, [reduced, language])
+  }, [language])
 
   const items = t.what.map((item, index) => ({
     ...item,
@@ -176,57 +155,62 @@ export function WorkView() {
         <p className="mt-6 max-w-xl text-lg text-[#F4F1EA]/70">{t.workSub}</p>
       </header>
 
-      {items.map((item, index) => (
-        <section key={item.n} className="relative min-h-[140svh] overflow-hidden">
-          <p
-            data-stroke-word
-            aria-hidden
-            className="pointer-events-none sticky top-[18vh] block px-4 font-display text-[28vw] leading-none tracking-[-0.07em] text-transparent"
-            style={{ WebkitTextStroke: "1px rgba(244,241,234,0.35)" }}
-          >
-            {item.word}
-          </p>
-          <div className="absolute inset-0">
-            <div
-              className="group/shot absolute left-[8vw] top-[22vh]"
-              data-parallax="140"
-              data-cursor="view"
+      {items.map((item, index) => {
+        const hasHref = Boolean(item.placeholder?.href)
+        return (
+          <section key={item.n} className="relative min-h-[140svh] overflow-hidden">
+            <p
+              data-stroke-word
+              aria-hidden
+              className="pointer-events-none sticky top-[18vh] block px-4 font-display text-[28vw] leading-none tracking-[-0.07em] text-transparent"
+              style={{ WebkitTextStroke: "1px rgba(244,241,234,0.35)" }}
             >
-              <div data-clip>
-                <Frame index={index} />
+              {item.word}
+            </p>
+            <div className="absolute inset-0">
+              <div
+                className="group/shot absolute left-[8vw] top-[22vh]"
+                data-parallax="140"
+                {...(hasHref ? { "data-cursor": "view" as const } : {})}
+              >
+                <div data-clip>
+                  <Frame index={index} />
+                </div>
+                {hasHref ? (
+                  <span className="work-cursor-label pointer-events-none absolute bottom-4 left-4 font-mono text-[11px] uppercase tracking-[0.18em] text-[#F4F1EA] opacity-0 transition-opacity duration-200 ease-out group-hover/shot:opacity-100">
+                    {t.view}
+                  </span>
+                ) : null}
+                <span className="mt-3 block font-mono text-[10px] uppercase tracking-[0.16em] text-[#F4F1EA]/55">
+                  [{t.workPlaceholder}]
+                </span>
               </div>
-              <span className="work-cursor-label pointer-events-none absolute bottom-4 left-4 font-mono text-[11px] uppercase tracking-[0.18em] text-[#F4F1EA] opacity-0 transition-opacity duration-200 ease-out group-hover/shot:opacity-100">
-                {t.view}
-              </span>
-              <span className="mt-3 block font-mono text-[10px] uppercase tracking-[0.16em] text-[#F4F1EA]/45">
-                [{t.workPlaceholder}]
-              </span>
+              <div className="absolute right-[10vw] top-[48vh] hidden sm:block" data-parallax="70" data-clip>
+                <Frame index={index + 1} compact />
+              </div>
+              <div className="group absolute bottom-[18vh] left-6 z-[1] max-w-xl sm:left-12">
+                <p className="font-mono text-sm text-[#1F4BFF]">[{item.n}]</p>
+                <h2 className="mt-3 font-display text-[clamp(2.2rem,4vw,3.6rem)] leading-[0.92] tracking-[-0.045em]">
+                  {item.title}
+                </h2>
+                <p className="mt-3 max-w-md text-[#F4F1EA]/75">{item.body}</p>
+                {hasHref && item.placeholder?.href ? (
+                  <a
+                    href={item.placeholder.href}
+                    className="mt-4 inline-block font-mono text-xs uppercase tracking-[0.18em] text-[#F4F1EA]"
+                  >
+                    {t.view}
+                  </a>
+                ) : (
+                  <p className="mt-4 font-mono text-xs uppercase tracking-[0.18em] text-[#F4F1EA]/55">
+                    {t.workPlaceholder}
+                  </p>
+                )}
+              </div>
             </div>
-            <div className="absolute right-[10vw] top-[48vh] hidden sm:block" data-parallax="70" data-clip>
-              <Frame index={index + 1} compact />
-            </div>
-            <div className="group absolute bottom-[18vh] left-6 z-[1] max-w-xl sm:left-12">
-              <p className="font-mono text-sm text-[#1F4BFF]">[{item.n}]</p>
-              <h2 className="mt-3 font-display text-[clamp(2.2rem,4vw,3.6rem)] leading-[0.92] tracking-[-0.045em]">
-                {item.title}
-              </h2>
-              <p className="mt-3 max-w-md text-[#F4F1EA]/75">{item.body}</p>
-              {item.placeholder?.href ? (
-                <a
-                  href={item.placeholder.href}
-                  className="mt-4 inline-block font-mono text-xs uppercase tracking-[0.18em] text-[#F4F1EA]"
-                >
-                  {t.view}
-                </a>
-              ) : (
-                <p className="mt-4 font-mono text-xs uppercase tracking-[0.18em] text-[#F4F1EA]/45">
-                  {t.workPlaceholder}
-                </p>
-              )}
-            </div>
-          </div>
-        </section>
-      ))}
+          </section>
+        )
+      })}
 
       <section data-quote className="px-6 py-28 sm:px-12">
         <p className="max-w-4xl font-display text-[clamp(2rem,5vw,3.8rem)] leading-[1.15] tracking-[-0.04em]">

@@ -1,9 +1,9 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import { ABOUT_PROGRESS_KEY } from "@/lib/redesign/config"
 import { useReducedMotion } from "@/hooks/use-reduced-motion"
-import { refreshScrollTrigger } from "@/hooks/use-gsap"
+import { loadGsap, refreshScrollTrigger, useGsap } from "@/hooks/use-gsap"
 import { useCopy } from "@/lib/redesign/use-copy"
 
 const KIND_LABEL = {
@@ -25,7 +25,6 @@ export function AboutView() {
   const [current, setCurrent] = useState<string>(t.chapters[0]?.title ?? "")
   const [years, setYears] = useState(0)
   const [resumeId, setResumeId] = useState<string | null>(null)
-  const listRef = useRef<HTMLDivElement>(null)
   const reduced = useReducedMotion()
   const labels = KIND_LABEL[language]
 
@@ -88,76 +87,63 @@ export function AboutView() {
     return () => cancelAnimationFrame(frame)
   }, [reduced, language])
 
-  useEffect(() => {
-    if (reduced) return
-    let ctx: { revert: () => void } | null = null
-    let dead = false
-    ;(async () => {
-      const gsap = (await import("gsap")).default
-      const { ScrollTrigger } = await import("gsap/ScrollTrigger")
-      const { Flip } = await import("gsap/Flip")
-      if (dead) return
-      gsap.registerPlugin(ScrollTrigger, Flip)
-
-      ctx = gsap.context(() => {
-        const thread = document.querySelector<SVGPathElement>("[data-thread-path]")
-        if (thread) {
-          const len = thread.getTotalLength()
-          gsap.set(thread, { strokeDasharray: len, strokeDashoffset: len })
-          gsap.to(thread, {
-            strokeDashoffset: 0,
-            ease: "none",
-            scrollTrigger: {
-              trigger: "[data-about-root]",
-              start: "top top",
-              end: "bottom bottom",
-              scrub: 0.6,
-            },
-          })
-        }
-
-        gsap.utils.toArray<HTMLElement>("[data-title]").forEach((title) => {
-          gsap.fromTo(
-            title,
-            { opacity: 0.35, y: 24 },
-            {
-              opacity: 1,
-              y: 0,
-              duration: 0.7,
-              ease: "power2.out",
-              scrollTrigger: { trigger: title, start: "top 82%", once: true },
-            },
-          )
-          gsap.to(title, {
-            filter: window.matchMedia("(min-width: 768px)").matches ? "blur(8px)" : "none",
-            opacity: 0.4,
-            ease: "none",
-            scrollTrigger: {
-              trigger: title,
-              start: "top 18%",
-              end: "top -10%",
-              scrub: true,
-            },
-          })
+  const listRef = useGsap(
+    (gsap) => {
+      const thread = document.querySelector<SVGPathElement>("[data-thread-path]")
+      if (thread) {
+        const len = thread.getTotalLength()
+        gsap.set(thread, { strokeDasharray: len, strokeDashoffset: len })
+        gsap.to(thread, {
+          strokeDashoffset: 0,
+          ease: "none",
+          scrollTrigger: {
+            trigger: "[data-about-root]",
+            start: "top top",
+            end: "bottom bottom",
+            scrub: 0.6,
+          },
         })
-      }, listRef)
+      }
 
-      ScrollTrigger.refresh()
-    })()
-    return () => {
-      dead = true
-      ctx?.revert()
-    }
-  }, [reduced, filter, language])
+      gsap.utils.toArray<HTMLElement>("[data-title]").forEach((title) => {
+        gsap.fromTo(
+          title,
+          { opacity: 0.35, y: 24 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.7,
+            ease: "power2.out",
+            scrollTrigger: { trigger: title, start: "top 82%", once: true },
+          },
+        )
+        gsap.to(title, {
+          filter: window.matchMedia("(min-width: 768px)").matches ? "blur(8px)" : "none",
+          opacity: 0.4,
+          ease: "none",
+          scrollTrigger: {
+            trigger: title,
+            start: "top 18%",
+            end: "top -10%",
+            scrub: true,
+          },
+        })
+      })
+    },
+    [filter, language],
+    { flip: true },
+  )
 
   const onFilter = async (id: string) => {
     if (reduced || !listRef.current) {
       setFilter(id)
       return
     }
-    const gsap = (await import("gsap")).default
-    const { Flip } = await import("gsap/Flip")
-    gsap.registerPlugin(Flip)
+    const { gsap, Flip } = await loadGsap({ flip: true })
+    if (!Flip || !listRef.current) {
+      setFilter(id)
+      return
+    }
     const state = Flip.getState(listRef.current.querySelectorAll("[data-chapter]"))
     setFilter(id)
     requestAnimationFrame(() => {

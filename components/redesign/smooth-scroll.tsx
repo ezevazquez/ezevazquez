@@ -2,6 +2,7 @@
 
 import { useEffect } from "react"
 import { useReducedMotion } from "@/hooks/use-reduced-motion"
+import { loadGsap } from "@/hooks/use-gsap"
 import { scrollBus } from "./scroll-bus"
 
 function bootReduced() {
@@ -20,11 +21,9 @@ export function SmoothScroll() {
 
     ;(async () => {
       const Lenis = (await import("lenis")).default
-      const gsap = (await import("gsap")).default
-      const { ScrollTrigger } = await import("gsap/ScrollTrigger")
+      const { gsap, ScrollTrigger } = await loadGsap()
       if (cancelled) return
 
-      gsap.registerPlugin(ScrollTrigger)
       const lenis = new Lenis({ lerp: 0.12, smoothWheel: true })
       scrollBus.lenis = lenis
       lenis.on("scroll", ScrollTrigger.update)

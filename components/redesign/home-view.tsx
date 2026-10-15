@@ -3,8 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import { EMAIL_URL } from "@/lib/constants"
 import { CALENDAR_URL, HAS_CALENDAR } from "@/lib/redesign/config"
-import { useReducedMotion } from "@/hooks/use-reduced-motion"
-import { refreshScrollTrigger } from "@/hooks/use-gsap"
+import { refreshScrollTrigger, useGsap } from "@/hooks/use-gsap"
 import { useCopy } from "@/lib/redesign/use-copy"
 import { NoteCard, StickerField } from "./stickers"
 import { TransitionLink } from "./transition-link"
@@ -47,189 +46,194 @@ function Clock() {
 
 export function HomeView() {
   const { t, language } = useCopy()
-  const rootRef = useRef<HTMLDivElement>(null)
-  const nameRef = useRef<HTMLHeadingElement>(null)
-  const slotRef = useRef<HTMLParagraphElement>(null)
-  const reduced = useReducedMotion()
+  const nameRef = useRef<HTMLParagraphElement>(null)
   const entered = useRef(false)
+  const docked = useRef(false)
+  const firstName = t.brandName.split(" ")[0] || "Eze"
 
   useEffect(() => {
     void refreshScrollTrigger()
   }, [language])
 
-  useEffect(() => {
-    if (reduced || !rootRef.current) return
-    let ctx: { revert: () => void } | null = null
-    let dead = false
+  const rootRef = useGsap(
+    (gsap, _root, { Flip, ScrollTrigger }) => {
+      const stickers = gsap.utils.toArray<HTMLElement>(".sticker")
+      const titleLines = gsap.utils.toArray<HTMLElement>("[data-hero-line]")
+      const card = document.querySelector<HTMLElement>("[data-note-card]")
+      let onDone: (() => void) | null = null
 
-    const run = async () => {
-      const gsap = (await import("gsap")).default
-      const { ScrollTrigger } = await import("gsap/ScrollTrigger")
-      const { Flip } = await import("gsap/Flip")
-      if (dead || !rootRef.current) return
-      gsap.registerPlugin(ScrollTrigger, Flip)
+      const entrance = () => {
+        if (entered.current) return
+        entered.current = true
+        const tl = gsap.timeline({ defaults: { ease: "power3.out" } })
+        gsap.set(stickers, { y: -80, opacity: 0, rotate: 0 })
+        gsap.set(titleLines, { yPercent: 110 })
+        if (card) gsap.set(card, { scale: 0.92, opacity: 0 })
 
-      ctx = gsap.context(() => {
-        const stickers = gsap.utils.toArray<HTMLElement>(".sticker")
-        const titleLines = gsap.utils.toArray<HTMLElement>("[data-hero-line]")
-        const card = document.querySelector<HTMLElement>("[data-note-card]")
-
-        const entrance = () => {
-          if (entered.current) return
-          entered.current = true
-          const tl = gsap.timeline({ defaults: { ease: "power3.out" } })
-          gsap.set(stickers, { y: -80, opacity: 0, rotate: 0 })
-          gsap.set(titleLines, { yPercent: 110 })
-          if (card) gsap.set(card, { scale: 0.92, opacity: 0 })
-
-          tl.to(stickers, {
-            y: 0,
-            opacity: 1,
-            rotate: (i) => Number(stickers[i]?.dataset.rotate || 0),
-            duration: 0.9,
-            stagger: 0.06,
-            ease: "back.out(1.6)",
-          })
-          if (card) {
-            tl.to(card, { scale: 1, opacity: 1, duration: 0.55 }, "-=0.45")
-          }
-          tl.to(titleLines, { yPercent: 0, duration: 0.85, stagger: 0.08 }, "-=0.35")
+        tl.to(stickers, {
+          y: 0,
+          opacity: 1,
+          rotate: (i: number) => Number(stickers[i]?.dataset.rotate || 0),
+          duration: 0.9,
+          stagger: 0.06,
+          ease: "back.out(1.6)",
+        })
+        if (card) {
+          tl.to(card, { scale: 1, opacity: 1, duration: 0.55 }, "-=0.45")
         }
+        tl.to(titleLines, { yPercent: 0, duration: 0.85, stagger: 0.08 }, "-=0.35")
+      }
 
-        if (document.documentElement.classList.contains("loader-done")) {
-          entrance()
-        } else {
-          const onDone = () => entrance()
-          window.addEventListener("eze:loader-done", onDone, { once: true })
-        }
+      if (document.documentElement.classList.contains("loader-done")) {
+        entrance()
+      } else {
+        onDone = () => entrance()
+        window.addEventListener("eze:loader-done", onDone, { once: true })
+      }
 
-        // Name shrinks into header slot (Alejandro HA)
-        if (nameRef.current && slotRef.current) {
-          const name = nameRef.current
-          ScrollTrigger.create({
-            trigger: "[data-hero]",
-            start: "top top",
-            end: "bottom top",
-            scrub: true,
-            onUpdate: (self) => {
-              const p = self.progress
-              gsap.set(name, {
-                scale: 1 - p * 0.72,
-                y: -p * 40,
-                opacity: 1 - p * 0.15,
-              })
-              gsap.set(slotRef.current, { opacity: Math.max(0, (p - 0.55) / 0.45) })
-            },
+      // Real Flip: brand name ↔ [Eze] header slot
+      const name = nameRef.current
+      if (name && Flip) {
+        const dock = () => {
+          if (docked.current) return
+          docked.current = true
+          const state = Flip.getState(name)
+          name.classList.add("is-docked")
+          name.textContent = `[${firstName}]`
+          Flip.from(state, {
+            duration: 0.65,
+            ease: "power2.inOut",
+            absolute: true,
+            scale: true,
           })
         }
+        const undock = () => {
+          if (!docked.current) return
+          docked.current = false
+          const state = Flip.getState(name)
+          name.classList.remove("is-docked")
+          name.textContent = t.brandName
+          Flip.from(state, {
+            duration: 0.55,
+            ease: "power2.inOut",
+            absolute: true,
+            scale: true,
+          })
+        }
 
-        gsap.utils.toArray<HTMLElement>("[data-line]").forEach((line) => {
-          gsap.from(line, {
-            yPercent: 110,
-            duration: 0.8,
-            ease: "power3.out",
-            scrollTrigger: { trigger: line, start: "top 88%", once: true },
+        ScrollTrigger.create({
+          trigger: "[data-hero]",
+          start: "top top",
+          end: "bottom top",
+          onUpdate: (self) => {
+            if (self.progress > 0.52) dock()
+            else if (self.progress < 0.4) undock()
+          },
+        })
+      }
+
+      gsap.utils.toArray<HTMLElement>("[data-line]").forEach((line) => {
+        gsap.from(line, {
+          yPercent: 110,
+          duration: 0.8,
+          ease: "power3.out",
+          scrollTrigger: { trigger: line, start: "top 88%", once: true },
+        })
+      })
+
+      if (window.matchMedia("(min-width: 768px)").matches) {
+        gsap.utils.toArray<HTMLElement>("[data-sharpen]").forEach((node) => {
+          gsap.from(node, {
+            filter: "blur(8px)",
+            opacity: 0.35,
+            duration: 0.75,
+            ease: "power2.out",
+            scrollTrigger: { trigger: node, start: "top 86%", once: true },
           })
         })
-
-        if (window.matchMedia("(min-width: 768px)").matches) {
-          gsap.utils.toArray<HTMLElement>("[data-sharpen]").forEach((node) => {
-            gsap.from(node, {
-              filter: "blur(8px)",
-              opacity: 0.35,
-              duration: 0.75,
-              ease: "power2.out",
-              scrollTrigger: { trigger: node, start: "top 86%", once: true },
-            })
+      } else {
+        gsap.utils.toArray<HTMLElement>("[data-sharpen]").forEach((node) => {
+          gsap.from(node, {
+            opacity: 0.35,
+            y: 12,
+            duration: 0.55,
+            ease: "power2.out",
+            scrollTrigger: { trigger: node, start: "top 88%", once: true },
           })
-        } else {
-          gsap.utils.toArray<HTMLElement>("[data-sharpen]").forEach((node) => {
-            gsap.from(node, {
-              opacity: 0.35,
-              y: 12,
-              duration: 0.55,
-              ease: "power2.out",
-              scrollTrigger: { trigger: node, start: "top 88%", once: true },
-            })
-          })
-        }
+        })
+      }
 
-        gsap.from("[data-wipe]", {
-          clipPath: "polygon(0 0, 100% 0, 100% 0, 0 18%)",
+      gsap.from("[data-wipe]", {
+        clipPath: "polygon(0 0, 100% 0, 100% 0, 0 18%)",
+        ease: "none",
+        scrollTrigger: {
+          trigger: "[data-wipe]",
+          start: "top 85%",
+          end: "top 25%",
+          scrub: true,
+        },
+      })
+
+      const panels = gsap.utils.toArray<HTMLElement>("[data-panel]")
+      panels.forEach((panel) => {
+        const blur = panel.querySelector("[data-panel-blur]")
+        if (!blur) return
+        const mobile = !window.matchMedia("(min-width: 768px)").matches
+        gsap.to(blur, {
+          filter: mobile ? "none" : "blur(10px)",
+          scale: 0.94,
+          opacity: 0.45,
           ease: "none",
           scrollTrigger: {
-            trigger: "[data-wipe]",
-            start: "top 85%",
-            end: "top 25%",
+            trigger: panel,
+            start: "center top",
+            end: "bottom top",
             scrub: true,
           },
         })
+      })
 
-        const panels = gsap.utils.toArray<HTMLElement>("[data-panel]")
-        panels.forEach((panel) => {
-          const blur = panel.querySelector("[data-panel-blur]")
-          if (!blur) return
-          const mobile = !window.matchMedia("(min-width: 768px)").matches
-          gsap.to(blur, {
-            filter: mobile ? "none" : "blur(10px)",
-            scale: 0.94,
-            opacity: 0.45,
-            ease: "none",
-            scrollTrigger: {
-              trigger: panel,
-              start: "center top",
-              end: "bottom top",
-              scrub: true,
-            },
-          })
+      const howLine = document.querySelector<SVGPathElement>("[data-how-line]")
+      if (howLine) {
+        const length = howLine.getTotalLength()
+        gsap.set(howLine, { strokeDasharray: length, strokeDashoffset: length })
+        gsap.to(howLine, {
+          strokeDashoffset: 0,
+          ease: "none",
+          scrollTrigger: {
+            trigger: "[data-how]",
+            start: "top 70%",
+            end: "bottom 55%",
+            scrub: true,
+          },
         })
+      }
 
-        // Draw line between how-I-work steps
-        const howLine = document.querySelector<SVGPathElement>("[data-how-line]")
-        if (howLine) {
-          const length = howLine.getTotalLength()
-          gsap.set(howLine, { strokeDasharray: length, strokeDashoffset: length })
-          gsap.to(howLine, {
-            strokeDashoffset: 0,
-            ease: "none",
-            scrollTrigger: {
-              trigger: "[data-how]",
-              start: "top 70%",
-              end: "bottom 55%",
-              scrub: true,
-            },
-          })
-        }
-      }, rootRef)
-
-      ScrollTrigger.refresh()
-    }
-
-    void run()
-    return () => {
-      dead = true
-      ctx?.revert()
-    }
-  }, [reduced, language])
+      return () => {
+        if (onDone) window.removeEventListener("eze:loader-done", onDone)
+        docked.current = false
+      }
+    },
+    [language, t.brandName, firstName],
+    { flip: true },
+  )
 
   return (
     <div ref={rootRef}>
-      <p
-        ref={slotRef}
-        data-name-slot
-        className="pointer-events-none fixed left-5 top-5 z-[40] font-display text-2xl tracking-[-0.05em] text-[#F4F1EA] opacity-0 mix-blend-difference"
-      >
-        [{t.brandName.split(" ")[0]}]
-      </p>
-
       <section data-hero className="canvas-grid relative min-h-svh overflow-hidden bg-[#12131A]">
         <StickerField />
         <div className="pointer-events-none relative z-30 mx-auto flex min-h-svh max-w-3xl flex-col items-center justify-center px-5 pb-28 pt-20 text-center">
           <Clock />
-          <h1
+          <p
             ref={nameRef}
+            data-brand-name
+            className="brand-name mt-5 font-display text-[clamp(2.4rem,6vw,4.2rem)] leading-none tracking-[-0.05em] text-[#F4F1EA] will-change-transform"
+          >
+            {t.brandName}
+          </p>
+          <h1
             data-hero-title
-            className="mt-6 origin-top font-display text-[clamp(3.2rem,9vw,7.4rem)] leading-[0.88] tracking-[-0.05em] text-[#F4F1EA] will-change-transform"
+            className="mt-4 origin-top font-display text-[clamp(3.2rem,9vw,7.4rem)] leading-[0.88] tracking-[-0.05em] text-[#F4F1EA]"
           >
             <span className="line-mask">
               <span data-hero-line className="block">
@@ -248,7 +252,7 @@ export function HomeView() {
           <div className="pointer-events-auto" data-note-card>
             <NoteCard />
           </div>
-          <p className="scroll-cue mt-10 font-mono text-[11px] uppercase tracking-[0.18em] text-[#F4F1EA]/45">
+          <p className="scroll-cue mt-10 font-mono text-[11px] uppercase tracking-[0.18em] text-[#F4F1EA]/55">
             {t.scroll}
           </p>
         </div>

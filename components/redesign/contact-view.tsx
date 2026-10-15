@@ -1,9 +1,10 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import { EMAIL_URL, GITHUB_URL, LINKEDIN_URL, SITE_EMAIL } from "@/lib/constants"
 import { CALENDAR_URL, HAS_CALENDAR } from "@/lib/redesign/config"
 import { useReducedMotion } from "@/hooks/use-reduced-motion"
+import { useGsap } from "@/hooks/use-gsap"
 import { useCopy } from "@/lib/redesign/use-copy"
 
 const LINKS = [
@@ -32,37 +33,32 @@ export function ContactView() {
   const { t } = useCopy()
   const reduced = useReducedMotion()
   const cardRef = useRef<HTMLDivElement>(null)
-  const sceneRef = useRef<HTMLDivElement>(null)
   const [flipped, setFlipped] = useState(false)
   const [copied, setCopied] = useState(false)
   const tilt = useRef({ x: 0, y: 0 })
 
-  useEffect(() => {
-    if (reduced || !cardRef.current) return
-    let dead = false
-    ;(async () => {
-      const gsap = (await import("gsap")).default
-      if (dead || !cardRef.current) return
-      gsap.from(cardRef.current, {
-        y: -120,
-        rotate: -14,
-        scale: 0.9,
-        opacity: 0,
-        duration: 1.05,
-        ease: "elastic.out(1, 0.55)",
-        delay: 0.12,
-      })
-      gsap.from("[data-hand]", {
-        y: -160,
-        opacity: 0,
-        duration: 0.9,
-        ease: "power3.out",
-      })
-    })()
+  const sceneRef = useGsap((gsap) => {
+    if (!cardRef.current) return
+    gsap.from(cardRef.current, {
+      y: -120,
+      rotate: -14,
+      scale: 0.9,
+      opacity: 0,
+      duration: 1.05,
+      ease: "elastic.out(1, 0.55)",
+      delay: 0.12,
+    })
+    gsap.from("[data-hand]", {
+      y: -160,
+      opacity: 0,
+      duration: 0.9,
+      ease: "power3.out",
+    })
     return () => {
-      dead = true
+      if (cardRef.current) gsap.killTweensOf(cardRef.current)
+      gsap.killTweensOf("[data-hand]")
     }
-  }, [reduced])
+  }, [])
 
   const applyTilt = () => {
     if (!cardRef.current || flipped) return

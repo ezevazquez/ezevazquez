@@ -16,22 +16,31 @@ type SignatureProps = {
   className?: string
   /** When true, CSS draw animation is skipped (GSAP drives the paths). */
   static?: boolean
+  "data-loader-sig"?: boolean
+  "data-logo-sig"?: boolean
 }
 
-export function Signature({ className = "", static: isStatic = false }: SignatureProps) {
+export function Signature({
+  className = "",
+  static: isStatic = false,
+  ...dataAttrs
+}: SignatureProps) {
   return (
-    <svg viewBox="0 0 640 200" className={className} aria-hidden fill="none">
+    <svg
+      viewBox="0 0 640 200"
+      className={className}
+      aria-hidden
+      fill="none"
+      {...(dataAttrs["data-loader-sig"] ? { "data-loader-sig": "" } : {})}
+      {...(dataAttrs["data-logo-sig"] ? { "data-logo-sig": "" } : {})}
+    >
       {PATHS.map((d, index) => (
         <path
           key={index}
           className={isStatic ? "sig-path-static" : "sig-path"}
           pathLength={1}
           d={d}
-          style={
-            isStatic
-              ? undefined
-              : { animationDelay: `${index * 0.28}s` }
-          }
+          style={isStatic ? undefined : { animationDelay: `${index * 0.28}s` }}
         />
       ))}
     </svg>

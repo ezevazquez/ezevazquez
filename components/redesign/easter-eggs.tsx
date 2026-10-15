@@ -27,14 +27,13 @@ export function EasterEggs() {
   const originalTitle = useRef("")
 
   useEffect(() => {
-    // Console hello for devs
     // eslint-disable-next-line no-console
     console.log(
-      "%c[ ezevazquez ]%c Technical PM. Ordená el quilombo con IA.",
+      "%c[ ezevazquez ]%c " + t.consoleHello,
       "background:#1F4BFF;color:#F4F1EA;padding:4px 8px;border-radius:999px;font-family:monospace",
       "color:#F4F1EA;padding:4px 8px;font-family:monospace",
     )
-  }, [])
+  }, [t.consoleHello])
 
   useEffect(() => {
     originalTitle.current = document.title
@@ -97,26 +96,57 @@ export function EasterEggs() {
 
   useEffect(() => {
     if (reduced) return
-    const magnets = () => {
+
+    type Handlers = { move: (e: PointerEvent) => void; leave: () => void }
+    const bound = new Map<HTMLElement, Handlers>()
+
+    const bind = (btn: HTMLElement) => {
+      if (bound.has(btn)) return
+      const onMove = (event: PointerEvent) => {
+        const rect = btn.getBoundingClientRect()
+        const x = event.clientX - rect.left - rect.width / 2
+        const y = event.clientY - rect.top - rect.height / 2
+        btn.style.transform = `translate(${x * 0.22}px, ${y * 0.22}px)`
+      }
+      const onLeave = () => {
+        btn.style.transform = ""
+      }
+      btn.addEventListener("pointermove", onMove)
+      btn.addEventListener("pointerleave", onLeave)
+      btn.dataset.magnetic = "1"
+      bound.set(btn, { move: onMove, leave: onLeave })
+    }
+
+    const unbind = (btn: HTMLElement) => {
+      const handlers = bound.get(btn)
+      if (!handlers) return
+      btn.removeEventListener("pointermove", handlers.move)
+      btn.removeEventListener("pointerleave", handlers.leave)
+      btn.style.transform = ""
+      delete btn.dataset.magnetic
+      bound.delete(btn)
+    }
+
+    const scan = () => {
+      const live = new Set<HTMLElement>()
       document.querySelectorAll<HTMLElement>(".magnetic").forEach((btn) => {
-        if (btn.dataset.magneticBound) return
-        btn.dataset.magnetic = "1"
-        const onMove = (event: PointerEvent) => {
-          const rect = btn.getBoundingClientRect()
-          const x = event.clientX - rect.left - rect.width / 2
-          const y = event.clientY - rect.top - rect.height / 2
-          btn.style.transform = `translate(${x * 0.22}px, ${y * 0.22}px)`
-        }
-        const onLeave = () => {
-          btn.style.transform = ""
-        }
-        btn.addEventListener("pointermove", onMove)
-        btn.addEventListener("pointerleave", onLeave)
+        live.add(btn)
+        bind(btn)
+      })
+      bound.forEach((_, btn) => {
+        if (!live.has(btn) || !btn.isConnected) unbind(btn)
       })
     }
-    magnets()
-    const id = window.setInterval(magnets, 1200)
-    return () => window.clearInterval(id)
+
+    scan()
+    const mo = new MutationObserver(scan)
+    mo.observe(document.body, { childList: true, subtree: true })
+
+    return () => {
+      mo.disconnect()
+      bound.forEach((_, btn) => unbind(btn))
+      bound.clear()
+    }
   }, [reduced, pathname])
 
   return null

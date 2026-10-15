@@ -38,18 +38,24 @@ function mapProgress(raw: number) {
 export function Loader() {
   const { t } = useCopy()
   const reduced = useReducedMotion()
-  const [visible, setVisible] = useState(() => !shouldSkipLoader())
+  // Always true on first paint so SSR and hydration match; CSS hides when loader-done.
+  const [visible, setVisible] = useState(true)
   const [leaving, setLeaving] = useState(false)
   const [count, setCount] = useState(0)
   const [phrase, setPhrase] = useState("")
   const phraseIndex = useRef(0)
+  const timeouts = useRef<number[]>([])
 
   useEffect(() => {
-    if (!visible) return
+    const clearTimeouts = () => {
+      timeouts.current.forEach((id) => window.clearTimeout(id))
+      timeouts.current = []
+    }
+
     if (reduced || shouldSkipLoader()) {
       document.documentElement.classList.add("loader-done")
       setVisible(false)
-      return
+      return clearTimeouts
     }
 
     document.documentElement.style.overflow = "hidden"
@@ -60,6 +66,12 @@ export function Loader() {
 
     phraseIndex.current = 0
     setPhrase(phrases[0] ?? "")
+
+    const schedule = (fn: () => void, ms: number) => {
+      const id = window.setTimeout(fn, ms)
+      timeouts.current.push(id)
+      return id
+    }
 
     const step = (now: number) => {
       const raw = Math.min(1, (now - started) / duration)
@@ -80,7 +92,7 @@ export function Loader() {
           scrambleFrame++
           setPhrase(scramble(from, to, scrambleFrame / scrambleSteps))
           if (scrambleFrame < scrambleSteps) {
-            window.setTimeout(runScramble, 28)
+            schedule(runScramble, 28)
           } else {
             setPhrase(to)
           }
@@ -92,7 +104,8 @@ export function Loader() {
         frame = requestAnimationFrame(step)
       } else {
         setLeaving(true)
-        window.setTimeout(() => {
+        window.dispatchEvent(new CustomEvent("eze:sig-flip"))
+        schedule(() => {
           try {
             sessionStorage.setItem(LOADER_STORAGE_KEY, "1")
           } catch {
@@ -109,9 +122,10 @@ export function Loader() {
     frame = requestAnimationFrame(step)
     return () => {
       cancelAnimationFrame(frame)
+      clearTimeouts()
       document.documentElement.style.overflow = ""
     }
-  }, [reduced, visible, t.loader])
+  }, [reduced, t.loader])
 
   if (!visible) return null
 
@@ -131,7 +145,7 @@ export function Loader() {
       aria-label={label}
     >
       <div className="flex flex-1 items-center justify-center px-6">
-        <Signature className="w-[min(78vw,520px)]" />
+        <Signature data-loader-sig className="w-[min(78vw,520px)]" />
       </div>
       <div className="flex items-end justify-between gap-6 px-6 pb-8 sm:px-10">
         <p className="max-w-[18rem] font-mono text-sm sm:text-base" aria-hidden>

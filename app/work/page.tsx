@@ -1,9 +1,9 @@
 import type { Metadata } from "next"
 import WorkPage from "@/components/pages/work-page"
+import { generatePageMetadata } from "@/lib/redesign/meta"
 
-export const metadata: Metadata = {
-  title: "Work | Eze Vazquez",
-  description: "Technical project management, AI automation, and custom systems.",
+export async function generateMetadata(): Promise<Metadata> {
+  return generatePageMetadata("work")
 }
 
 export default function Work() {

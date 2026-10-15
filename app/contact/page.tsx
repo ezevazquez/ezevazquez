@@ -1,9 +1,9 @@
 import type { Metadata } from "next"
 import { ContactView } from "@/components/redesign/contact-view"
+import { generatePageMetadata } from "@/lib/redesign/meta"
 
-export const metadata: Metadata = {
-  title: "Contact | Eze Vazquez",
-  description: "Let's work together. A short call. Tell me the problem.",
+export async function generateMetadata(): Promise<Metadata> {
+  return generatePageMetadata("contact")
 }
 
 export default function ContactPage() {

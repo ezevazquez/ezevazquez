@@ -5,6 +5,7 @@ import "./globals.css"
 import { LanguageProvider } from "@/components/language-provider"
 import { SiteFrame } from "@/components/redesign/site-frame"
 import { BOOT_SCRIPT } from "@/lib/redesign/boot-script"
+import { getRequestLanguage } from "@/lib/redesign/request-language"
 
 const syne = Syne({
   subsets: ["latin"],
@@ -49,13 +50,19 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {
+  const language = getRequestLanguage()
+
   return (
-    <html lang="en" suppressHydrationWarning className={`${syne.variable} ${outfit.variable} ${dmMono.variable}`}>
+    <html
+      lang={language}
+      suppressHydrationWarning
+      className={`${syne.variable} ${outfit.variable} ${dmMono.variable}`}
+    >
       <head>
         <script dangerouslySetInnerHTML={{ __html: BOOT_SCRIPT }} />
       </head>
       <body className="bg-[#12131A] font-sans text-[#F4F1EA] antialiased">
-        <LanguageProvider>
+        <LanguageProvider initialLanguage={language}>
           <SiteFrame>{children}</SiteFrame>
         </LanguageProvider>
       </body>

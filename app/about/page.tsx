@@ -1,9 +1,9 @@
 import type { Metadata } from "next"
 import AboutPage from "@/components/pages/about-page"
+import { generatePageMetadata } from "@/lib/redesign/meta"
 
-export const metadata: Metadata = {
-  title: "About | Eze Vazquez",
-  description: "From 2018 to now. Work, studies, and side projects.",
+export async function generateMetadata(): Promise<Metadata> {
+  return generatePageMetadata("about")
 }
 
 export default function About() {

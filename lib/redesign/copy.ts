@@ -2,7 +2,14 @@ export const copy = {
   es: {
     skip: "Ir al contenido",
     navLabel: "Secciones",
+    nav: {
+      root: "inicio",
+      about: "about",
+      work: "work",
+      contact: "contacto",
+    },
     langLabel: "Switch to English",
+    consoleHello: "Technical PM. Ordená el quilombo con IA.",
     heroTitle: "Technical PM.",
     heroLine: "Armo sistemas que trabajan por vos.",
     heroSub:
@@ -142,7 +149,7 @@ export const copy = {
     contactKicker: "contacto",
     contactTitle: "Laburemos juntos.",
     contactSub: "Charla corta. Me contás el problema.",
-    contactFlip: "Dá vuelta",
+    contactFlip: "Da vuelta",
     contactBack: "ezejvaz@gmail.com",
     contactCopied: "copiado, che",
     contactCopy: "Copiar mail",
@@ -171,7 +178,14 @@ export const copy = {
   en: {
     skip: "Skip to content",
     navLabel: "Sections",
+    nav: {
+      root: "home",
+      about: "about",
+      work: "work",
+      contact: "contact",
+    },
     langLabel: "Pasar a español",
+    consoleHello: "Technical PM. I sort out the mess with AI.",
     heroTitle: "Technical PM.",
     heroLine: "I build systems that work for you.",
     heroSub:

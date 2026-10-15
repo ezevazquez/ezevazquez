@@ -4,7 +4,7 @@
 import type React from "react"
 import { createContext, useContext, useEffect, useState } from "react"
 import { translations, type Language } from "@/lib/translation"
-import { LANGUAGE_STORAGE_KEY } from "@/lib/redesign/config"
+import { LANGUAGE_COOKIE_KEY, LANGUAGE_STORAGE_KEY } from "@/lib/redesign/config"
 
 const LanguageContext = createContext<
   | {
@@ -15,44 +15,35 @@ const LanguageContext = createContext<
   | undefined
 >(undefined)
 
-function isLanguage(value: string | null | undefined): value is Language {
-  return value === "en" || value === "es"
-}
-
-function readBootLanguage(): Language {
-  if (typeof document === "undefined") return "en"
-  const fromDom = document.documentElement.dataset.lang || document.documentElement.lang
-  if (isLanguage(fromDom)) return fromDom
+function persistLanguage(language: Language) {
   try {
-    const saved = localStorage.getItem(LANGUAGE_STORAGE_KEY) ?? localStorage.getItem("language")
-    if (isLanguage(saved)) return saved
+    localStorage.setItem(LANGUAGE_STORAGE_KEY, language)
+    localStorage.setItem("language", language)
   } catch {
     /* ignore */
   }
-  const browser = (navigator.language || "").toLowerCase()
-  return browser.startsWith("es") ? "es" : "en"
+  try {
+    document.cookie = `${LANGUAGE_COOKIE_KEY}=${language};path=/;max-age=31536000;samesite=lax`
+  } catch {
+    /* ignore */
+  }
+  document.documentElement.lang = language
+  document.documentElement.dataset.lang = language
 }
 
-export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguage] = useState<Language>(readBootLanguage)
-  const [hydrated, setHydrated] = useState(false)
+export function LanguageProvider({
+  children,
+  initialLanguage,
+}: {
+  children: React.ReactNode
+  /** From cookie / Accept-Language so SSR matches first client paint. */
+  initialLanguage: Language
+}) {
+  const [language, setLanguage] = useState<Language>(initialLanguage)
 
   useEffect(() => {
-    setLanguage(readBootLanguage())
-    setHydrated(true)
-  }, [])
-
-  useEffect(() => {
-    if (!hydrated) return
-    try {
-      localStorage.setItem(LANGUAGE_STORAGE_KEY, language)
-      localStorage.setItem("language", language)
-    } catch {
-      /* ignore */
-    }
-    document.documentElement.lang = language
-    document.documentElement.dataset.lang = language
-  }, [language, hydrated])
+    persistLanguage(language)
+  }, [language])
 
   const t = (key: string) => {
     const keys = key.split(".")

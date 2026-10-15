@@ -11,3 +11,5 @@ export const LOADER_STORAGE_KEY = "eze-loader"
 export const STICKER_STORAGE_KEY = "eze-stickers"
 export const ABOUT_PROGRESS_KEY = "eze-about-progress"
 export const LANGUAGE_STORAGE_KEY = "ezevazquez-language"
+/** Cookie mirrors localStorage so SSR can paint the correct language. */
+export const LANGUAGE_COOKIE_KEY = "ezevazquez-language"

@@ -3,8 +3,7 @@ import AboutPage from "@/components/pages/about-page"
 
 export const metadata: Metadata = {
   title: "About | Eze Vazquez",
-  description:
-    "Technical Product Manager and Digital Builder. Professional background, experience and capabilities.",
+  description: "From 2018 to now. Work, studies, and side projects.",
 }
 
 export default function About() {

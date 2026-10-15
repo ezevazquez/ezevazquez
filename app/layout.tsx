@@ -1,32 +1,44 @@
-import type React from "react"
+import type { ReactNode } from "react"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { DM_Mono, Outfit, Syne } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { LanguageProvider } from "@/components/language-provider"
+import { SiteFrame } from "@/components/redesign/site-frame"
 
-const inter = Inter({
+const syne = Syne({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-inter",
+  variable: "--font-display",
+})
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-body",
+})
+
+const dmMono = DM_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  display: "swap",
+  variable: "--font-mono",
 })
 
 export const metadata: Metadata = {
-  title: "Eze Vazquez | Digital Builder",
+  title: "Eze Vazquez | Technical PM",
   description:
-    "Websites, lead follow-ups and simple automations for small businesses. Stop losing inquiries and repeating the same work.",
+    "Technical PM. I build systems that work for you. Teams, processes, and operations with AI, built around your problem.",
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} ${inter.variable} antialiased`}>
+    <html lang="en" suppressHydrationWarning className={`${syne.variable} ${outfit.variable} ${dmMono.variable}`}>
+      <body className="bg-[#12131A] font-sans text-[#F4F1EA] antialiased">
         <ThemeProvider attribute="class" defaultTheme="dark">
-          <LanguageProvider>{children}</LanguageProvider>
+          <LanguageProvider>
+            <SiteFrame>{children}</SiteFrame>
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>

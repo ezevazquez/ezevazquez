@@ -76,6 +76,11 @@ const config = {
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
       },
+      fontFamily: {
+        display: ["var(--font-display)", "sans-serif"],
+        sans: ["var(--font-body)", "sans-serif"],
+        mono: ["var(--font-mono)", "ui-monospace", "monospace"],
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

@@ -27,6 +27,9 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     const saved = localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem("language")
     if (isLanguage(saved)) {
       setLanguage(saved)
+    } else {
+      const browser = navigator.language.toLowerCase()
+      setLanguage(browser.startsWith("es") ? "es" : "en")
     }
     setHydrated(true)
   }, [])

@@ -3,7 +3,7 @@ import WorkPage from "@/components/pages/work-page"
 
 export const metadata: Metadata = {
   title: "Work | Eze Vazquez",
-  description: "Digital systems, workflows and prototypes for small businesses.",
+  description: "Technical project management, AI automation, and custom systems.",
 }
 
 export default function Work() {

@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "skills": {
+    "brandkit": {
+      "source": "Leonxlnx/taste-skill",
+      "sourceType": "github",
+      "skillPath": "skills/brandkit/SKILL.md",
+      "computedHash": "4bf33908992cde092395205122fad7a59e117190292bc8847cdba324b6f1c5b2"
+    },
+    "emil-design-eng": {
+      "source": "emilkowalski/skills",
+      "sourceType": "github",
+      "skillPath": "skills/emil-design-eng/SKILL.md",
+      "computedHash": "51f2537e04d15911b41d78e2de24c36a0e26d41beae15e82a954fe5496a5eda9"
+    },
+    "extract-design-system": {
+      "source": "arvindrk/extract-design-system",
+      "sourceType": "github",
+      "skillPath": "skills/extract-design-system/SKILL.md",
+      "computedHash": "5f231fda377e304b202848f09ecc0fd42839355e76f60e06c3ceb7a643c15500"
+    },
+    "review-animations": {
+      "source": "emilkowalski/skills",
+      "sourceType": "github",
+      "skillPath": "skills/review-animations/SKILL.md",
+      "computedHash": "b4e5f0f4fe3e2743c85bf7354108f48a0b9d502cb20ef5c4a9c195da91f93736"
+    },
+    "web-design-guidelines": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/web-design-guidelines/SKILL.md",
+      "computedHash": "f3bc47f890f42a44db1007ab390709ec368e4b8c089baee6b0007182236ac474"
+    }
+  }
+}

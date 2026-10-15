@@ -7,6 +7,7 @@ import { BottomNav } from "./bottom-nav"
 import { CursorHalo } from "./cursor-halo"
 import { EasterEggs } from "./easter-eggs"
 import { Loader } from "./loader"
+import { LogoMark } from "./logo-mark"
 import { SmoothScroll } from "./smooth-scroll"
 import { TransitionProvider } from "./transition-context"
 
@@ -20,6 +21,7 @@ export function SiteFrame({ children }: { children: ReactNode }) {
         <CursorHalo />
         <EasterEggs />
         <Loader />
+        <LogoMark />
         <div
           aria-hidden
           className="grain pointer-events-none fixed inset-0 z-[1] opacity-[0.18] mix-blend-overlay max-md:opacity-[0.1]"

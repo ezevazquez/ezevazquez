@@ -7,11 +7,11 @@ import { TransitionLink } from "./transition-link"
 import { useTransitionNav } from "./transition-context"
 
 const TABS = [
-  { href: "/", id: "root" },
-  { href: "/about", id: "about" },
-  { href: "/work", id: "work" },
-  { href: "/contact", id: "contact" },
-] as const
+  { href: "/", key: "root" as const },
+  { href: "/about", key: "about" as const },
+  { href: "/work", key: "work" as const },
+  { href: "/contact", key: "contact" as const },
+]
 
 function activeIndex(pathname: string) {
   if (pathname.startsWith("/about")) return 1
@@ -78,7 +78,10 @@ export function BottomNav() {
           className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/10 bg-[#12131A]/90 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-[#F4F1EA]/80"
           aria-hidden
         >
-          {previewHref === "/" ? "root" : previewHref.replace("/", "")}
+          {previewHref === "/"
+            ? t.nav.root
+            : t.nav[(previewHref.replace("/", "") as keyof typeof t.nav)] ??
+              previewHref.replace("/", "")}
         </p>
       )}
       <div
@@ -152,7 +155,7 @@ export function BottomNav() {
           const selected = tabIndex === current
           return (
             <TransitionLink
-              key={tab.id}
+              key={tab.key}
               href={tab.href}
               role="tab"
               tabIndex={tabIndex === focusIndex ? 0 : -1}
@@ -170,7 +173,6 @@ export function BottomNav() {
               }}
               onKeyDown={(event) => {
                 if (event.key === "Enter" || event.key === " ") {
-                  // TransitionLink handles click; ensure Space activates
                   if (event.key === " ") {
                     event.preventDefault()
                     navigate(tab.href)
@@ -181,7 +183,7 @@ export function BottomNav() {
                 tabIndex === index ? "text-white" : "text-[#F4F1EA]/70"
               }`}
             >
-              {tab.id}
+              {t.nav[tab.key]}
             </TransitionLink>
           )
         })}

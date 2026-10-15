@@ -41,10 +41,10 @@ const STICKERS: StickerData[] = [
     mobile: true,
     draw: "cal",
   },
-  { id: "mate", label: "mate", x: "18%", y: "40%", rotate: -12, draw: "mate" },
-  { id: "jira", label: "jira", x: "80%", y: "36%", rotate: 8, draw: "jira" },
-  { id: "excel", label: "excel", x: "14%", y: "84%", rotate: 3, draw: "excel" },
-  { id: "stamp", label: "stamp", x: "68%", y: "80%", rotate: -4, draw: "stamp" },
+  { id: "mate", label: "mate", x: "18%", y: "40%", rotate: -12, mobile: true, draw: "mate" },
+  { id: "jira", label: "jira", x: "80%", y: "36%", rotate: 8, mobile: true, draw: "jira" },
+  { id: "excel", label: "excel", x: "14%", y: "84%", rotate: 3, mobile: true, draw: "excel" },
+  { id: "stamp", label: "stamp", x: "68%", y: "80%", rotate: -4, mobile: true, draw: "stamp" },
 ]
 
 type PosMap = Record<string, { x: number; y: number }>
@@ -125,6 +125,7 @@ function Drawing({ kind, steaming }: { kind: Draw; steaming?: boolean }) {
 type StickerProps = {
   sticker: StickerData
   name: string
+  stampLabel: string
   shift: { x: number; y: number }
   z: number
   onShift: (id: string, next: { x: number; y: number }) => void
@@ -139,6 +140,7 @@ type StickerProps = {
 function Sticker({
   sticker,
   name,
+  stampLabel,
   shift,
   z,
   onShift,
@@ -312,7 +314,7 @@ function Sticker({
       <Drawing kind={sticker.draw} steaming={steaming} />
       {stamped && (
         <span className="pointer-events-none absolute inset-0 grid place-items-center rotate-[-18deg] font-display text-sm tracking-widest text-[#1F4BFF]/90">
-          APROBADO
+          {stampLabel}
         </span>
       )}
     </>
@@ -416,6 +418,7 @@ export function StickerField() {
             key={sticker.id}
             sticker={sticker}
             name={t.stickers[sticker.label]}
+            stampLabel={t.eggStamp}
             shift={shift}
             z={z}
             onShift={onShift}

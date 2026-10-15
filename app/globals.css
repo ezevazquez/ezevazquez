@@ -151,8 +151,72 @@ html.loader-done [data-loader] {
 .band::after {
   background: #ff3b30;
   mix-blend-mode: screen;
-  opacity: 0.75;
+  opacity: 0.55;
   animation-delay: 50ms !important;
+}
+
+/* Real RGB channel split of the outgoing page during transitions */
+.rgb-split-source {
+  opacity: 0 !important;
+}
+
+.rgb-split-layers {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 65;
+  overflow: hidden;
+}
+
+.rgb-layer {
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: screen;
+  will-change: transform;
+}
+
+.rgb-r {
+  filter: url(#rgb-r);
+  animation: rgb-spread-r 0.72s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+.rgb-g {
+  filter: url(#rgb-g);
+  animation: rgb-spread-g 0.72s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+.rgb-b {
+  filter: url(#rgb-b);
+  animation: rgb-spread-b 0.72s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+@keyframes rgb-spread-r {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(-10px); opacity: 0.85; }
+}
+
+@keyframes rgb-spread-g {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(0); opacity: 0.9; }
+}
+
+@keyframes rgb-spread-b {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(10px); opacity: 0.85; }
+}
+
+.brand-name.is-docked {
+  position: fixed;
+  left: 50%;
+  top: 1.15rem;
+  z-index: 40;
+  margin: 0;
+  transform: translateX(-50%);
+  font-size: 1.5rem;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  mix-blend-mode: difference;
+  pointer-events: none;
 }
 
 .band:nth-child(even)::before,

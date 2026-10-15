@@ -4,11 +4,16 @@ import { useEffect } from "react"
 import { useReducedMotion } from "@/hooks/use-reduced-motion"
 import { scrollBus } from "./scroll-bus"
 
+function bootReduced() {
+  if (typeof document === "undefined") return false
+  return document.documentElement.classList.contains("reduce-motion")
+}
+
 export function SmoothScroll() {
   const reduced = useReducedMotion()
 
   useEffect(() => {
-    if (reduced) return
+    if (reduced || bootReduced()) return
 
     let cancelled = false
     let cleanup = () => {}

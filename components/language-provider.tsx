@@ -4,53 +4,63 @@
 import type React from "react"
 import { createContext, useContext, useEffect, useState } from "react"
 import { translations, type Language } from "@/lib/translation"
+import { LANGUAGE_STORAGE_KEY } from "@/lib/redesign/config"
 
-const STORAGE_KEY = "ezevazquez-language"
+const LanguageContext = createContext<
+  | {
+      language: Language
+      setLanguage: (lang: Language) => void
+      t: (key: string) => any
+    }
+  | undefined
+>(undefined)
 
-type LanguageContextType = {
-  language: Language
-  setLanguage: (lang: Language) => void
-  t: (key: string) => any
-}
-
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
-
-function isLanguage(value: string | null): value is Language {
+function isLanguage(value: string | null | undefined): value is Language {
   return value === "en" || value === "es"
 }
 
+function readBootLanguage(): Language {
+  if (typeof document === "undefined") return "en"
+  const fromDom = document.documentElement.dataset.lang || document.documentElement.lang
+  if (isLanguage(fromDom)) return fromDom
+  try {
+    const saved = localStorage.getItem(LANGUAGE_STORAGE_KEY) ?? localStorage.getItem("language")
+    if (isLanguage(saved)) return saved
+  } catch {
+    /* ignore */
+  }
+  const browser = (navigator.language || "").toLowerCase()
+  return browser.startsWith("es") ? "es" : "en"
+}
+
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguage] = useState<Language>("en")
+  const [language, setLanguage] = useState<Language>(readBootLanguage)
   const [hydrated, setHydrated] = useState(false)
 
   useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem("language")
-    if (isLanguage(saved)) {
-      setLanguage(saved)
-    } else {
-      const browser = navigator.language.toLowerCase()
-      setLanguage(browser.startsWith("es") ? "es" : "en")
-    }
+    setLanguage(readBootLanguage())
     setHydrated(true)
   }, [])
 
   useEffect(() => {
     if (!hydrated) return
-    localStorage.setItem(STORAGE_KEY, language)
-    // Keep the legacy key in sync for older sessions.
-    localStorage.setItem("language", language)
+    try {
+      localStorage.setItem(LANGUAGE_STORAGE_KEY, language)
+      localStorage.setItem("language", language)
+    } catch {
+      /* ignore */
+    }
     document.documentElement.lang = language
+    document.documentElement.dataset.lang = language
   }, [language, hydrated])
 
   const t = (key: string) => {
     const keys = key.split(".")
     let value: any = translations[language]
-
     for (const k of keys) {
       if (value === undefined) return key
       value = value[k]
     }
-
     return value === undefined ? key : value
   }
 

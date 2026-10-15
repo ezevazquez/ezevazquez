@@ -1,6 +1,5 @@
 "use client"
 
-import { Particles } from "./particles"
 import { Navbar } from "./navbar"
 import { HeroSection } from "./sections/hero-section"
 import { AboutSection } from "./sections/about-section"
@@ -12,7 +11,7 @@ import { Footer } from "./footer"
 export default function ProfilePage() {
   return (
     <div className="relative min-h-screen bg-black text-white overflow-hidden">
-      <Particles className="fixed inset-0 pointer-events-none" />
+      <div className="grain fixed inset-0 pointer-events-none opacity-30" aria-hidden />
       <Navbar />
       <main>
         <HeroSection />

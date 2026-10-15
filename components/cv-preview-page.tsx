@@ -5,7 +5,6 @@ import { motion } from "framer-motion"
 import { useLanguage } from "./language-provider"
 import { ArrowLeft, Download, FileText } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { Particles } from "./particles"
 import { SecondaryCTA } from "@/components/shared/cta-buttons"
 
 export function CVPreviewPage() {
@@ -34,7 +33,7 @@ export function CVPreviewPage() {
         className="fixed inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(59,130,246,0.1),transparent)] pointer-events-none"
         aria-hidden
       />
-      <Particles className="fixed inset-0 pointer-events-none opacity-70" />
+      <div className="grain fixed inset-0 pointer-events-none opacity-30" aria-hidden />
 
       <div className="relative z-10 section-container px-4 sm:px-6 py-10 md:py-14">
         <motion.div

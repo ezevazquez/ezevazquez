@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useRef, useCallback } from "react"
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion"
-import { Particles } from "./particles"
 import { Card } from "@/components/ui/card"
 import { Github, Mail, Linkedin } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
@@ -60,7 +59,7 @@ export default function WorkInProgressPage() {
 
   return (
     <div ref={containerRef} className="relative h-screen w-full overflow-hidden bg-black text-white">
-      <Particles className="absolute inset-0" />
+      <div className="grain absolute inset-0 opacity-40" aria-hidden />
 
       <motion.div
         className="pointer-events-none absolute h-64 w-64 rounded-full bg-gradient-to-r from-blue-500/30 to-cyan-500/30 blur-3xl"

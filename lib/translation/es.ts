@@ -338,7 +338,7 @@ export const es = {
     },
   },
   contactCta: {
-    emailLabel: "ezejvaz@gmail.com",
+    emailLabel: "hola@ezevazquez.com",
     reassurance: "Suelo responder en 1–2 días hábiles. Sin spam, sin presión.",
   },
   cvPreview: {

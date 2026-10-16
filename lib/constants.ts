@@ -1,4 +1,4 @@
-export const SITE_EMAIL = "ezejvaz@gmail.com"
+export const SITE_EMAIL = "hola@ezevazquez.com"
 
 export const BOOK_CALL_URL = `mailto:${SITE_EMAIL}?subject=Free%20consultation`
 

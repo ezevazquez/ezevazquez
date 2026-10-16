@@ -415,8 +415,15 @@ html.has-custom-cursor [data-cursor="click"] * {
 
 .sticker-grabbed {
   z-index: 70 !important;
-  scale: 0.94 !important;
-  transition: scale 140ms var(--ease-out);
+}
+
+.sticker [data-sticker-art] {
+  transform-origin: center;
+  transition: transform 140ms var(--ease-out);
+}
+
+.sticker-grabbed [data-sticker-art] {
+  transform: scale(0.94);
 }
 
 .sticker-stamped::after {

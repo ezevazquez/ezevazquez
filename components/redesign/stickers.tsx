@@ -14,12 +14,11 @@ import { EMAIL_URL, GITHUB_URL, LINKEDIN_URL } from "@/lib/constants"
 import { useReducedMotion } from "@/hooks/use-reduced-motion"
 import { useCopy } from "@/lib/redesign/use-copy"
 import { useTransitionNav } from "./transition-context"
-import { playBassRiff, stopTune, toggleTune } from "@/lib/redesign/tune"
-import { toggleRadio, stopRadio } from "@/lib/redesign/radio"
 import { useToast } from "./toast-provider"
 import { StickerLinkDialog } from "./sticker-link-dialog"
 
 type StickerSize = "tiny" | "small" | "medium" | "large" | "wide" | "tall" | "polaroid"
+type StickerDialog = "linkedin" | "github" | "mail" | "polaroid"
 
 type StickerData = {
   id: string
@@ -30,94 +29,47 @@ type StickerData = {
   rotate: number
   asset: string
   size: StickerSize
-  dialog?: "linkedin"
+  dialog?: StickerDialog
 }
 const STICKERS: StickerData[] = [
-  { id: "git", label: "github", href: GITHUB_URL, asset: "/stickers/git.png", size: "small", x: "4%", y: "8%", rotate: -8 },
-  { id: "in", label: "linkedin", href: LINKEDIN_URL, asset: "/stickers/linkedin.png", size: "medium", x: "83%", y: "7%", rotate: 6, dialog: "linkedin" },
-  { id: "mail", label: "mail", href: EMAIL_URL, asset: "/stickers/letter.png", size: "wide", x: "30%", y: "80%", rotate: 4 },
-  { id: "mate", label: "mate", asset: "/stickers/mate.png", size: "tall", x: "3%", y: "31%", rotate: -12 },
-  { id: "jira", label: "jira", asset: "/stickers/jira.png", size: "small", x: "90%", y: "22%", rotate: 8 },
-  { id: "phones", label: "phones", asset: "/stickers/headphones.png", size: "medium", x: "3%", y: "62%", rotate: -8 },
-  { id: "bass", label: "bass", asset: "/stickers/bass.png", size: "tall", x: "90%", y: "60%", rotate: -10 },
-  { id: "lemon", label: "lemon", asset: "/stickers/lemon.png", size: "small", x: "58%", y: "2%", rotate: 6 },
-  { id: "fernet", label: "fernet", asset: "/stickers/fernet.png", size: "medium", x: "15%", y: "3%", rotate: 4 },
-  { id: "cordoba", label: "cordoba", asset: "/stickers/cba.png", size: "tall", x: "43%", y: "1%", rotate: -4 },
-  { id: "dog", label: "dog", asset: "/stickers/dog.png", size: "medium", x: "15%", y: "74%", rotate: -6 },
-  { id: "boca", label: "boca", asset: "/stickers/boca.png", size: "medium", x: "83%", y: "47%", rotate: -3 },
-  { id: "cooper", label: "cooper", asset: "/stickers/cooper.png", size: "medium", x: "3%", y: "46%", rotate: 7 },
-  { id: "lomito", label: "lomito", asset: "/stickers/lomito.png", size: "wide", x: "82%", y: "34%", rotate: -5 },
-  { id: "notion", label: "notion", asset: "/stickers/notion.png", size: "tiny", x: "15%", y: "23%", rotate: -9 },
-  { id: "phone", label: "phone", asset: "/stickers/phone.png", size: "medium", x: "64%", y: "80%", rotate: 9 },
-  { id: "me", label: "eze", asset: "/stickers/me.png", size: "small", x: "15%", y: "50%", rotate: -5 },
-  { id: "pol-1", label: "polaroid", asset: "/stickers/polaroid1.png", size: "polaroid", x: "28%", y: "2%", rotate: -12 },
-  { id: "pol-2", label: "polaroid", asset: "/stickers/polaroid2.png", size: "polaroid", x: "75%", y: "68%", rotate: 9 },
-  { id: "pol-3", label: "polaroid", asset: "/stickers/polaroid3.png", size: "polaroid", x: "73%", y: "2%", rotate: -4 },
+  { id: "fernet", label: "fernet", asset: "/stickers/fernet.png", size: "medium", x: "4%", y: "8%", rotate: 4 },
+  { id: "git", label: "github", href: GITHUB_URL, asset: "/stickers/git.png", size: "small", x: "32%", y: "8%", rotate: -3, dialog: "github" },
+  { id: "cordoba", label: "cordoba", asset: "/stickers/cba.png", size: "tall", x: "45%", y: "9%", rotate: -4 },
+  { id: "jira", label: "jira", asset: "/stickers/jira.png", size: "small", x: "56%", y: "10%", rotate: 5 },
+  { id: "in", label: "linkedin", href: LINKEDIN_URL, asset: "/stickers/linkedin.png", size: "small", x: "70%", y: "7%", rotate: 6, dialog: "linkedin" },
+  { id: "lomito", label: "lomito", asset: "/stickers/lomito.png", size: "wide", x: "83%", y: "14%", rotate: -7 },
+  { id: "pol-1", label: "polaroid", asset: "/stickers/polaroid1.png", size: "polaroid", x: "15%", y: "20%", rotate: -12, dialog: "polaroid" },
+  { id: "me", label: "eze", asset: "/stickers/me.png", size: "small", x: "29%", y: "20%", rotate: -5 },
+  { id: "cooper", label: "cooper", asset: "/stickers/cooper.png", size: "medium", x: "61%", y: "20%", rotate: 7 },
+  { id: "mate", label: "mate", asset: "/stickers/mate.png", size: "tall", x: "4%", y: "34%", rotate: -12 },
+  { id: "notion", label: "notion", asset: "/stickers/notion.png", size: "small", x: "20%", y: "47%", rotate: -9 },
+  { id: "pol-2", label: "polaroid", asset: "/stickers/polaroid2.png", size: "polaroid", x: "76%", y: "32%", rotate: 7, dialog: "polaroid" },
+  { id: "bass", label: "bass", asset: "/stickers/bass.png", size: "tall", x: "72%", y: "52%", rotate: -10 },
+  { id: "phones", label: "phones", asset: "/stickers/headphones.png", size: "medium", x: "4%", y: "65%", rotate: -8 },
+  { id: "dog", label: "dog", asset: "/stickers/dog.png", size: "medium", x: "20%", y: "62%", rotate: -6 },
+  { id: "mail", label: "mail", href: EMAIL_URL, asset: "/stickers/letter.png", size: "wide", x: "13%", y: "80%", rotate: 4, dialog: "mail" },
+  { id: "pol-3", label: "polaroid", asset: "/stickers/polaroid3.png", size: "polaroid", x: "31%", y: "72%", rotate: -9, dialog: "polaroid" },
+  { id: "phone", label: "phone", asset: "/stickers/phone.png", size: "medium", x: "57%", y: "79%", rotate: 4 },
+  { id: "lemon", label: "lemon", asset: "/stickers/lemon.png", size: "small", x: "72%", y: "76%", rotate: 6 },
+  { id: "boca", label: "boca", asset: "/stickers/boca.png", size: "medium", x: "84%", y: "78%", rotate: -3 },
 ]
 
 type PosMap = Record<string, { x: number; y: number }>
-type LayoutMap = Record<string, { x: number; y: number }>
 
-function packStickers(): LayoutMap {
-  const stickers = Array.from(document.querySelectorAll<HTMLElement>("[data-sticker]"))
-  const parent = stickers[0]?.offsetParent as HTMLElement | null
-  if (!parent || !stickers.length) return {}
-
-  const width = parent.clientWidth
-  const height = parent.clientHeight
-  const parentRect = parent.getBoundingClientRect()
-  const zoom = parentRect.width / width || 1
-  const toLocalRect = (element: HTMLElement) => {
-    const rect = element.getBoundingClientRect()
-    return {
-      left: (rect.left - parentRect.left) / zoom,
-      top: (rect.top - parentRect.top) / zoom,
-      right: (rect.right - parentRect.left) / zoom,
-      bottom: (rect.bottom - parentRect.top) / zoom,
+function getDialogContent(sticker: StickerData, t: ReturnType<typeof useCopy>["t"]) {
+  switch (sticker.dialog) {
+    case "github":
+      return { intro: t.stickerDialog.github.intro, href: GITHUB_URL, linkLabel: t.stickerDialog.github.link }
+    case "mail":
+      return { intro: t.stickerDialog.mail.intro, href: EMAIL_URL, linkLabel: t.stickerDialog.mail.link }
+    case "polaroid": {
+      const index = Math.max(0, Number(sticker.id.split("-")[1]) - 1)
+      return { intro: t.stickerDialog.polaroids[index] ?? t.stickerDialog.polaroids[0] }
     }
+    case "linkedin":
+    default:
+      return { intro: t.stickerDialog.linkedin.intro, href: LINKEDIN_URL, linkLabel: t.stickerDialog.linkedin.link }
   }
-  const centerX = width / 2
-  const centerY = height / 2
-  const card = document.querySelector<HTMLElement>("[data-hero-deck]")
-  const terminal = document.querySelector<HTMLElement>("[data-agent-terminal]")
-  const exclusions = [
-    ...(card ? [toLocalRect(card)] : [{ left: centerX - 264, right: centerX + 264, top: centerY - 224, bottom: centerY + 224 }]),
-    ...(terminal ? [toLocalRect(terminal)] : []),
-  ]
-  const ordered = stickers
-    .map((element) => {
-      const sticker = STICKERS.find(({ id }) => id === element.dataset.sticker)
-      return sticker ? { element, sticker, width: element.offsetWidth, height: element.offsetHeight } : null
-    })
-    .filter((item): item is NonNullable<typeof item> => Boolean(item))
-    .sort((a, b) => b.width * b.height - a.width * a.height)
-
-  for (const gap of [18, 10, 4, 0]) {
-    const placed: Array<{ left: number; top: number; right: number; bottom: number }> = []
-    const result: LayoutMap = {}
-    for (const { sticker, width: itemWidth, height: itemHeight } of ordered) {
-      const preferredX = (parseFloat(sticker.x) / 100) * width
-      const preferredY = (parseFloat(sticker.y) / 100) * height
-      let best: { x: number; y: number; score: number } | undefined
-      for (let y = 64; y <= height - itemHeight - 48; y += 8) {
-        for (let x = 16; x <= width - itemWidth - 16; x += 8) {
-          const box = { left: x - gap, top: y - gap, right: x + itemWidth + gap, bottom: y + itemHeight + gap }
-          if (exclusions.some((area) => box.left < area.right && box.right > area.left && box.top < area.bottom && box.bottom > area.top)) continue
-          if (placed.some((area) => box.left < area.right && box.right > area.left && box.top < area.bottom && box.bottom > area.top)) continue
-          const score = Math.hypot((x - preferredX) * 0.85, y - preferredY)
-          if (!best || score < best.score) best = { x, y, score }
-        }
-      }
-      if (!best) break
-      result[sticker.id] = { x: best.x, y: best.y }
-      placed.push({ left: best.x - gap, top: best.y - gap, right: best.x + itemWidth + gap, bottom: best.y + itemHeight + gap })
-    }
-    if (Object.keys(result).length === ordered.length) {
-      return result
-    }
-  }
-
-  return {}
 }
 
 function playStickerSound(kind: "pick" | "drop") {
@@ -156,16 +108,21 @@ const SIZE_STYLES: Record<StickerSize, CSSProperties> = {
 
 function Drawing({ sticker, playing }: { sticker: StickerData; playing?: boolean }) {
   return (
-    <Image
-      src={sticker.asset}
-      alt=""
-      width={208}
-      height={208}
-      sizes="(max-width: 640px) 96px, 128px"
-      draggable={false}
+    <span
+      data-sticker-art
       style={SIZE_STYLES[sticker.size]}
-      className={`pointer-events-none object-contain ${playing ? "phones-on" : ""}`}
-    />
+      className="pointer-events-none block"
+    >
+      <Image
+        src={sticker.asset}
+        alt=""
+        width={208}
+        height={208}
+        sizes="(max-width: 1023px) 0px, 208px"
+        draggable={false}
+        className={`h-full w-full object-contain ${playing ? "phones-on" : ""}`}
+      />
+    </span>
   )
 }
 
@@ -173,8 +130,6 @@ type StickerProps = {
   sticker: StickerData
   name: string
   shift: { x: number; y: number }
-  basePosition?: { x: number; y: number }
-  layoutReady: boolean
   z: number
   onShift: (id: string, next: { x: number; y: number }) => void
   onBringFront: (id: string) => void
@@ -190,8 +145,6 @@ function Sticker({
   sticker,
   name,
   shift,
-  basePosition,
-  layoutReady,
   z,
   onShift,
   onBringFront,
@@ -227,14 +180,14 @@ function Sticker({
       const boardTop = -parent.clientHeight * 0.5
       const boardRight = parent.clientWidth * 1.5
       const boardBottom = parent.clientHeight * 1.5
-      const baseLeft = basePosition?.x ?? (parseFloat(sticker.x) / 100) * parent.clientWidth
-      const baseTop = basePosition?.y ?? (parseFloat(sticker.y) / 100) * parent.clientHeight
+      const baseLeft = (parseFloat(sticker.x) / 100) * parent.clientWidth
+      const baseTop = (parseFloat(sticker.y) / 100) * parent.clientHeight
       return {
         x: Math.min(boardRight - baseLeft - el.offsetWidth, Math.max(boardLeft - baseLeft, x)),
         y: Math.min(boardBottom - baseTop - el.offsetHeight, Math.max(boardTop - baseTop, y)),
       }
     },
-    [basePosition, sticker.x, sticker.y],
+    [sticker.x, sticker.y],
   )
 
   const applyTransform = useCallback(
@@ -278,9 +231,6 @@ function Sticker({
   const onPointerDown = (event: ReactPointerEvent<HTMLElement>) => {
     if (event.button !== 0) return
     event.preventDefault()
-    if (sticker.id !== "cooper") {
-      event.currentTarget.style.transformOrigin = `${event.nativeEvent.offsetX}px ${event.nativeEvent.offsetY}px`
-    }
     moved.current = false
     dragging.current = true
     setGrabbed(true)
@@ -331,15 +281,14 @@ function Sticker({
   const className = [
     "sticker absolute select-none touch-none cursor-grab active:cursor-grabbing focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-signal",
     "hidden lg:flex",
-    layoutReady && !basePosition ? "invisible" : "",
-    grabbed && sticker.id !== "cooper" ? "sticker-grabbed" : "",
+    grabbed ? "sticker-grabbed" : "",
   ]
     .filter(Boolean)
     .join(" ")
 
   const style: CSSProperties = {
-    left: basePosition ? `${basePosition.x}px` : sticker.x,
-    top: basePosition ? `${basePosition.y}px` : sticker.y,
+    left: sticker.x,
+    top: sticker.y,
     zIndex: z,
     transform: `translate3d(${shift.x}px, ${shift.y}px, 0) rotate(${sticker.rotate}deg)`,
   }
@@ -390,13 +339,13 @@ function Sticker({
           opened.current = false
           return
         }
-        if (sticker.href) onOpen(sticker, event.currentTarget.getBoundingClientRect())
+        if (sticker.dialog || sticker.href) onOpen(sticker, event.currentTarget.getBoundingClientRect())
         else onActivate(sticker.id)
       }}
       onKeyDown={(event) => {
         if (event.key !== "Enter" && event.key !== " ") return
         event.preventDefault()
-        if (sticker.href) onOpen(sticker, event.currentTarget.getBoundingClientRect())
+        if (sticker.dialog || sticker.href) onOpen(sticker, event.currentTarget.getBoundingClientRect())
         else onActivate(sticker.id)
       }}
       {...handlers}
@@ -412,44 +361,53 @@ export function StickerField({ entered, zoom }: { entered: boolean; zoom: number
   const { showToast } = useToast()
   const reduced = useReducedMotion()
   const [positions, setPositions] = useState<PosMap>({})
-  const [layout, setLayout] = useState<LayoutMap>({})
-  const [layoutReady, setLayoutReady] = useState(false)
   const [zOrder, setZOrder] = useState<string[]>(STICKERS.map((s) => s.id))
-  const [playing, setPlaying] = useState(false)
-  const [activeDialog, setActiveDialog] = useState<StickerData["dialog"]>()
+  const [playingId, setPlayingId] = useState<string>()
+  const [activeSticker, setActiveSticker] = useState<StickerData>()
   const [dialogAnchor, setDialogAnchor] = useState<{ left: number; top: number; right: number; bottom: number; width: number }>()
   const dialogTriggerRef = useRef<HTMLElement | null>(null)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
 
-  useLayoutEffect(() => {
-    const updateLayout = () => {
-      if (window.innerWidth < 1024) {
-        setLayout({})
-        setLayoutReady(false)
-        return
-      }
-      setPositions({})
-      const nextLayout = packStickers()
-      setLayout(nextLayout)
-      setLayoutReady(Object.keys(nextLayout).length === STICKERS.length)
+  const stopAudio = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current.pause()
+      audioRef.current.currentTime = 0
+      audioRef.current = null
     }
-    updateLayout()
-    window.addEventListener("resize", updateLayout)
-    return () => window.removeEventListener("resize", updateLayout)
+    setPlayingId(undefined)
   }, [])
+
+  const playAudio = useCallback((id: string, source: string) => {
+    stopAudio()
+    const audio = new Audio(source)
+    audio.volume = 0.45
+    audioRef.current = audio
+    setPlayingId(id)
+    audio.addEventListener("ended", () => {
+      if (audioRef.current === audio) {
+        audioRef.current = null
+        setPlayingId(undefined)
+      }
+    }, { once: true })
+    void audio.play().catch(() => {
+      if (audioRef.current === audio) {
+        audioRef.current = null
+        setPlayingId(undefined)
+      }
+    })
+  }, [stopAudio])
 
   useEffect(() => {
     const reset = () => {
       setPositions({})
       setZOrder(STICKERS.map((sticker) => sticker.id))
-      setPlaying(false)
-      setActiveDialog(undefined)
+      setActiveSticker(undefined)
       setDialogAnchor(undefined)
-      stopRadio()
-      stopTune()
+      stopAudio()
     }
     window.addEventListener("eze:reset-hero", reset)
     return () => window.removeEventListener("eze:reset-hero", reset)
-  }, [])
+  }, [stopAudio])
 
   useLayoutEffect(() => {
     if (!entered) return
@@ -478,10 +436,7 @@ export function StickerField({ entered, zoom }: { entered: boolean; zoom: number
     })
   }, [entered, reduced])
 
-  useEffect(() => () => {
-    stopRadio()
-    stopTune()
-  }, [])
+  useEffect(() => stopAudio, [stopAudio])
 
   const onShift = useCallback((id: string, next: { x: number; y: number }) => {
     setPositions((prev) => {
@@ -498,7 +453,7 @@ export function StickerField({ entered, zoom }: { entered: boolean; zoom: number
       if (sticker.dialog) {
         dialogTriggerRef.current = document.querySelector<HTMLElement>(`[data-sticker="${sticker.id}"]`)
         if (anchor) setDialogAnchor({ left: anchor.left, top: anchor.top, right: anchor.right, bottom: anchor.bottom, width: anchor.width })
-        setActiveDialog(sticker.dialog)
+        setActiveSticker(sticker)
         return
       }
       if (!sticker.href) return
@@ -525,27 +480,17 @@ export function StickerField({ entered, zoom }: { entered: boolean; zoom: number
       lemon: { message: t.stickerToasts.lemon, icon: "🍋" },
       cordoba: { message: t.stickerToasts.cordoba, icon: "🏛️" },
     }
+    if (id === "fernet") playAudio(id, "/audio/cuarteto.mp3")
+    if (id === "bass") playAudio(id, "/audio/bass.mp3")
     if (id === "phones") {
-      const { promise, action } = toggleRadio((on) => setPlaying(on))
-      if (action === "play") {
-        showToast({ message: t.stickerToasts.radioTuning, icon: "📻", type: "radio" })
-        promise.then((ok) => {
-          if (ok) showToast({ message: t.stickerToasts.radioPlaying, icon: "🎵", type: "radio" })
-          else void toggleTune().then((on) => {
-            setPlaying(on)
-            if (on) showToast({ message: t.eggMusic, icon: "🎵", type: "radio" })
-          })
-        })
-      } else {
-        stopTune()
-        showToast({ message: t.stickerToasts.radioPaused, icon: "⏸", type: "radio" })
-      }
+      const tracks = ["/audio/cuarteto.mp3", "/audio/bass.mp3"]
+      playAudio(id, tracks[Math.floor(Math.random() * tracks.length)])
+      showToast({ message: t.stickerToasts.radioPlaying, icon: "🎵", type: "radio" })
       return
     }
-    if (id === "bass") void playBassRiff()
     const item = messages[id]
     if (item) showToast({ ...item, type: id === "mate" ? "success" : "info" })
-  }, [showToast, t])
+  }, [playAudio, showToast, t])
 
   return (
     <>
@@ -559,26 +504,24 @@ export function StickerField({ entered, zoom }: { entered: boolean; zoom: number
             sticker={sticker}
             name={t.stickers[sticker.label]}
             shift={shift}
-            basePosition={layout[sticker.id]}
-            layoutReady={layoutReady}
             z={z}
             onShift={onShift}
             onBringFront={onBringFront}
             onActivate={onActivate}
             onOpen={onOpen}
-            playing={sticker.id === "phones" && playing}
+            playing={sticker.id === playingId}
             reduced={reduced}
             zoom={zoom}
             tooltip={tooltip}
           />
         )
       })}
-      {activeDialog === "linkedin" && (
+      {activeSticker?.dialog && (
         <StickerLinkDialog
-          href={LINKEDIN_URL}
+          {...getDialogContent(activeSticker, t)}
           anchor={dialogAnchor}
           trigger={dialogTriggerRef.current}
-          onClose={() => setActiveDialog(undefined)}
+          onClose={() => setActiveSticker(undefined)}
         />
       )}
     </>

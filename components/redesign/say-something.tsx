@@ -14,6 +14,7 @@ export function SaySomething() {
   const [draft, setDraft] = useState("")
   const [position, setPosition] = useState<CursorPosition>({ x: 0, y: 0 })
   const inputRef = useRef<HTMLInputElement>(null)
+  const formRef = useRef<HTMLFormElement>(null)
   const timerRef = useRef<number>()
 
   useEffect(() => {
@@ -25,6 +26,24 @@ export function SaySomething() {
   }, [editing])
 
   useEffect(() => () => window.clearTimeout(timerRef.current), [])
+
+  useEffect(() => {
+    if (!editing) {
+      delete document.documentElement.dataset.saySomethingOpen
+      return
+    }
+    document.documentElement.dataset.saySomethingOpen = "true"
+    const closeOnOutsidePointer = (event: PointerEvent) => {
+      if (formRef.current?.contains(event.target as Node)) return
+      setEditing(false)
+      setDraft("")
+    }
+    document.addEventListener("pointerdown", closeOnOutsidePointer, true)
+    return () => {
+      document.removeEventListener("pointerdown", closeOnOutsidePointer, true)
+      delete document.documentElement.dataset.saySomethingOpen
+    }
+  }, [editing])
 
   useEffect(() => {
     const reset = () => {
@@ -74,6 +93,7 @@ export function SaySomething() {
     <>
       {(editing || message) && (
         <form
+          ref={formRef}
           onSubmit={(event) => {
             event.preventDefault()
             send()

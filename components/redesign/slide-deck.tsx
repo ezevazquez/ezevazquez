@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState, useCallback, useRef } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence, type Variants } from "framer-motion"
 import { useCopy } from "@/lib/redesign/use-copy"
 import { useReducedMotion } from "@/hooks/use-reduced-motion"
 import { LINKEDIN_URL } from "@/lib/constants"
@@ -90,7 +90,7 @@ export function SlideDeck({ entered }: { entered: boolean }) {
     go(event.key === "ArrowLeft" ? -1 : 1)
   }
 
-  const cardVariants = {
+  const cardVariants: Variants = {
     enter: {
       opacity: 0,
       transform: reduced ? "translate3d(0, 0, 0) scale(1)" : "translate3d(0, 14px, 0) scale(0.985)",

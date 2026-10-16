@@ -134,6 +134,7 @@ export function HomeView() {
         data-hero
         className="relative h-svh select-none overflow-hidden bg-canvas"
         onPointerDown={(event: PointerEvent<HTMLElement>) => {
+          if (event.pointerType === "touch") return
           const target = event.target as HTMLElement
           if (target.closest(".sticker, [data-hero-deck], nav, button, input, a, [data-cursor], [role='dialog']")) return
           event.preventDefault()

@@ -130,14 +130,14 @@ const ART: Record<Draw, string> = {
   cordoba: "/stickers/cordoba.png",
   dog: "/stickers/dog.png",
   pizza: "/stickers/pizza.png",
-  boca: "/stickers/boca.svg",
+  boca: "/stickers/boca.png",
   polaroid: "",
 }
 
 function PolaroidFrame({ src }: { src?: string }) {
   const [ready, setReady] = useState(Boolean(src))
   return (
-    <div className="w-[5.6rem] bg-paper p-1.5 pb-5 shadow-[4px_8px_0_rgba(0,0,0,0.4)]">
+    <div className="w-[5.6rem] bg-paper p-1.5 pb-5">
       {src && ready ? (
         <Image
           src={src}
@@ -429,7 +429,7 @@ function Sticker({
 }
 
 export function StickerField({ entered, zoom }: { entered: boolean; zoom: number }) {
-  const { t, language } = useCopy()
+  const { t } = useCopy()
   const { navigate } = useTransitionNav()
   const { showToast } = useToast()
   const reduced = useReducedMotion()
@@ -502,13 +502,13 @@ export function StickerField({ entered, zoom }: { entered: boolean; zoom: number
       const overlap = !(rect.right < b.left || rect.left > b.right || rect.bottom < b.top || rect.top > b.bottom)
       if (overlap) {
         showToast({
-          message: language === "es" ? "Ticket importado a Excel: la pesadilla de todo PM 📊" : "Jira ticket dropped into Excel: PM nightmare 📊",
+          message: t.stickerToasts.jiraExcel,
           icon: "📊",
           type: "warning",
         })
       }
     },
-    [showToast, language],
+    [showToast, t.stickerToasts.jiraExcel],
   )
 
   const onOpen = useCallback(
@@ -531,7 +531,7 @@ export function StickerField({ entered, zoom }: { entered: boolean; zoom: number
       if (id === "mate") {
         setSteaming(true)
         showToast({
-          message: language === "es" ? "Mate cebado 🧉 (+10 foco técnico)" : "Mate brewed 🧉 (+10 focus)",
+          message: t.stickerToasts.mate,
           icon: "🧉",
           type: "success",
         })
@@ -540,7 +540,7 @@ export function StickerField({ entered, zoom }: { entered: boolean; zoom: number
       if (id === "stamp") {
         setStamped(true)
         showToast({
-          message: language === "es" ? "Sellado con pasaporte porteño 🇦🇷" : "Stamped in Buenos Aires 🇦🇷",
+          message: t.stickerToasts.stamp,
           icon: "🇦🇷",
           type: "info",
         })
@@ -549,7 +549,7 @@ export function StickerField({ entered, zoom }: { entered: boolean; zoom: number
       if (id === "excel") {
         setLit(true)
         showToast({
-          message: language === "es" ? "VLOOKUP funcionando de milagro 📈" : "VLOOKUP working by a miracle 📈",
+          message: t.stickerToasts.excel,
           icon: "📈",
           type: "info",
         })
@@ -557,7 +557,7 @@ export function StickerField({ entered, zoom }: { entered: boolean; zoom: number
       }
       if (id === "jira") {
         showToast({
-          message: language === "es" ? "Ticket movido a 'In Progress' 🎟️" : "Ticket moved to 'In Progress' 🎟️",
+          message: t.stickerToasts.jira,
           icon: "🎟️",
           type: "info",
         })
@@ -579,7 +579,7 @@ export function StickerField({ entered, zoom }: { entered: boolean; zoom: number
           delete el.dataset.flying
         }
         showToast({
-          message: language === "es" ? "Vuelo despegado rumbo a producción ✈️" : "Takeoff to production deployed ✈️",
+          message: t.stickerToasts.plane,
           icon: "✈️",
           type: "info",
         })
@@ -588,14 +588,14 @@ export function StickerField({ entered, zoom }: { entered: boolean; zoom: number
         const { promise, action } = toggleRadio((on) => setPlaying(on))
         if (action === "play") {
           showToast({
-            message: language === "es" ? "Sintonizando Radio Lo-Fi... 📻" : "Tuning in to Lo-Fi radio... 📻",
+            message: t.stickerToasts.radioTuning,
             icon: "📻",
             type: "radio",
           })
           promise.then((ok) => {
             if (ok) {
               showToast({
-                message: language === "es" ? "Sonando Radio Lo-Fi en vivo 🎵" : "Playing Live Lo-Fi Radio 🎵",
+                message: t.stickerToasts.radioPlaying,
                 icon: "🎵",
                 type: "radio",
               })
@@ -609,7 +609,7 @@ export function StickerField({ entered, zoom }: { entered: boolean; zoom: number
         } else {
           stopTune()
           showToast({
-            message: language === "es" ? "Radio pausada ⏸" : "Radio paused ⏸",
+            message: t.stickerToasts.radioPaused,
             icon: "⏸",
             type: "radio",
           })
@@ -618,62 +618,62 @@ export function StickerField({ entered, zoom }: { entered: boolean; zoom: number
       if (id === "bass") {
         void playBassRiff()
         showToast({
-          message: language === "es" ? "Riff de bajo slappeado 🎸" : "Slapped bass riff 🎸",
+          message: t.stickerToasts.bass,
           icon: "🎸",
           type: "info",
         })
       }
       if (id === "fernet") {
         showToast({
-          message: language === "es" ? "70/30 con hielo. Listo para deployar 🧊" : "Fernet 70/30 on the rocks 🧊",
+          message: t.stickerToasts.fernet,
           icon: "🧊",
           type: "info",
         })
       }
       if (id === "pizza") {
         showToast({
-          message: language === "es" ? "Porción de muzzarella para la nocturna 🍕" : "Slice of pizza for the late shift 🍕",
+          message: t.stickerToasts.pizza,
           icon: "🍕",
           type: "info",
         })
       }
       if (id === "dog") {
         showToast({
-          message: language === "es" ? "Salchicha guardián del sprint 🌭🐶" : "Dachshund sprint guardian 🌭🐶",
+          message: t.stickerToasts.dog,
           icon: "🐶",
           type: "info",
         })
       }
       if (id === "boca") {
         showToast({
-          message: "Esto es Boca 💙💛💙",
+          message: t.stickerToasts.boca,
           icon: "⚽",
           type: "info",
         })
       }
       if (id === "gummies") {
         showToast({
-          message: language === "es" ? "Gomitas de eucalipto para el cerebro 🍬" : "Gummies for the brain 🍬",
+          message: t.stickerToasts.gummies,
           icon: "🍬",
           type: "info",
         })
       }
       if (id === "lemon") {
         showToast({
-          message: language === "es" ? "Limón ácido pero fresco 🍋" : "Fresh & sharp lemon 🍋",
+          message: t.stickerToasts.lemon,
           icon: "🍋",
           type: "info",
         })
       }
       if (id === "cordoba") {
         showToast({
-          message: "Córdoba · La Docta 🏛️",
+          message: t.stickerToasts.cordoba,
           icon: "🏛️",
           type: "info",
         })
       }
     },
-    [reduced, showToast, language, t.eggMusic],
+    [reduced, showToast, t],
   )
 
   return (

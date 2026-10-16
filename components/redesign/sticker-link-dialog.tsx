@@ -56,7 +56,7 @@ export function StickerLinkDialog({ href, anchor, onClose }: StickerLinkDialogPr
       >
         <span aria-hidden className="absolute -bottom-3 left-1/2 h-6 w-6 -translate-x-1/2 rotate-45 border-b-[3px] border-r-[3px] border-paper bg-paper" />
         <div className="relative flex items-start justify-between gap-5">
-          <p className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-canvas/45">Connection found</p>
+          <p className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-canvas/45">{t.stickerDialog.kicker}</p>
           <button
             ref={closeRef}
             type="button"

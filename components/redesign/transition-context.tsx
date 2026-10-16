@@ -24,12 +24,8 @@ type TransitionContextValue = {
 
 const TransitionContext = createContext<TransitionContextValue | null>(null)
 
-const PAGE_TITLES: Record<string, { es: string; en: string }> = {
-  "/": { es: "Inicio", en: "Home" },
-  "/about": { es: "About", en: "About" },
-  "/work": { es: "Work", en: "Work" },
-  "/contact": { es: "Contacto", en: "Contact" },
-}
+const pageTitleKey = (pathname: string) =>
+  pathname === "/" ? "root" : pathname.slice(1) as "about" | "work" | "contact"
 
 function scrollToTop() {
   if (scrollBus.lenis) {
@@ -83,7 +79,7 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
   const router = useRouter()
   const pathname = usePathname()
   const reduced = useReducedMotion()
-  const { language } = useCopy()
+  const { t } = useCopy()
   const [phase, setPhase] = useState<"idle" | "exit" | "enter">("idle")
   const [previewHref, setPreviewHref] = useState<string | null>(null)
   const pending = useRef<string | null>(null)
@@ -99,10 +95,10 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
     rgbCleanup.current = null
     focusMain()
     const key = pending.current ?? pathname
-    const title = PAGE_TITLES[key]?.[language] ?? "Eze Vazquez"
+    const title = t.pageTitles[pageTitleKey(key)] ?? t.brandName
     if (liveRef.current) liveRef.current.textContent = title
     pending.current = null
-  }, [language, pathname])
+  }, [pathname, t])
 
   const navigate = useCallback(
     (href: string) => {
@@ -167,7 +163,7 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
     scrollToTop()
     if (reduced) {
       focusMain()
-      const title = PAGE_TITLES[pathname]?.[language] ?? "Eze Vazquez"
+      const title = t.pageTitles[pageTitleKey(pathname)] ?? t.brandName
       if (liveRef.current) liveRef.current.textContent = title
       return
     }
@@ -175,7 +171,7 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
     setPhase("enter")
     const id = window.setTimeout(finishEnter, 580)
     return () => window.clearTimeout(id)
-  }, [pathname, reduced, language, finishEnter])
+  }, [pathname, reduced, finishEnter, t])
 
   useEffect(() => {
     return () => {

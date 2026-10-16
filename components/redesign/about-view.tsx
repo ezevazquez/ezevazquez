@@ -6,11 +6,6 @@ import { useReducedMotion } from "@/hooks/use-reduced-motion"
 import { loadGsap, refreshScrollTrigger, useGsap } from "@/hooks/use-gsap"
 import { useCopy } from "@/lib/redesign/use-copy"
 
-const KIND_LABEL = {
-  es: { work: "Trabajo", study: "Estudios", side: "Propios" },
-  en: { work: "Work", study: "Studies", side: "Side" },
-} as const
-
 const KIND_COLOR = {
   work: "var(--color-action)",
   study: "rgb(var(--primitive-thread-study))",
@@ -26,7 +21,7 @@ export function AboutView() {
   const [years, setYears] = useState(0)
   const [resumeId, setResumeId] = useState<string | null>(null)
   const reduced = useReducedMotion()
-  const labels = KIND_LABEL[language]
+  const labels = t.kindLabels
 
   const chapters = t.chapters.filter((chapter) => filter === "all" || chapter.kind === filter)
 

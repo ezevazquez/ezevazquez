@@ -5,11 +5,13 @@ import { useReducedMotion } from "@/hooks/use-reduced-motion"
 import { loadGsap } from "@/hooks/use-gsap"
 import { TransitionLink } from "./transition-link"
 import { TerminalMark } from "./terminal-mark"
+import { useCopy } from "@/lib/redesign/use-copy"
 
 /**
  * Persistent logo that FLIPs from the loader signature into the header slot.
  */
 export function LogoMark() {
+  const { t } = useCopy()
   const reduced = useReducedMotion()
   const logoRef = useRef<HTMLAnchorElement>(null)
   const [ready, setReady] = useState(false)
@@ -79,7 +81,7 @@ export function LogoMark() {
     <TransitionLink
       ref={logoRef}
       href="/"
-      aria-label="Eze Vazquez"
+      aria-label={t.brandName}
       data-logo-slot
       className={`fixed left-4 top-4 z-[40] w-[4.5rem] text-paper mix-blend-difference sm:left-5 sm:w-20 ${
         ready ? "opacity-100" : "pointer-events-none opacity-0"

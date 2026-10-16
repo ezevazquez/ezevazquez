@@ -406,17 +406,15 @@ html.has-custom-cursor .utility-control {
 }
 
 .sticker {
-  box-shadow: 4px 6px 0 rgba(0, 0, 0, 0.35);
   will-change: transform;
   opacity: 0;
   scale: 0.58;
 }
 
 .sticker-grabbed {
-  box-shadow: 10px 18px 0 rgba(0, 0, 0, 0.28);
   z-index: 70 !important;
   scale: 0.94 !important;
-  transition: scale 140ms var(--ease-out), box-shadow 140ms var(--ease-out);
+  transition: scale 140ms var(--ease-out);
 }
 
 .sticker-stamped::after {

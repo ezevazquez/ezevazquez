@@ -107,7 +107,7 @@ export function Loader() {
       }`}
       role="status"
       aria-live="polite"
-      aria-label="Cargando entorno Ezequiel Vazquez"
+      aria-label={t.loaderAria}
     >
       {/* Center Terminal Box */}
       <div className="flex flex-1 items-center justify-center px-6">

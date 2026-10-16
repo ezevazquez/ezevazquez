@@ -9,6 +9,7 @@ import {
   type ReactNode,
 } from "react"
 import { AnimatePresence, motion } from "framer-motion"
+import { useCopy } from "@/lib/redesign/use-copy"
 
 export type ToastItem = {
   id: string
@@ -48,6 +49,7 @@ export function toast(item: Omit<ToastItem, "id"> | string) {
 }
 
 export function ToastProvider({ children }: { children: ReactNode }) {
+  const { t } = useCopy()
   const [toasts, setToasts] = useState<ToastItem[]>([])
 
   const removeToast = useCallback((id: string) => {
@@ -88,7 +90,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     <ToastContext.Provider value={{ showToast }}>
       {children}
       <aside
-        aria-label="Notificaciones"
+        aria-label={t.notificationsLabel}
         aria-live="polite"
         aria-atomic="true"
         role="status"

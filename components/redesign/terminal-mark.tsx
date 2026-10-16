@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useCopy } from "@/lib/redesign/use-copy"
 
 type TerminalMarkProps = {
   className?: string
@@ -14,6 +15,7 @@ export function TerminalMark({
   isStatic = false,
   ...dataAttrs
 }: TerminalMarkProps) {
+  const { t } = useCopy()
   const [dots, setDots] = useState("")
 
   useEffect(() => {
@@ -51,10 +53,10 @@ export function TerminalMark({
           <span className="h-2.5 w-2.5 rounded-full bg-danger/80" />
           <span className="h-2.5 w-2.5 rounded-full bg-warning/80" />
           <span className="h-2.5 w-2.5 rounded-full bg-success/80" />
-          <span className="ml-2 text-[11px] text-paper/55">eze@buenos-aires: ~</span>
+          <span className="ml-2 text-[11px] text-paper/55">{t.terminalMark.location}</span>
         </div>
         <span className="rounded bg-paper px-2 py-0.5 text-[10px] uppercase tracking-wider text-canvas font-mono">
-          zsh · live
+          {t.terminalMark.status}
         </span>
       </div>
 
@@ -62,18 +64,18 @@ export function TerminalMark({
       <div className="mt-4 space-y-2.5 font-mono text-left text-xs sm:text-sm">
         <div className="flex items-center gap-2 text-paper">
           <span className="font-bold">$</span>
-          <span className="text-paper font-medium">eze --init --role &quot;technical-pm&quot;</span>
+          <span className="text-paper font-medium">{t.terminalMark.command}</span>
         </div>
 
         <div className="space-y-1 text-[11px] sm:text-xs text-paper/60">
           <p className="flex items-center gap-1.5">
-            <span className="text-success">✔</span> Buenos Aires runtime mounted (GMT-3)
+            <span className="text-success">✔</span> {t.terminalMark.runtime}
           </p>
           <p className="flex items-center gap-1.5">
-            <span className="text-success">✔</span> Systems & AI automation pipelines loaded
+            <span className="text-success">✔</span> {t.terminalMark.systems}
           </p>
           <p className="flex items-center gap-1.5">
-            <span className="text-paper/80">→</span> Initializing interactive canvas{dots}
+            <span className="text-paper/80">→</span> {t.terminalMark.initializing}{dots}
           </p>
         </div>
 

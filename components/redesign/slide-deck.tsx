@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useState, useCallback, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useCopy } from "@/lib/redesign/use-copy"
 import { useReducedMotion } from "@/hooks/use-reduced-motion"
@@ -13,7 +13,7 @@ export function SlideDeck({ entered }: { entered: boolean }) {
   const { t } = useCopy()
   const reduced = useReducedMotion()
   const [index, setIndex] = useState(0)
-  const [direction, setDirection] = useState(1)
+  const hasTypedOnce = useRef(false)
   const slides = t.heroDeck
 
   // Cache handling with localStorage
@@ -44,7 +44,7 @@ export function SlideDeck({ entered }: { entered: boolean }) {
 
   const go = useCallback(
     (delta: number) => {
-      setDirection(delta)
+      hasTypedOnce.current = true
       setIndex((prev) => {
         const next = (prev + delta + slides.length) % slides.length
         saveIndex(next)
@@ -60,6 +60,11 @@ export function SlideDeck({ entered }: { entered: boolean }) {
 
   useEffect(() => {
     if (!entered || !current) return
+    if (hasTypedOnce.current) {
+      setTypedTitle(current.title)
+      setTypedBody(current.body)
+      return
+    }
     let titleIndex = 0
     let bodyIndex = 0
     setTypedTitle("")
@@ -72,6 +77,7 @@ export function SlideDeck({ entered }: { entered: boolean }) {
         bodyIndex += 1
         setTypedBody(current.body.slice(0, bodyIndex))
       } else {
+        hasTypedOnce.current = true
         window.clearInterval(type)
       }
     }, 16)
@@ -84,16 +90,25 @@ export function SlideDeck({ entered }: { entered: boolean }) {
     go(event.key === "ArrowLeft" ? -1 : 1)
   }
 
-  const slideVariants = {
-    enter: { opacity: 0 },
-    center: { opacity: 1 },
-    exit: { opacity: 0 },
-  }
-
   const cardVariants = {
-    enter: { opacity: 0, y: reduced ? 0 : 10, scale: reduced ? 1 : 0.99 },
-    center: { opacity: 1, y: 0, scale: 1 },
-    exit: { opacity: 0 },
+    enter: {
+      opacity: 0,
+      transform: reduced ? "translate3d(0, 0, 0) scale(1)" : "translate3d(0, 14px, 0) scale(0.985)",
+    },
+    center: {
+      opacity: 1,
+      transform: "translate3d(0, 0, 0) scale(1)",
+      transition: reduced
+        ? { opacity: { duration: 0.12, ease: [0.23, 1, 0.32, 1] } }
+        : { transform: { type: "spring", duration: 0.38, bounce: 0.14 }, opacity: { duration: 0.16, ease: [0.23, 1, 0.32, 1] } },
+    },
+    exit: {
+      opacity: 0,
+      transform: reduced ? "translate3d(0, 0, 0) scale(1)" : "translate3d(0, -12px, 0) scale(0.99)",
+      transition: reduced
+        ? { opacity: { duration: 0.12, ease: [0.23, 1, 0.32, 1] } }
+        : { transform: { duration: 0.18, ease: [0.23, 1, 0.32, 1] }, opacity: { duration: 0.14, ease: [0.23, 1, 0.32, 1] } },
+    },
   }
 
   return (
@@ -103,7 +118,7 @@ export function SlideDeck({ entered }: { entered: boolean }) {
       onKeyDown={onDeckKeyDown}
       tabIndex={0}
       role="region"
-      aria-label="Deck interactivo"
+      aria-label={t.deck.aria}
     >
       {/* Physical stack: the current card is passed into these layers. */}
       {Array.from({ length: 4 }, (_, layer) => (
@@ -115,45 +130,33 @@ export function SlideDeck({ entered }: { entered: boolean }) {
         />
       ))}
 
-      <AnimatePresence initial={false} mode="sync" custom={direction}>
+      <AnimatePresence initial={false} mode="sync">
       <motion.div
         key={index}
-        custom={direction}
         variants={cardVariants}
         initial="enter"
         animate="center"
         exit="exit"
-        transition={reduced ? { duration: 0 } : { type: "spring", stiffness: 360, damping: 23, mass: 0.65 }}
         className="relative h-[20rem] rounded-[1.7rem] border border-paper/80 bg-deck p-6 shadow-[0_24px_80px_-30px_rgb(var(--primitive-black)/0.9)] sm:h-[25rem] sm:p-8"
       >
 
         {/* Slide Content with Animation */}
         <div className="relative h-[calc(100%-3rem)] overflow-hidden">
-          <AnimatePresence custom={direction} mode="wait">
-            <motion.div
-              key={index}
-              custom={direction}
-              variants={slideVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={{ duration: reduced ? 0 : 0.16, ease: "easeOut" }}
-            >
+            <div>
               <h2 className="font-display text-[clamp(2rem,6vw,3.4rem)] font-bold leading-[0.92] tracking-[-0.055em] text-paper">
                 <span aria-hidden>{typedTitle}</span><span className="sr-only">{current.title}</span><span aria-hidden className="text-signal">{entered && typedTitle.length < current.title.length ? "▍" : ""}</span>
               </h2>
               <p className="mt-5 max-w-[24rem] font-mono text-base leading-relaxed text-paper/80 sm:text-lg">
                 <span aria-hidden>{typedBody}</span><span className="sr-only">{current.body}</span>
               </p>
-            </motion.div>
-          </AnimatePresence>
+            </div>
         </div>
         <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between sm:bottom-8 sm:left-8 sm:right-8">
-          <a href={LINKEDIN_URL} target="_blank" rel="noreferrer" className="press rounded-full bg-paper px-4 py-2 font-mono text-xs text-canvas hover:bg-sheet">LinkedIn ↗</a>
+          <a href={LINKEDIN_URL} target="_blank" rel="noreferrer" className="press rounded-full bg-paper px-4 py-2 font-mono text-xs text-canvas hover:bg-sheet">{t.deck.linkedin}</a>
           <div className="flex items-center gap-2">
-            <button type="button" onClick={() => go(-1)} aria-label="Slide anterior" className="press grid h-9 w-9 place-items-center rounded-full border border-paper/60 text-xl leading-none text-paper">‹</button>
+            <button type="button" onClick={() => go(-1)} aria-label={t.deck.previous} className="press grid h-9 w-9 place-items-center rounded-full border border-paper/60 text-xl leading-none text-paper">‹</button>
             <span className="font-mono text-[10px] text-paper/55">{index + 1} / {slides.length}</span>
-            <button type="button" onClick={() => go(1)} aria-label="Slide siguiente" className="press grid h-9 w-9 place-items-center rounded-full border border-paper/60 text-xl leading-none text-paper">›</button>
+            <button type="button" onClick={() => go(1)} aria-label={t.deck.next} className="press grid h-9 w-9 place-items-center rounded-full border border-paper/60 text-xl leading-none text-paper">›</button>
           </div>
         </div>
       </motion.div>

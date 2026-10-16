@@ -167,7 +167,7 @@ export function HomeView() {
         </div>
         <SaySomething />
         <CanvasZoom value={zoom} onChange={setZoom} />
-        <button type="button" onClick={() => { pan.current = { x: 0, y: 0 }; setZoom(0.8); applyWorldTransform(0.8); window.dispatchEvent(new CustomEvent("eze:reset-stickers")) }} className="utility-control press fixed right-16 top-4 z-[60] rounded-full border border-paper/15 bg-canvas/80 px-3 py-2 font-mono text-[11px] uppercase tracking-wide text-paper backdrop-blur-md">reset</button>
+        <button type="button" onClick={() => { pan.current = { x: 0, y: 0 }; setZoom(0.8); applyWorldTransform(0.8); window.dispatchEvent(new CustomEvent("eze:reset-stickers")) }} className="utility-control press fixed right-16 top-4 z-[60] rounded-full border border-paper/15 bg-canvas/80 px-3 py-2 font-mono text-[11px] uppercase tracking-wide text-paper backdrop-blur-md">{t.controls.reset}</button>
       </section>
 
       <div className="overflow-hidden border-y border-white/10 bg-canvas py-4">

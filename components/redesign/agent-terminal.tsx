@@ -4,7 +4,7 @@ import { useRef, useState, type PointerEvent } from "react"
 import { useCopy } from "@/lib/redesign/use-copy"
 
 export function AgentTerminal() {
-  const { language } = useCopy()
+  const { t } = useCopy()
   const [command, setCommand] = useState("")
   const [lines, setLines] = useState<string[]>([])
   const [position, setPosition] = useState({ x: 0, y: 0 })
@@ -13,7 +13,7 @@ export function AgentTerminal() {
   const run = () => {
     const value = command.trim()
     if (!value) return
-    setLines((current) => [...current.slice(-2), `$ ${value}`, language === "es" ? "↳ recibido. Sigo pensando." : "↳ received. Still thinking."])
+    setLines((current) => [...current.slice(-2), `$ ${value}`, t.agentTerminal.response])
     setCommand("")
   }
 
@@ -35,11 +35,11 @@ export function AgentTerminal() {
     >
       <div className="flex items-center gap-1.5 border-b border-paper/15 bg-canvas-raised px-3 py-2 text-[9px] uppercase tracking-[0.14em] text-paper/55">
         <span className="h-2 w-2 rounded-full bg-danger" /><span className="h-2 w-2 rounded-full bg-warning" /><span className="h-2 w-2 rounded-full bg-success" />
-        <span className="ml-1">agent.terminal</span>
+        <span className="ml-1">{t.agentTerminal.title}</span>
       </div>
       <div className="p-3">
       <div className="min-h-12 space-y-1 text-[10px] leading-relaxed text-paper/75" aria-live="polite">
-        {lines.length ? lines.map((line, index) => <p key={`${line}-${index}`}>{line}</p>) : <p>{language === "es" ? "escribí cualquier cosa" : "type anything"}</p>}
+        {lines.length ? lines.map((line, index) => <p key={`${line}-${index}`}>{line}</p>) : <p>{t.agentTerminal.empty}</p>}
       </div>
       <form
         className="mt-3 flex border-t border-paper/15 pt-2"
@@ -48,9 +48,9 @@ export function AgentTerminal() {
           run()
         }}
       >
-        <label className="sr-only" htmlFor="agent-command">{language === "es" ? "Comando para el agente" : "Command for the agent"}</label>
+        <label className="sr-only" htmlFor="agent-command">{t.agentTerminal.commandLabel}</label>
         <span className="mr-1 text-signal">›</span>
-        <input id="agent-command" value={command} onChange={(event) => setCommand(event.target.value)} placeholder={language === "es" ? "escribí algo" : "type anything"} className="min-w-0 flex-1 rounded bg-paper/10 px-1.5 py-1 text-[10px] text-paper outline-none placeholder:text-paper/35 focus:bg-paper/15" />
+        <input id="agent-command" value={command} onChange={(event) => setCommand(event.target.value)} placeholder={t.agentTerminal.placeholder} className="min-w-0 flex-1 rounded bg-paper/10 px-1.5 py-1 text-[10px] text-paper outline-none placeholder:text-paper/35 focus:bg-paper/15" />
       </form>
       </div>
     </section>

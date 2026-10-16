@@ -12,6 +12,7 @@ export function CursorHalo() {
   const pos = useRef({ x: -100, y: -100 })
   const target = useRef({ x: -100, y: -100 })
   const seen = useRef(false)
+  const overSticker = useRef(false)
 
   useEffect(() => {
     const node = ref.current
@@ -32,7 +33,7 @@ export function CursorHalo() {
         seen.current = true
         pos.current = { x: event.clientX, y: event.clientY }
       }
-      node.style.opacity = "1"
+      node.style.opacity = overSticker.current ? "0" : "1"
     }
 
     const onOver = (event: PointerEvent) => {
@@ -41,14 +42,20 @@ export function CursorHalo() {
       ) as HTMLElement | null
       if (!el || !labelRef.current) return
       if (el.classList.contains("sticker") || el.dataset.cursor === "drag") {
-        labelRef.current.textContent = t.cursorDrag
-        node.dataset.state = "drag"
-      } else if (el.dataset.cursor === "view" || el.closest("[data-cursor='view']")) {
-        labelRef.current.textContent = t.cursorView
-        node.dataset.state = "view"
-      } else {
+        overSticker.current = true
         labelRef.current.textContent = ""
         node.dataset.state = ""
+        node.style.opacity = "0"
+      } else if (el.dataset.cursor === "view" || el.closest("[data-cursor='view']")) {
+        overSticker.current = false
+        labelRef.current.textContent = t.cursorView
+        node.dataset.state = "view"
+        node.style.opacity = "1"
+      } else {
+        overSticker.current = false
+        labelRef.current.textContent = ""
+        node.dataset.state = ""
+        node.style.opacity = "1"
       }
     }
 
@@ -63,7 +70,7 @@ export function CursorHalo() {
       window.removeEventListener("pointermove", move)
       window.removeEventListener("pointerover", onOver)
     }
-  }, [reduced, t.cursorDrag, t.cursorView])
+  }, [reduced, t.cursorView])
 
   if (reduced) return null
 
@@ -71,7 +78,7 @@ export function CursorHalo() {
     <div
       ref={ref}
       aria-hidden
-      className="pointer-events-none fixed left-0 top-0 z-[90] hidden h-3.5 w-3.5 rounded-full bg-paper opacity-0 mix-blend-difference md:block data-[state=drag]:h-5 data-[state=drag]:w-5 data-[state=view]:h-5 data-[state=view]:w-5"
+      className="pointer-events-none fixed left-0 top-0 z-[90] hidden h-3.5 w-3.5 rounded-full bg-paper opacity-0 mix-blend-difference md:block data-[state=view]:h-5 data-[state=view]:w-5"
     >
       <span
         ref={labelRef}

@@ -17,6 +17,7 @@ import { useTransitionNav } from "./transition-context"
 import { playBassRiff, stopTune, toggleTune } from "@/lib/redesign/tune"
 import { toggleRadio, stopRadio } from "@/lib/redesign/radio"
 import { useToast } from "./toast-provider"
+import { StickerLinkDialog } from "./sticker-link-dialog"
 
 type Draw =
   | "git"
@@ -49,10 +50,11 @@ type StickerData = {
   mobile?: boolean
   draw: Draw
   photo?: string
+  dialog?: "linkedin"
 }
 const STICKERS: StickerData[] = [
   { id: "git", label: "github", href: GITHUB_URL, x: "6%", y: "16%", rotate: -8, mobile: true, draw: "git" },
-  { id: "in", label: "linkedin", href: LINKEDIN_URL, x: "74%", y: "12%", rotate: 6, mobile: true, draw: "in" },
+  { id: "in", label: "linkedin", href: LINKEDIN_URL, x: "74%", y: "12%", rotate: 6, mobile: true, draw: "in", dialog: "linkedin" },
   { id: "mail", label: "mail", href: EMAIL_URL, x: "8%", y: "70%", rotate: 4, mobile: true, draw: "mail" },
   {
     id: "cal",
@@ -78,34 +80,10 @@ const STICKERS: StickerData[] = [
   { id: "dog", label: "dog", x: "2%", y: "88%", rotate: -6, mobile: true, draw: "dog" },
   { id: "pizza", label: "pizza", x: "94%", y: "72%", rotate: 8, mobile: true, draw: "pizza" },
   { id: "boca", label: "boca", x: "62%", y: "90%", rotate: -3, mobile: true, draw: "boca" },
-  { id: "pol-1", label: "polaroid", x: "18%", y: "4%", rotate: -7, draw: "polaroid", photo: "/stickers/polaroids/1.jpg" },
-  { id: "pol-2", label: "polaroid", x: "78%", y: "48%", rotate: 5, draw: "polaroid", photo: "/stickers/polaroids/2.jpg" },
-  { id: "pol-3", label: "polaroid", x: "28%", y: "72%", rotate: 3, mobile: true, draw: "polaroid", photo: "/stickers/polaroids/3.jpg" },
+  { id: "pol-1", label: "polaroid", x: "18%", y: "4%", rotate: -7, draw: "polaroid" },
+  { id: "pol-2", label: "polaroid", x: "78%", y: "48%", rotate: 5, draw: "polaroid" },
+  { id: "pol-3", label: "polaroid", x: "28%", y: "72%", rotate: 3, mobile: true, draw: "polaroid" },
 ]
-
-const TOOLTIPS: Record<string, { es: string; en: string }> = {
-  git: { es: "GitHub · Código & Repos", en: "GitHub · Code & Repos" },
-  in: { es: "LinkedIn · Conectar", en: "LinkedIn · Connect" },
-  mail: { es: "Mail · Contacto directo", en: "Mail · Direct contact" },
-  cal: { es: "Agenda · Reservar llamada", en: "Calendar · Book a call" },
-  mate: { es: "Mate · Clic para cebar", en: "Mate · Click to brew" },
-  jira: { es: "Jira · Arrastralo a Excel", en: "Jira · Drag me to Excel" },
-  excel: { es: "Excel · Matriz operativa", en: "Excel · Operational matrix" },
-  stamp: { es: "Buenos Aires · GMT-3", en: "Buenos Aires · GMT-3" },
-  plane: { es: "Avión · Despegar a producción", en: "Plane · Takeoff to prod" },
-  phones: { es: "Auriculares · Radio Lo-Fi en vivo", en: "Headphones · Live Lo-Fi Radio" },
-  gummies: { es: "Gomitas · Azúcar para deployar", en: "Gummies · Brain fuel" },
-  bass: { es: "Bajo · Riff en vivo", en: "Bass · Live bass riff" },
-  lemon: { es: "Limón · Ácido pero necesario", en: "Lemon · Fresh & sharp" },
-  fernet: { es: "Fernet · 70/30 con hielo", en: "Fernet · 70/30 on the rocks" },
-  cordoba: { es: "Córdoba · La Docta", en: "Córdoba · La Docta" },
-  dog: { es: "Salchicha · Guardián del sprint", en: "Dachshund · Sprint guardian" },
-  pizza: { es: "Pizza · Combustible de nocturnas", en: "Pizza · Late night fuel" },
-  boca: { es: "Boca · Esto es Boca", en: "Boca · Esto es Boca" },
-  "pol-1": { es: "Polaroid · Memoria de equipo", en: "Polaroid · Team memory" },
-  "pol-2": { es: "Polaroid · Buenos Aires", en: "Polaroid · Buenos Aires" },
-  "pol-3": { es: "Polaroid · Setup", en: "Polaroid · Desk setup" },
-}
 
 type PosMap = Record<string, { x: number; y: number }>
 
@@ -209,7 +187,7 @@ type StickerProps = {
   onBringFront: (id: string) => void
   onDrop: (id: string, rect: DOMRect) => void
   onActivate: (id: string) => void
-  onOpen: (href: string) => void
+  onOpen: (sticker: StickerData) => void
   steaming?: boolean
   stamped?: boolean
   lit?: boolean
@@ -328,7 +306,7 @@ function Sticker({
       if (elRef.current) onDrop(sticker.id, elRef.current.getBoundingClientRect())
       if (!moved.current) {
         opened.current = true
-        if (sticker.href) onOpen(sticker.href)
+        if (sticker.href) onOpen(sticker)
         else onActivate(sticker.id)
       } else if (!reduced && Math.hypot(velocity.current.x, velocity.current.y) > 2) {
         fling()
@@ -386,6 +364,8 @@ function Sticker({
     onPointerMove,
     onPointerEnter: () => setHovered(true),
     onPointerLeave: () => setHovered(false),
+    onFocus: () => setHovered(true),
+    onBlur: () => setHovered(false),
     onDragStart: (event: React.DragEvent) => event.preventDefault(),
   }
 
@@ -398,7 +378,7 @@ function Sticker({
         </span>
       )}
       {hovered && !grabbed && tooltip && (
-        <span className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/20 bg-canvas/95 px-2.5 py-0.5 font-mono text-[10px] font-medium text-white shadow-xl backdrop-blur-md animate-in fade-in zoom-in-95 duration-150 z-50">
+        <span role="tooltip" className="pointer-events-none absolute -top-8 left-1/2 z-50 -translate-x-1/2 whitespace-nowrap rounded-full border border-paper/20 bg-canvas/95 px-2.5 py-0.5 font-mono text-[10px] font-medium text-paper shadow-xl backdrop-blur-md animate-in fade-in zoom-in-95 duration-150">
           {tooltip}
         </span>
       )}
@@ -408,7 +388,7 @@ function Sticker({
   return (
     <div
       ref={setRef}
-      role={sticker.href ? "link" : "button"}
+      role={sticker.href && !sticker.dialog ? "link" : "button"}
       tabIndex={0}
       draggable={false}
       onClick={() => {
@@ -420,13 +400,13 @@ function Sticker({
           opened.current = false
           return
         }
-        if (sticker.href) onOpen(sticker.href)
+        if (sticker.href) onOpen(sticker)
         else onActivate(sticker.id)
       }}
       onKeyDown={(event) => {
         if (event.key !== "Enter" && event.key !== " ") return
         event.preventDefault()
-        if (sticker.href) onOpen(sticker.href)
+        if (sticker.href) onOpen(sticker)
         else onActivate(sticker.id)
       }}
       {...handlers}
@@ -447,6 +427,7 @@ export function StickerField() {
   const [stamped, setStamped] = useState(false)
   const [lit, setLit] = useState(false)
   const [playing, setPlaying] = useState(false)
+  const [activeDialog, setActiveDialog] = useState<StickerData["dialog"]>()
 
   useEffect(() => () => {
     stopRadio()
@@ -488,10 +469,15 @@ export function StickerField() {
   )
 
   const onOpen = useCallback(
-    (href: string) => {
-      if (href.startsWith("/")) navigate(href)
-      else if (href.startsWith("mailto:")) window.location.href = href
-      else window.open(href, "_blank", "noopener,noreferrer")
+    (sticker: StickerData) => {
+      if (sticker.dialog) {
+        setActiveDialog(sticker.dialog)
+        return
+      }
+      if (!sticker.href) return
+      if (sticker.href.startsWith("/")) navigate(sticker.href)
+      else if (sticker.href.startsWith("mailto:")) window.location.href = sticker.href
+      else window.open(sticker.href, "_blank", "noopener,noreferrer")
     },
     [navigate],
   )
@@ -651,7 +637,7 @@ export function StickerField() {
       {STICKERS.map((sticker) => {
         const z = 20 + zOrder.indexOf(sticker.id)
         const shift = positions[sticker.id] ?? { x: 0, y: 0 }
-        const tooltip = TOOLTIPS[sticker.id]?.[language] || TOOLTIPS[sticker.id]?.es
+        const tooltip = t.stickerHints[sticker.id as keyof typeof t.stickerHints]
         return (
           <Sticker
             key={sticker.id}
@@ -674,6 +660,9 @@ export function StickerField() {
           />
         )
       })}
+      {activeDialog === "linkedin" && (
+        <StickerLinkDialog href={LINKEDIN_URL} onClose={() => setActiveDialog(undefined)} />
+      )}
     </>
   )
 }

@@ -323,6 +323,14 @@ html.has-custom-cursor * {
   cursor: none !important;
 }
 
+html.has-custom-cursor .sticker {
+  cursor: grab !important;
+}
+
+html.has-custom-cursor .sticker:active {
+  cursor: grabbing !important;
+}
+
 .phones-on {
   animation: phones-pulse 1.2s var(--ease-out) infinite;
 }

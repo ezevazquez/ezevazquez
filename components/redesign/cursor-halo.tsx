@@ -69,6 +69,11 @@ export function CursorHalo() {
         labelRef.current.textContent = ""
         node.dataset.state = ""
         node.style.opacity = "0"
+      } else if (el.dataset.cursor === "click" || el.closest("[data-cursor='click']")) {
+        overSticker.current = true
+        labelRef.current.textContent = ""
+        node.dataset.state = ""
+        node.style.opacity = "0"
       } else if (el.dataset.cursor === "view" || el.closest("[data-cursor='view']")) {
         overSticker.current = false
         labelRef.current.textContent = t.cursorView

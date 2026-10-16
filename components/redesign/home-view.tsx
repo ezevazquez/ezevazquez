@@ -12,10 +12,12 @@ import { AgentTerminal } from "./agent-terminal"
 import { CanvasZoom } from "./canvas-zoom"
 import { TransitionLink } from "./transition-link"
 
+const MARQUEE_COPIES = 8
+
 export function HomeView() {
   const { t, language } = useCopy()
   const [heroEntered, setHeroEntered] = useState(false)
-  const [zoom, setZoom] = useState(0.8)
+  const [zoom, setZoom] = useState(1)
   const gridRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
   const pan = useRef({ x: 0, y: 0 })
@@ -146,7 +148,12 @@ export function HomeView() {
           const dx = event.clientX - boardDrag.current.startX
           const dy = event.clientY - boardDrag.current.startY
           if (Math.hypot(dx, dy) > 4) boardDrag.current.moved = true
-          pan.current = { x: Math.max(-180, Math.min(180, boardDrag.current.x + dx)), y: Math.max(-140, Math.min(140, boardDrag.current.y + dy)) }
+          const maxPanX = event.currentTarget.clientWidth * 0.55
+          const maxPanY = event.currentTarget.clientHeight * 0.55
+          pan.current = {
+            x: Math.max(-maxPanX, Math.min(maxPanX, boardDrag.current.x + dx)),
+            y: Math.max(-maxPanY, Math.min(maxPanY, boardDrag.current.y + dy)),
+          }
           applyWorldTransform()
         }}
         onPointerUp={(event: PointerEvent<HTMLElement>) => {
@@ -155,8 +162,9 @@ export function HomeView() {
           boardDrag.current = null
         }}
       >
-        <div ref={gridRef} className="canvas-grid pointer-events-none absolute -inset-[30%] origin-center" />
-        <div ref={contentRef} className="absolute inset-0 origin-center">
+        <div ref={gridRef} className="canvas-grid pointer-events-none absolute -inset-[160%] z-0 origin-center" />
+        <div className="canvas-vignette pointer-events-none absolute inset-0 z-10" />
+        <div ref={contentRef} className="absolute inset-0 z-20 origin-center">
           <StickerField entered={heroEntered} zoom={zoom} />
           <AgentTerminal />
           <div className="pointer-events-none relative z-30 mx-auto flex h-full max-w-3xl items-center justify-center px-5 pb-24 pt-14 text-center sm:pb-16">
@@ -168,19 +176,31 @@ export function HomeView() {
         </div>
         <SaySomething />
         <CanvasZoom value={zoom} onChange={setZoom} />
-        <button type="button" onClick={() => { pan.current = { x: 0, y: 0 }; setZoom(0.8); applyWorldTransform(0.8); window.dispatchEvent(new CustomEvent("eze:reset-stickers")) }} className="utility-control press fixed right-16 top-4 z-[60] rounded-full border border-paper/15 bg-canvas/80 px-3 py-2 font-mono text-[11px] uppercase tracking-wide text-paper backdrop-blur-md">{t.controls.reset}</button>
+        <button type="button" onClick={() => { pan.current = { x: 0, y: 0 }; setZoom(1); applyWorldTransform(1); window.dispatchEvent(new CustomEvent("eze:reset-hero")) }} className="utility-control press fixed right-16 top-4 z-[60] rounded-full border border-paper/15 bg-canvas/80 px-3 py-2 font-mono text-[11px] uppercase tracking-wide text-paper backdrop-blur-md">{t.controls.reset}</button>
       </section>
 
       <div className="overflow-hidden border-y border-white/10 bg-canvas py-4">
-        <div className="marquee-track flex w-max gap-10">
-          {Array.from({ length: 2 }, (_, loop) => (
-            <p key={loop} className="flex gap-10 font-display text-4xl tracking-[-0.04em] text-paper/80">
-              {t.what.map((item) => (
-                <span key={`${loop}-${item.n}`} className="flex items-center gap-10">
-                  {item.word}
-                  <span className="text-signal">/</span>
-                </span>
-              ))}
+        <div
+          className="marquee-track flex w-max"
+          style={{ animationDuration: `${MARQUEE_COPIES * 14}s` }}
+        >
+          {[0, 1].map((loop) => (
+            <p
+              key={loop}
+              aria-hidden={loop === 1 || undefined}
+              className="flex shrink-0 items-center gap-10 pr-10 font-display text-4xl tracking-[-0.04em] text-paper/80"
+            >
+              {Array.from({ length: MARQUEE_COPIES }, (_, copy) =>
+                t.what.map((item) => (
+                  <span
+                    key={`${loop}-${copy}-${item.n}`}
+                    className="flex shrink-0 items-center gap-10 whitespace-nowrap"
+                  >
+                    {item.word}
+                    <span className="text-signal">/</span>
+                  </span>
+                )),
+              )}
             </p>
           ))}
         </div>

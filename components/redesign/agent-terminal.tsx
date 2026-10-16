@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState, type PointerEvent } from "react"
+import { useEffect, useRef, useState, type PointerEvent } from "react"
 import { useCopy } from "@/lib/redesign/use-copy"
 
 export function AgentTerminal() {
@@ -9,6 +9,17 @@ export function AgentTerminal() {
   const [lines, setLines] = useState<string[]>([])
   const [position, setPosition] = useState({ x: 0, y: 0 })
   const drag = useRef<{ x: number; y: number; startX: number; startY: number } | null>(null)
+
+  useEffect(() => {
+    const reset = () => {
+      setCommand("")
+      setLines([])
+      setPosition({ x: 0, y: 0 })
+      drag.current = null
+    }
+    window.addEventListener("eze:reset-hero", reset)
+    return () => window.removeEventListener("eze:reset-hero", reset)
+  }, [])
 
   const run = () => {
     const value = command.trim()
@@ -20,6 +31,7 @@ export function AgentTerminal() {
   return (
     <section
       data-cursor="view"
+      data-agent-terminal
       className="absolute right-[3%] top-[54%] z-40 hidden w-56 overflow-hidden rounded-2xl border border-paper/25 bg-canvas font-mono shadow-[8px_12px_0_rgb(var(--primitive-black)/0.35)] lg:block"
       style={{ transform: `translate3d(${position.x}px, ${position.y}px, 0)` }}
       onPointerDown={(event: PointerEvent<HTMLElement>) => {

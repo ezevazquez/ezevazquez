@@ -18,7 +18,7 @@ import { useToast } from "./toast-provider"
 import { StickerLinkDialog } from "./sticker-link-dialog"
 
 type StickerSize = "tiny" | "small" | "medium" | "large" | "wide" | "tall" | "polaroid"
-type StickerDialog = "linkedin" | "github" | "mail" | "polaroid"
+type StickerDialog = "linkedin" | "github" | "mail" | "polaroid" | "verse"
 
 type StickerData = {
   id: string
@@ -41,15 +41,19 @@ const STICKERS: StickerData[] = [
   { id: "pol-1", label: "polaroid", asset: "/stickers/polaroid1.png", size: "polaroid", x: "15%", y: "20%", rotate: -12, dialog: "polaroid" },
   { id: "me", label: "eze", asset: "/stickers/me.png", size: "small", x: "29%", y: "20%", rotate: -5 },
   { id: "cooper", label: "cooper", asset: "/stickers/cooper.png", size: "medium", x: "61%", y: "20%", rotate: 7 },
+  { id: "jesus-1", label: "jesus", asset: "/stickers/jesus1.png", size: "wide", x: "38%", y: "27%", rotate: 3, dialog: "verse" },
   { id: "mate", label: "mate", asset: "/stickers/mate.png", size: "tall", x: "4%", y: "34%", rotate: -12 },
   { id: "notion", label: "notion", asset: "/stickers/notion.png", size: "small", x: "20%", y: "47%", rotate: -9 },
   { id: "pol-2", label: "polaroid", asset: "/stickers/polaroid2.png", size: "polaroid", x: "76%", y: "32%", rotate: 7, dialog: "polaroid" },
+  { id: "jesus-2", label: "jesus", asset: "/stickers/jesus2.png", size: "wide", x: "86%", y: "46%", rotate: -5, dialog: "verse" },
   { id: "bass", label: "bass", asset: "/stickers/bass.png", size: "tall", x: "72%", y: "52%", rotate: -10 },
   { id: "phones", label: "phones", asset: "/stickers/headphones.png", size: "medium", x: "4%", y: "65%", rotate: -8 },
   { id: "dog", label: "dog", asset: "/stickers/dog.png", size: "medium", x: "20%", y: "62%", rotate: -6 },
+  { id: "jesus-3", label: "jesus", asset: "/stickers/jesus3.png", size: "medium", x: "44%", y: "64%", rotate: 5, dialog: "verse" },
   { id: "mail", label: "mail", href: EMAIL_URL, asset: "/stickers/letter.png", size: "wide", x: "13%", y: "80%", rotate: 4, dialog: "mail" },
   { id: "pol-3", label: "polaroid", asset: "/stickers/polaroid3.png", size: "polaroid", x: "31%", y: "72%", rotate: -9, dialog: "polaroid" },
   { id: "phone", label: "phone", asset: "/stickers/phone.png", size: "medium", x: "57%", y: "79%", rotate: 4 },
+  { id: "jesus-4", label: "jesus", asset: "/stickers/jesus4.png", size: "medium", x: "65%", y: "82%", rotate: -4, dialog: "verse" },
   { id: "lemon", label: "lemon", asset: "/stickers/lemon.png", size: "small", x: "72%", y: "76%", rotate: 6 },
   { id: "boca", label: "boca", asset: "/stickers/boca.png", size: "medium", x: "84%", y: "78%", rotate: -3 },
 ]
@@ -65,6 +69,11 @@ function getDialogContent(sticker: StickerData, t: ReturnType<typeof useCopy>["t
     case "polaroid": {
       const index = Math.max(0, Number(sticker.id.split("-")[1]) - 1)
       return { intro: t.stickerDialog.polaroids[index] ?? t.stickerDialog.polaroids[0], hearts: true }
+    }
+    case "verse": {
+      const index = Math.max(0, Number(sticker.id.split("-")[1]) - 1)
+      const verse = t.stickerDialog.verses[index] ?? t.stickerDialog.verses[0]
+      return { intro: `“${verse.text}” — ${verse.reference}` }
     }
     case "linkedin":
     default:

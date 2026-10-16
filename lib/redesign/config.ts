@@ -8,7 +8,6 @@ export const CALENDAR_URL =
 export const HAS_CALENDAR = CALENDAR_URL.length > 0
 
 export const LOADER_STORAGE_KEY = "eze-loader"
-export const STICKER_STORAGE_KEY = "eze-stickers"
 export const ABOUT_PROGRESS_KEY = "eze-about-progress"
 export const LANGUAGE_STORAGE_KEY = "ezevazquez-language"
 /** Cookie mirrors localStorage so SSR can paint the correct language. */

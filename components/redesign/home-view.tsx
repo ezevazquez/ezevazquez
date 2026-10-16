@@ -1,60 +1,52 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useCallback, useEffect, useRef, useState, type PointerEvent } from "react"
 import { EMAIL_URL } from "@/lib/constants"
 import { CALENDAR_URL, HAS_CALENDAR } from "@/lib/redesign/config"
 import { refreshScrollTrigger, useGsap } from "@/hooks/use-gsap"
 import { useCopy } from "@/lib/redesign/use-copy"
 import { StickerField } from "./stickers"
 import { SlideDeck } from "./slide-deck"
-import { DrawWall } from "./draw-wall"
-import { WallNotes } from "./wall-notes"
+import { SaySomething } from "./say-something"
+import { AgentTerminal } from "./agent-terminal"
+import { CanvasZoom } from "./canvas-zoom"
 import { TransitionLink } from "./transition-link"
 
 export function HomeView() {
   const { t, language } = useCopy()
-  const entered = useRef(false)
+  const [heroEntered, setHeroEntered] = useState(false)
+  const [zoom, setZoom] = useState(0.8)
+  const gridRef = useRef<HTMLDivElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
+  const pan = useRef({ x: 0, y: 0 })
+  const boardDrag = useRef<{ x: number; y: number; startX: number; startY: number; moved: boolean } | null>(null)
+
+  const applyWorldTransform = useCallback((nextZoom = zoom) => {
+    const transform = `translate3d(${pan.current.x}px, ${pan.current.y}px, 0) scale(${nextZoom})`
+    if (gridRef.current) gridRef.current.style.transform = transform
+    if (contentRef.current) contentRef.current.style.transform = transform
+  }, [zoom])
+
+  useEffect(() => {
+    applyWorldTransform()
+  }, [applyWorldTransform])
 
   useEffect(() => {
     void refreshScrollTrigger()
   }, [language])
 
+  useEffect(() => {
+    if (document.documentElement.classList.contains("loader-done")) {
+      setHeroEntered(true)
+      return
+    }
+    const reveal = () => setHeroEntered(true)
+    window.addEventListener("eze:loader-done", reveal, { once: true })
+    return () => window.removeEventListener("eze:loader-done", reveal)
+  }, [])
+
   const rootRef = useGsap(
     (gsap) => {
-      const stickers = gsap.utils.toArray<HTMLElement>(".sticker")
-      const titleLines = gsap.utils.toArray<HTMLElement>("[data-hero-line]")
-      const card = document.querySelector<HTMLElement>("[data-note-card]")
-      let onDone: (() => void) | null = null
-
-      const entrance = () => {
-        if (entered.current) return
-        entered.current = true
-        const tl = gsap.timeline({ defaults: { ease: "power3.out" } })
-        gsap.set(stickers, { y: -80, opacity: 0, rotate: 0 })
-        gsap.set(titleLines, { yPercent: 110 })
-        if (card) gsap.set(card, { scale: 0.92, opacity: 0 })
-
-        tl.to(stickers, {
-          y: 0,
-          opacity: 1,
-          rotate: (i: number) => Number(stickers[i]?.dataset.rotate || 0),
-          duration: 0.9,
-          stagger: 0.06,
-          ease: "back.out(1.6)",
-        })
-        if (card) {
-          tl.to(card, { scale: 1, opacity: 1, duration: 0.55 }, "-=0.45")
-        }
-        tl.to(titleLines, { yPercent: 0, duration: 0.85, stagger: 0.08 }, "-=0.35")
-      }
-
-      if (document.documentElement.classList.contains("loader-done")) {
-        entrance()
-      } else {
-        onDone = () => entrance()
-        window.addEventListener("eze:loader-done", onDone, { once: true })
-      }
-
       gsap.utils.toArray<HTMLElement>("[data-line]").forEach((line) => {
         gsap.from(line, {
           yPercent: 110,
@@ -132,27 +124,50 @@ export function HomeView() {
         })
       }
 
-      return () => {
-        if (onDone) window.removeEventListener("eze:loader-done", onDone)
-      }
     },
     [language],
   )
 
   return (
     <div ref={rootRef}>
-      <section data-hero className="canvas-grid relative min-h-svh overflow-hidden bg-canvas">
-        <DrawWall />
-        <StickerField />
-        <div className="pointer-events-none relative z-30 mx-auto flex min-h-svh max-w-3xl items-center justify-center px-5 pb-28 pt-16 text-center">
-          <h1 className="sr-only">{`${t.heroTitle} ${t.heroLine}`}</h1>
-          <div className="pointer-events-auto w-full" data-note-card>
-            <SlideDeck />
-            <div className="mt-4">
-              <WallNotes />
+      <section
+        data-hero
+        className="relative h-svh select-none overflow-hidden bg-canvas"
+        onPointerDown={(event: PointerEvent<HTMLElement>) => {
+          const target = event.target as HTMLElement
+          if (target.closest(".sticker, [data-hero-deck], nav, button, input, a, [data-cursor], [role='dialog']")) return
+          event.preventDefault()
+          boardDrag.current = { x: pan.current.x, y: pan.current.y, startX: event.clientX, startY: event.clientY, moved: false }
+          event.currentTarget.setPointerCapture(event.pointerId)
+        }}
+        onPointerMove={(event: PointerEvent<HTMLElement>) => {
+          if (!boardDrag.current) return
+          const dx = event.clientX - boardDrag.current.startX
+          const dy = event.clientY - boardDrag.current.startY
+          if (Math.hypot(dx, dy) > 4) boardDrag.current.moved = true
+          pan.current = { x: Math.max(-180, Math.min(180, boardDrag.current.x + dx)), y: Math.max(-140, Math.min(140, boardDrag.current.y + dy)) }
+          applyWorldTransform()
+        }}
+        onPointerUp={(event: PointerEvent<HTMLElement>) => {
+          if (!boardDrag.current) return
+          if (!boardDrag.current.moved) window.dispatchEvent(new CustomEvent("eze:say-something", { detail: { x: event.clientX, y: event.clientY } }))
+          boardDrag.current = null
+        }}
+      >
+        <div ref={gridRef} className="canvas-grid pointer-events-none absolute -inset-[30%] origin-center" />
+        <div ref={contentRef} className="absolute inset-0 origin-center">
+          <StickerField entered={heroEntered} zoom={zoom} />
+          <AgentTerminal />
+          <div className="pointer-events-none relative z-30 mx-auto flex h-full max-w-3xl items-center justify-center px-5 pb-24 pt-14 text-center sm:pb-16">
+            <h1 className="sr-only">{`${t.heroTitle} ${t.heroLine}`}</h1>
+            <div className="pointer-events-auto flex w-full flex-col items-center" data-note-card>
+              <SlideDeck entered={heroEntered} />
             </div>
           </div>
         </div>
+        <SaySomething />
+        <CanvasZoom value={zoom} onChange={setZoom} />
+        <button type="button" onClick={() => { pan.current = { x: 0, y: 0 }; setZoom(0.8); applyWorldTransform(0.8); window.dispatchEvent(new CustomEvent("eze:reset-stickers")) }} className="utility-control press fixed right-16 top-4 z-[60] rounded-full border border-paper/15 bg-canvas/80 px-3 py-2 font-mono text-[11px] uppercase tracking-wide text-paper backdrop-blur-md">reset</button>
       </section>
 
       <div className="overflow-hidden border-y border-white/10 bg-canvas py-4">

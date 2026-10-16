@@ -5,10 +5,11 @@ import { useCopy } from "@/lib/redesign/use-copy"
 
 type StickerLinkDialogProps = {
   href: string
+  anchor?: { left: number; top: number; width: number }
   onClose: () => void
 }
 
-export function StickerLinkDialog({ href, onClose }: StickerLinkDialogProps) {
+export function StickerLinkDialog({ href, anchor, onClose }: StickerLinkDialogProps) {
   const { t } = useCopy()
   const dialogRef = useRef<HTMLElement>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
@@ -38,7 +39,7 @@ export function StickerLinkDialog({ href, onClose }: StickerLinkDialogProps) {
 
   return (
     <div
-      className="fixed inset-0 z-[100] grid place-items-center bg-canvas/75 px-5 backdrop-blur-sm"
+      className="fixed inset-0 z-[100]"
       role="presentation"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) onClose()
@@ -49,11 +50,13 @@ export function StickerLinkDialog({ href, onClose }: StickerLinkDialogProps) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="linkedin-dialog-title"
-        className="relative w-full max-w-sm rotate-[-1deg] border-[3px] border-canvas bg-paper p-7 text-canvas shadow-[8px_9px_0_rgb(var(--color-canvas))]"
+        className="absolute w-[min(22rem,calc(100vw-2rem))] -translate-x-1/2 -translate-y-full rounded-[1.6rem] border-[3px] border-paper bg-paper p-5 text-canvas shadow-[7px_8px_0_rgb(var(--primitive-black)/0.55)]"
+        style={{ left: anchor ? anchor.left + anchor.width / 2 : "50%", top: anchor ? anchor.top - 12 : "50%" }}
+        onMouseDown={(event) => event.stopPropagation()}
       >
-        <span aria-hidden className="absolute -bottom-4 left-12 h-8 w-8 rotate-45 border-b-[3px] border-r-[3px] border-canvas bg-paper" />
+        <span aria-hidden className="absolute -bottom-3 left-1/2 h-6 w-6 -translate-x-1/2 rotate-45 border-b-[3px] border-r-[3px] border-paper bg-paper" />
         <div className="relative flex items-start justify-between gap-5">
-          <p className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-signal-deep">Connection found</p>
+          <p className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-canvas/45">Connection found</p>
           <button
             ref={closeRef}
             type="button"
@@ -64,7 +67,7 @@ export function StickerLinkDialog({ href, onClose }: StickerLinkDialogProps) {
             ×
           </button>
         </div>
-        <p id="linkedin-dialog-title" className="relative mt-7 font-display text-4xl leading-[0.92] tracking-[-0.05em] sm:text-5xl">
+        <p id="linkedin-dialog-title" className="relative mt-5 font-mono text-2xl font-medium leading-[1.05] tracking-[-0.05em] sm:text-3xl">
           {t.stickerDialog.linkedin.intro}
           <a
             href={href}

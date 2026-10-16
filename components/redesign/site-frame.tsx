@@ -38,7 +38,7 @@ export function SiteFrame({ children }: { children: ReactNode }) {
           type="button"
           onClick={() => setLanguage(language === "es" ? "en" : "es")}
           aria-label={t.langLabel}
-          className="press fixed right-4 top-4 z-[60] rounded-full border border-paper/15 bg-canvas/80 px-3 py-2 font-mono text-[11px] uppercase tracking-wide text-paper backdrop-blur-md"
+          className="utility-control press fixed right-4 top-4 z-[60] rounded-full border border-paper/15 bg-canvas/80 px-3 py-2 font-mono text-[11px] uppercase tracking-wide text-paper backdrop-blur-md"
         >
           {language === "es" ? "EN" : "ES"}
         </button>

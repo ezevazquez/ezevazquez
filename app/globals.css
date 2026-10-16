@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Outfit:wght@100..900&family=Syne:wght@400..800&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -42,9 +44,13 @@
     --color-focus: var(--color-action);
     --space-page-x: clamp(1.25rem, 4vw, 3rem);
     --space-section-y: clamp(4.5rem, 10vw, 7rem);
-    --font-display-token: var(--font-display), sans-serif;
-    --font-body-token: var(--font-body), sans-serif;
-    --font-mono-token: var(--font-mono), ui-monospace, monospace;
+    /* Loaded non-blockingly at runtime; system fallbacks keep builds offline-safe. */
+    --font-display: "Syne", "Arial Narrow", Arial, sans-serif;
+    --font-body: "Outfit", Arial, sans-serif;
+    --font-mono: "DM Mono", "SFMono-Regular", Consolas, monospace;
+    --font-display-token: var(--font-display);
+    --font-body-token: var(--font-body);
+    --font-mono-token: var(--font-mono);
     --radius-control: 9999px;
     --radius-card: 1.7rem;
     --duration-fast: 140ms;
@@ -119,10 +125,20 @@ html.loader-done [data-loader] {
 }
 
 .canvas-grid {
+  isolation: isolate;
   background-image:
     linear-gradient(to right, rgb(var(--primitive-paper) / 0.06) 1px, transparent 1px),
     linear-gradient(to bottom, rgb(var(--primitive-paper) / 0.06) 1px, transparent 1px);
-  background-size: 56px 56px;
+  background-size: 42px 42px;
+}
+
+.canvas-grid::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: radial-gradient(ellipse at center, transparent 42%, rgb(var(--primitive-black) / 0.28) 72%, rgb(var(--primitive-black) / 0.86) 100%);
 }
 
 .press {
@@ -131,6 +147,20 @@ html.loader-done [data-loader] {
 
 .press:active {
   transform: scale(0.97);
+}
+
+.utility-control {
+  cursor: pointer;
+  transition: transform var(--duration-fast) var(--ease-out), background-color var(--duration-fast) ease, border-color var(--duration-fast) ease, color var(--duration-fast) ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .utility-control:hover {
+    transform: translateY(-1px);
+    border-color: var(--color-paper);
+    background-color: var(--color-paper);
+    color: var(--color-canvas);
+  }
 }
 
 .press:focus-visible,
@@ -331,6 +361,27 @@ html.has-custom-cursor .sticker:active {
   cursor: grabbing !important;
 }
 
+html.has-custom-cursor [data-hero],
+html.has-custom-cursor [data-hero] * {
+  cursor: grab !important;
+}
+
+html.has-custom-cursor [data-hero] .sticker,
+html.has-custom-cursor [data-hero] [data-cursor],
+html.has-custom-cursor [data-hero] button,
+html.has-custom-cursor [data-hero] input,
+html.has-custom-cursor [data-hero] a {
+  cursor: pointer !important;
+}
+
+html.has-custom-cursor [data-hero] .sticker:active {
+  cursor: grabbing !important;
+}
+
+html.has-custom-cursor .utility-control {
+  cursor: pointer !important;
+}
+
 .phones-on {
   animation: phones-pulse 1.2s var(--ease-out) infinite;
 }
@@ -357,11 +408,15 @@ html.has-custom-cursor .sticker:active {
 .sticker {
   box-shadow: 4px 6px 0 rgba(0, 0, 0, 0.35);
   will-change: transform;
+  opacity: 0;
+  scale: 0.58;
 }
 
 .sticker-grabbed {
   box-shadow: 10px 18px 0 rgba(0, 0, 0, 0.28);
-  z-index: 50 !important;
+  z-index: 70 !important;
+  scale: 0.94 !important;
+  transition: scale 140ms var(--ease-out), box-shadow 140ms var(--ease-out);
 }
 
 .sticker-stamped::after {

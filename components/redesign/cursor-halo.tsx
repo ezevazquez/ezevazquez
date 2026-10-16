@@ -37,10 +37,33 @@ export function CursorHalo() {
     }
 
     const onOver = (event: PointerEvent) => {
-      const el = (event.target as HTMLElement | null)?.closest?.(
+      const targetElement = event.target as HTMLElement | null
+      const inHero = targetElement?.closest?.("[data-hero]")
+      if (inHero) {
+        overSticker.current = true
+        if (labelRef.current) labelRef.current.textContent = ""
+        node.dataset.state = ""
+        node.style.opacity = "0"
+        return
+      }
+      if (targetElement?.closest?.(".utility-control")) {
+        overSticker.current = true
+        if (labelRef.current) labelRef.current.textContent = ""
+        node.dataset.state = ""
+        node.style.opacity = "0"
+        return
+      }
+      const el = targetElement?.closest?.(
         "[data-cursor], .sticker, a, button",
       ) as HTMLElement | null
-      if (!el || !labelRef.current) return
+      if (!labelRef.current) return
+      if (!el) {
+        overSticker.current = false
+        labelRef.current.textContent = ""
+        node.dataset.state = ""
+        node.style.opacity = "1"
+        return
+      }
       if (el.classList.contains("sticker") || el.dataset.cursor === "drag") {
         overSticker.current = true
         labelRef.current.textContent = ""

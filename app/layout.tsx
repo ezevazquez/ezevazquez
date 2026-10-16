@@ -1,30 +1,10 @@
 import type { ReactNode } from "react"
 import type { Metadata } from "next"
-import { DM_Mono, Outfit, Syne } from "next/font/google"
 import "./globals.css"
 import { LanguageProvider } from "@/components/language-provider"
 import { SiteFrame } from "@/components/redesign/site-frame"
 import { BOOT_SCRIPT } from "@/lib/redesign/boot-script"
 import { getRequestLanguage } from "@/lib/redesign/request-language"
-
-const syne = Syne({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-display",
-})
-
-const outfit = Outfit({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-body",
-})
-
-const dmMono = DM_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  display: "swap",
-  variable: "--font-mono",
-})
 
 export const metadata: Metadata = {
   title: {
@@ -56,7 +36,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html
       lang={language}
       suppressHydrationWarning
-      className={`${syne.variable} ${outfit.variable} ${dmMono.variable}`}
+      className=""
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: BOOT_SCRIPT }} />

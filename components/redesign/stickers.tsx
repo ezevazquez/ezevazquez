@@ -3,6 +3,7 @@
 import {
   useCallback,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   type CSSProperties,
@@ -10,7 +11,7 @@ import {
 } from "react"
 import Image from "next/image"
 import { EMAIL_URL, GITHUB_URL, LINKEDIN_URL } from "@/lib/constants"
-import { CALENDAR_URL, HAS_CALENDAR, STICKER_STORAGE_KEY } from "@/lib/redesign/config"
+import { CALENDAR_URL, HAS_CALENDAR } from "@/lib/redesign/config"
 import { useReducedMotion } from "@/hooks/use-reduced-motion"
 import { useCopy } from "@/lib/redesign/use-copy"
 import { useTransitionNav } from "./transition-context"
@@ -53,55 +54,61 @@ type StickerData = {
   dialog?: "linkedin"
 }
 const STICKERS: StickerData[] = [
-  { id: "git", label: "github", href: GITHUB_URL, x: "6%", y: "16%", rotate: -8, mobile: true, draw: "git" },
-  { id: "in", label: "linkedin", href: LINKEDIN_URL, x: "74%", y: "12%", rotate: 6, mobile: true, draw: "in", dialog: "linkedin" },
-  { id: "mail", label: "mail", href: EMAIL_URL, x: "8%", y: "70%", rotate: 4, mobile: true, draw: "mail" },
+  { id: "git", label: "github", href: GITHUB_URL, x: "5%", y: "8%", rotate: -8, mobile: true, draw: "git" },
+  { id: "in", label: "linkedin", href: LINKEDIN_URL, x: "82%", y: "8%", rotate: 6, mobile: true, draw: "in", dialog: "linkedin" },
+  { id: "mail", label: "mail", href: EMAIL_URL, x: "5%", y: "76%", rotate: 4, mobile: true, draw: "mail" },
   {
     id: "cal",
     label: "agenda",
     href: HAS_CALENDAR ? CALENDAR_URL : "/contact",
-    x: "76%",
-    y: "64%",
+    x: "82%",
+    y: "76%",
     rotate: -6,
     mobile: true,
     draw: "cal",
   },
-  { id: "mate", label: "mate", x: "18%", y: "40%", rotate: -12, mobile: true, draw: "mate" },
-  { id: "jira", label: "jira", x: "80%", y: "36%", rotate: 8, mobile: true, draw: "jira" },
-  { id: "excel", label: "excel", x: "14%", y: "84%", rotate: 3, mobile: true, draw: "excel" },
-  { id: "stamp", label: "stamp", x: "68%", y: "80%", rotate: -4, mobile: true, draw: "stamp" },
-  { id: "plane", label: "plane", x: "84%", y: "8%", rotate: 12, mobile: true, draw: "plane" },
-  { id: "phones", label: "phones", x: "46%", y: "78%", rotate: -8, mobile: true, draw: "phones" },
-  { id: "gummies", label: "gummies", x: "3%", y: "50%", rotate: 8, mobile: true, draw: "gummies" },
-  { id: "bass", label: "bass", x: "92%", y: "40%", rotate: -10, draw: "bass" },
-  { id: "lemon", label: "lemon", x: "34%", y: "88%", rotate: 6, mobile: true, draw: "lemon" },
-  { id: "fernet", label: "fernet", x: "58%", y: "2%", rotate: 4, mobile: true, draw: "fernet" },
-  { id: "cordoba", label: "cordoba", x: "40%", y: "2%", rotate: -4, draw: "cordoba" },
-  { id: "dog", label: "dog", x: "2%", y: "88%", rotate: -6, mobile: true, draw: "dog" },
-  { id: "pizza", label: "pizza", x: "94%", y: "72%", rotate: 8, mobile: true, draw: "pizza" },
-  { id: "boca", label: "boca", x: "62%", y: "90%", rotate: -3, mobile: true, draw: "boca" },
-  { id: "pol-1", label: "polaroid", x: "18%", y: "4%", rotate: -7, draw: "polaroid" },
-  { id: "pol-2", label: "polaroid", x: "78%", y: "48%", rotate: 5, draw: "polaroid" },
-  { id: "pol-3", label: "polaroid", x: "28%", y: "72%", rotate: 3, mobile: true, draw: "polaroid" },
+  { id: "mate", label: "mate", x: "3%", y: "31%", rotate: -12, mobile: true, draw: "mate" },
+  { id: "jira", label: "jira", x: "79%", y: "24%", rotate: 8, mobile: true, draw: "jira" },
+  { id: "excel", label: "excel", x: "20%", y: "76%", rotate: 3, mobile: true, draw: "excel" },
+  { id: "stamp", label: "stamp", x: "73%", y: "76%", rotate: -4, mobile: true, draw: "stamp" },
+  { id: "plane", label: "plane", x: "87%", y: "27%", rotate: 12, mobile: true, draw: "plane" },
+  { id: "phones", label: "phones", x: "3%", y: "60%", rotate: -8, mobile: true, draw: "phones" },
+  { id: "gummies", label: "gummies", x: "4%", y: "49%", rotate: 8, mobile: true, draw: "gummies" },
+  { id: "bass", label: "bass", x: "89%", y: "46%", rotate: -10, draw: "bass" },
+  { id: "lemon", label: "lemon", x: "17%", y: "67%", rotate: 6, mobile: true, draw: "lemon" },
+  { id: "fernet", label: "fernet", x: "17%", y: "3%", rotate: 4, mobile: true, draw: "fernet" },
+  { id: "cordoba", label: "cordoba", x: "35%", y: "3%", rotate: -4, draw: "cordoba" },
+  { id: "dog", label: "dog", x: "2%", y: "76%", rotate: -6, mobile: true, draw: "dog" },
+  { id: "pizza", label: "pizza", x: "88%", y: "76%", rotate: 8, mobile: true, draw: "pizza" },
+  { id: "boca", label: "boca", x: "87%", y: "62%", rotate: -3, mobile: true, draw: "boca" },
+  { id: "pol-1", label: "polaroid", x: "22%", y: "3%", rotate: -7, draw: "polaroid" },
+  { id: "pol-2", label: "polaroid", x: "78%", y: "65%", rotate: 5, draw: "polaroid" },
+  { id: "pol-3", label: "polaroid", x: "15%", y: "56%", rotate: 3, mobile: true, draw: "polaroid" },
 ]
 
 type PosMap = Record<string, { x: number; y: number }>
 
-function loadPositions(): PosMap {
+function playStickerSound(kind: "pick" | "drop") {
   try {
-    const raw = localStorage.getItem(STICKER_STORAGE_KEY)
-    if (!raw) return {}
-    return JSON.parse(raw) as PosMap
+    const AudioContextClass = window.AudioContext || (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext
+    if (!AudioContextClass) return
+    const context = new AudioContextClass()
+    const oscillator = context.createOscillator()
+    const gain = context.createGain()
+    const start = kind === "pick" ? 310 : 190
+    const end = kind === "pick" ? 230 : 105
+    oscillator.type = "triangle"
+    oscillator.frequency.setValueAtTime(start, context.currentTime)
+    oscillator.frequency.exponentialRampToValueAtTime(end, context.currentTime + 0.07)
+    gain.gain.setValueAtTime(0.1, context.currentTime)
+    gain.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + 0.09)
+    oscillator.connect(gain)
+    gain.connect(context.destination)
+    oscillator.start()
+    oscillator.stop(context.currentTime + 0.1)
+    oscillator.addEventListener("ended", () => void context.close())
   } catch {
-    return {}
-  }
-}
-
-function savePositions(map: PosMap) {
-  try {
-    localStorage.setItem(STICKER_STORAGE_KEY, JSON.stringify(map))
-  } catch {
-    /* ignore */
+    // Audio feedback is optional.
   }
 }
 
@@ -187,12 +194,13 @@ type StickerProps = {
   onBringFront: (id: string) => void
   onDrop: (id: string, rect: DOMRect) => void
   onActivate: (id: string) => void
-  onOpen: (sticker: StickerData) => void
+  onOpen: (sticker: StickerData, anchor?: DOMRect) => void
   steaming?: boolean
   stamped?: boolean
   lit?: boolean
   playing?: boolean
   reduced: boolean
+  zoom: number
   tooltip?: string
 }
 
@@ -212,6 +220,7 @@ function Sticker({
   lit,
   playing,
   reduced,
+  zoom,
   tooltip,
 }: StickerProps) {
   const elRef = useRef<HTMLElement | null>(null)
@@ -248,17 +257,17 @@ function Sticker({
   )
 
   const applyTransform = useCallback(
-    (x: number, y: number, scale = 1) => {
+    (x: number, y: number) => {
       const el = elRef.current
       if (!el) return
-      el.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${sticker.rotate}deg) scale(${scale})`
+      el.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${sticker.rotate}deg)`
     },
     [sticker.rotate],
   )
 
   useEffect(() => {
     if (elRef.current?.dataset.flying === "1") return
-    applyTransform(shift.x, shift.y, grabbed ? 1.08 : 1)
+    applyTransform(shift.x, shift.y)
   }, [shift, grabbed, applyTransform])
 
   const fling = useCallback(() => {
@@ -275,7 +284,7 @@ function Sticker({
       x = next.x
       y = next.y
       live.current = { x, y }
-      applyTransform(x, y, 1)
+      applyTransform(x, y)
       if (Math.hypot(vx, vy) > 0.4) {
         raf.current = requestAnimationFrame(tick)
       } else {
@@ -292,6 +301,8 @@ function Sticker({
     dragging.current = true
     setGrabbed(true)
     onBringFront(sticker.id)
+    event.currentTarget.style.zIndex = "70"
+    playStickerSound("pick")
     start.current = { x: event.clientX, y: event.clientY, left: live.current.x, top: live.current.y }
     last.current = { x: event.clientX, y: event.clientY, t: performance.now() }
     velocity.current = { x: 0, y: 0 }
@@ -304,9 +315,10 @@ function Sticker({
       setGrabbed(false)
       onShift(sticker.id, { ...live.current })
       if (elRef.current) onDrop(sticker.id, elRef.current.getBoundingClientRect())
+      if (moved.current) playStickerSound("drop")
       if (!moved.current) {
         opened.current = true
-        if (sticker.href) onOpen(sticker)
+        if (sticker.href) onOpen(sticker, elRef.current?.getBoundingClientRect())
         else onActivate(sticker.id)
       } else if (!reduced && Math.hypot(velocity.current.x, velocity.current.y) > 2) {
         fling()
@@ -318,8 +330,8 @@ function Sticker({
 
   const onPointerMove = (event: ReactPointerEvent<HTMLElement>) => {
     if (!dragging.current || !event.currentTarget.hasPointerCapture(event.pointerId)) return
-    const dx = event.clientX - start.current.x
-    const dy = event.clientY - start.current.y
+    const dx = (event.clientX - start.current.x) / zoom
+    const dy = (event.clientY - start.current.y) / zoom
     if (Math.hypot(dx, dy) > 4) moved.current = true
     const next = clampToParent(start.current.left + dx, start.current.top + dy)
     const now = performance.now()
@@ -330,11 +342,11 @@ function Sticker({
     }
     last.current = { x: event.clientX, y: event.clientY, t: now }
     live.current = next
-    applyTransform(next.x, next.y, 1.08)
+    applyTransform(next.x, next.y)
   }
 
   const className = [
-    "sticker absolute touch-none cursor-grab active:cursor-grabbing focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-signal",
+    "sticker absolute select-none touch-none cursor-grab active:cursor-grabbing focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-signal",
     sticker.mobile ? "flex" : "hidden sm:flex",
     grabbed ? "sticker-grabbed" : "",
     stamped ? "sticker-stamped" : "",
@@ -391,7 +403,7 @@ function Sticker({
       role={sticker.href && !sticker.dialog ? "link" : "button"}
       tabIndex={0}
       draggable={false}
-      onClick={() => {
+      onClick={(event) => {
         if (moved.current) {
           moved.current = false
           return
@@ -400,13 +412,13 @@ function Sticker({
           opened.current = false
           return
         }
-        if (sticker.href) onOpen(sticker)
+        if (sticker.href) onOpen(sticker, event.currentTarget.getBoundingClientRect())
         else onActivate(sticker.id)
       }}
       onKeyDown={(event) => {
         if (event.key !== "Enter" && event.key !== " ") return
         event.preventDefault()
-        if (sticker.href) onOpen(sticker)
+        if (sticker.href) onOpen(sticker, event.currentTarget.getBoundingClientRect())
         else onActivate(sticker.id)
       }}
       {...handlers}
@@ -416,7 +428,7 @@ function Sticker({
   )
 }
 
-export function StickerField() {
+export function StickerField({ entered, zoom }: { entered: boolean; zoom: number }) {
   const { t, language } = useCopy()
   const { navigate } = useTransitionNav()
   const { showToast } = useToast()
@@ -428,21 +440,52 @@ export function StickerField() {
   const [lit, setLit] = useState(false)
   const [playing, setPlaying] = useState(false)
   const [activeDialog, setActiveDialog] = useState<StickerData["dialog"]>()
+  const [dialogAnchor, setDialogAnchor] = useState<{ left: number; top: number; width: number }>()
+
+  useEffect(() => {
+    const reset = () => {
+      setPositions({})
+      setZOrder(STICKERS.map((sticker) => sticker.id))
+    }
+    window.addEventListener("eze:reset-stickers", reset)
+    return () => window.removeEventListener("eze:reset-stickers", reset)
+  }, [])
+
+  useLayoutEffect(() => {
+    if (!entered) return
+    const stickers = Array.from(document.querySelectorAll<HTMLElement>("[data-sticker]"))
+    if (reduced) {
+      stickers.forEach((sticker) => {
+        sticker.style.opacity = "1"
+        sticker.style.scale = "1"
+      })
+      return
+    }
+    stickers.forEach((sticker, index) => {
+      const animation = sticker.animate(
+        [
+          { opacity: 0, scale: 0.58, filter: "blur(5px)" },
+          { opacity: 1, scale: 1, filter: "blur(0px)" },
+        ],
+        { duration: 460, delay: 260 + index * 72, easing: "cubic-bezier(0.23, 1, 0.32, 1)", fill: "both" },
+      )
+      animation.onfinish = () => {
+        sticker.style.opacity = "1"
+        sticker.style.scale = "1"
+        sticker.style.filter = "none"
+        animation.cancel()
+      }
+    })
+  }, [entered, reduced])
 
   useEffect(() => () => {
     stopRadio()
     stopTune()
   }, [])
 
-  useEffect(() => {
-    setPositions(loadPositions())
-  }, [])
-
   const onShift = useCallback((id: string, next: { x: number; y: number }) => {
     setPositions((prev) => {
-      const map = { ...prev, [id]: next }
-      savePositions(map)
-      return map
+      return { ...prev, [id]: next }
     })
   }, [])
 
@@ -469,8 +512,9 @@ export function StickerField() {
   )
 
   const onOpen = useCallback(
-    (sticker: StickerData) => {
+    (sticker: StickerData, anchor?: DOMRect) => {
       if (sticker.dialog) {
+        if (anchor) setDialogAnchor({ left: anchor.left, top: anchor.top, width: anchor.width })
         setActiveDialog(sticker.dialog)
         return
       }
@@ -635,7 +679,7 @@ export function StickerField() {
   return (
     <>
       {STICKERS.map((sticker) => {
-        const z = 20 + zOrder.indexOf(sticker.id)
+        const z = 40 + zOrder.indexOf(sticker.id)
         const shift = positions[sticker.id] ?? { x: 0, y: 0 }
         const tooltip = t.stickerHints[sticker.id as keyof typeof t.stickerHints]
         return (
@@ -656,12 +700,13 @@ export function StickerField() {
             lit={sticker.id === "excel" && lit}
             playing={sticker.id === "phones" && playing}
             reduced={reduced}
+            zoom={zoom}
             tooltip={tooltip}
           />
         )
       })}
       {activeDialog === "linkedin" && (
-        <StickerLinkDialog href={LINKEDIN_URL} onClose={() => setActiveDialog(undefined)} />
+        <StickerLinkDialog href={LINKEDIN_URL} anchor={dialogAnchor} onClose={() => setActiveDialog(undefined)} />
       )}
     </>
   )

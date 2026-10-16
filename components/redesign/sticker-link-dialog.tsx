@@ -3,7 +3,6 @@
 import { createPortal } from "react-dom"
 import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import { useReducedMotion } from "@/hooks/use-reduced-motion"
-import { useCopy } from "@/lib/redesign/use-copy"
 
 type DialogAnchor = {
   left: number
@@ -21,14 +20,15 @@ type DialogPosition = {
 }
 
 type StickerLinkDialogProps = {
-  href: string
+  intro: string
+  href?: string
+  linkLabel?: string
   anchor?: DialogAnchor
   trigger?: HTMLElement | null
   onClose: () => void
 }
 
-export function StickerLinkDialog({ href, anchor, trigger, onClose }: StickerLinkDialogProps) {
-  const { t } = useCopy()
+export function StickerLinkDialog({ intro, href, linkLabel, anchor, trigger, onClose }: StickerLinkDialogProps) {
   const reduced = useReducedMotion()
   const dialogRef = useRef<HTMLElement>(null)
   const linkRef = useRef<HTMLAnchorElement>(null)
@@ -36,7 +36,7 @@ export function StickerLinkDialog({ href, anchor, trigger, onClose }: StickerLin
   const triggerRef = useRef(trigger)
   const [mounted, setMounted] = useState(false)
   const [position, setPosition] = useState<DialogPosition>()
-  const fullText = `${t.stickerDialog.linkedin.intro}${t.stickerDialog.linkedin.link}.`
+  const fullText = linkLabel ? `${intro}${linkLabel}.` : intro
   const [typedLength, setTypedLength] = useState(reduced ? fullText.length : 0)
 
   onCloseRef.current = onClose
@@ -109,7 +109,7 @@ export function StickerLinkDialog({ href, anchor, trigger, onClose }: StickerLin
     if (!mounted) return
     const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null
     const triggerToRestore = triggerRef.current
-    linkRef.current?.focus()
+    ;(linkRef.current ?? dialogRef.current)?.focus()
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -121,7 +121,11 @@ export function StickerLinkDialog({ href, anchor, trigger, onClose }: StickerLin
       const focusable = dialogRef.current?.querySelectorAll<HTMLElement>(
         "a[href], button:not([disabled])",
       )
-      if (!focusable?.length) return
+      if (!focusable?.length) {
+        event.preventDefault()
+        dialogRef.current?.focus()
+        return
+      }
       const first = focusable[0]
       const last = focusable[focusable.length - 1]
       if (event.shiftKey && document.activeElement === first) {
@@ -156,6 +160,7 @@ export function StickerLinkDialog({ href, anchor, trigger, onClose }: StickerLin
         role="dialog"
         aria-modal="true"
         aria-label={fullText}
+        tabIndex={linkLabel ? undefined : -1}
         className="fixed w-[min(16rem,calc(100vw-1.5rem))] rounded-2xl border-2 border-canvas bg-paper px-4 py-3 text-black shadow-[4px_5px_0_rgb(var(--primitive-black)/0.45)]"
         style={{
           left: position?.left ?? "50%",
@@ -176,22 +181,21 @@ export function StickerLinkDialog({ href, anchor, trigger, onClose }: StickerLin
           />
         )}
         <p className="relative font-mono text-sm font-medium leading-snug text-black">
-          {t.stickerDialog.linkedin.intro.slice(0, typedLength)}
-          <a
-            ref={linkRef}
-            href={href}
-            target="_blank"
-            rel="noreferrer"
-            data-cursor="click"
-            aria-label={t.stickerDialog.linkedin.link}
-            className="cursor-pointer decoration-1 underline underline-offset-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal"
-          >
-            {t.stickerDialog.linkedin.link.slice(
-              0,
-              Math.max(0, typedLength - t.stickerDialog.linkedin.intro.length),
-            )}
-          </a>
-          {typedLength >= fullText.length ? "." : <span aria-hidden>▍</span>}
+          {intro.slice(0, typedLength)}
+          {href && linkLabel && (
+            <a
+              ref={linkRef}
+              href={href}
+              target={href.startsWith("mailto:") ? undefined : "_blank"}
+              rel={href.startsWith("mailto:") ? undefined : "noreferrer"}
+              data-cursor="click"
+              aria-label={linkLabel}
+              className="cursor-pointer decoration-1 underline underline-offset-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal"
+            >
+              {linkLabel.slice(0, Math.max(0, typedLength - intro.length))}
+            </a>
+          )}
+          {linkLabel && typedLength >= fullText.length ? "." : typedLength < fullText.length ? <span aria-hidden>▍</span> : null}
         </p>
       </section>
     </div>,

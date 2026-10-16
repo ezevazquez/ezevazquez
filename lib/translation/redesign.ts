@@ -63,7 +63,7 @@ export const copy = {
     ],
     ctaTitle: "Laburemos juntos.",
     ctaButton: "Agendar llamada",
-    ctaNote: "O escribime a ezejvaz@gmail.com",
+    ctaNote: "O escribime a hola@ezevazquez.com",
     ctaCalendarSoon: "Agenda próximamente",
     loader: [
       "Ordenando el desorden…",
@@ -144,7 +144,7 @@ export const copy = {
     contactTitle: "Laburemos juntos.",
     contactSub: "Charla corta. Me contás el problema.",
     contactFlip: "Da vuelta",
-    contactBack: "ezejvaz@gmail.com",
+    contactBack: "hola@ezevazquez.com",
     contactCopied: "copiado, che",
     contactCopy: "Copiar mail",
     mail: "Mail",
@@ -258,6 +258,13 @@ export const copy = {
       close: "Cerrar",
       kicker: "Conexión encontrada",
       linkedin: { intro: "Encontrame en ", link: "LinkedIn" },
+      github: { intro: "Mirá lo que estoy armando en ", link: "GitHub" },
+      mail: { intro: "Escribime a ", link: "hola@ezevazquez.com" },
+      polaroids: [
+        "Mi persona favorita.",
+        "El amor de mi vida.",
+        "Todo es mejor con ella.",
+      ],
     },
   },
   en: {
@@ -323,7 +330,7 @@ export const copy = {
     ],
     ctaTitle: "Let's work together.",
     ctaButton: "Book a call",
-    ctaNote: "Or email ezejvaz@gmail.com",
+    ctaNote: "Or email hola@ezevazquez.com",
     ctaCalendarSoon: "Calendar link soon",
     loader: [
       "Sorting out the mess…",
@@ -403,7 +410,7 @@ export const copy = {
     contactTitle: "Let's work together.",
     contactSub: "A short call. You tell me the problem.",
     contactFlip: "Flip",
-    contactBack: "ezejvaz@gmail.com",
+    contactBack: "hola@ezevazquez.com",
     contactCopied: "copied",
     contactCopy: "Copy email",
     mail: "Mail",
@@ -517,6 +524,13 @@ export const copy = {
       close: "Close",
       kicker: "Connection found",
       linkedin: { intro: "Find me on ", link: "LinkedIn" },
+      github: { intro: "See what I’m building on ", link: "GitHub" },
+      mail: { intro: "Email me at ", link: "hola@ezevazquez.com" },
+      polaroids: [
+        "My favorite person.",
+        "The love of my life.",
+        "Everything is better with her.",
+      ],
     },
   },
 } as const

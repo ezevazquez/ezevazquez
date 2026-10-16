@@ -23,12 +23,13 @@ type StickerLinkDialogProps = {
   intro: string
   href?: string
   linkLabel?: string
+  hearts?: boolean
   anchor?: DialogAnchor
   trigger?: HTMLElement | null
   onClose: () => void
 }
 
-export function StickerLinkDialog({ intro, href, linkLabel, anchor, trigger, onClose }: StickerLinkDialogProps) {
+export function StickerLinkDialog({ intro, href, linkLabel, hearts = false, anchor, trigger, onClose }: StickerLinkDialogProps) {
   const reduced = useReducedMotion()
   const dialogRef = useRef<HTMLElement>(null)
   const linkRef = useRef<HTMLAnchorElement>(null)
@@ -169,6 +170,13 @@ export function StickerLinkDialog({ intro, href, linkLabel, anchor, trigger, onC
         }}
         onPointerDown={(event) => event.stopPropagation()}
       >
+        {hearts && (
+          <span aria-hidden className="pointer-events-none absolute inset-0 text-signal">
+            <span className={`absolute -left-4 -top-5 rotate-[-18deg] text-2xl ${reduced ? "" : "animate-bounce"}`}>♥</span>
+            <span className={`absolute -right-3 -top-7 rotate-12 text-lg ${reduced ? "" : "animate-pulse"}`}>♥</span>
+            <span className={`absolute -bottom-5 right-8 rotate-[-8deg] text-xl ${reduced ? "" : "animate-bounce [animation-delay:180ms]"}`}>♥</span>
+          </span>
+        )}
         {position?.direction !== "center" && (
           <span
             aria-hidden

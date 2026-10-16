@@ -61,7 +61,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: BOOT_SCRIPT }} />
       </head>
-      <body className="bg-[#12131A] font-sans text-[#F4F1EA] antialiased">
+      <body className="bg-canvas font-sans text-paper antialiased">
         <LanguageProvider initialLanguage={language}>
           <SiteFrame>{children}</SiteFrame>
         </LanguageProvider>

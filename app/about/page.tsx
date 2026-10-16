@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import AboutPage from "@/components/pages/about-page"
+import { AboutView } from "@/components/redesign/about-view"
 import { generatePageMetadata } from "@/lib/redesign/meta"
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -7,5 +7,5 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function About() {
-  return <AboutPage />
+  return <AboutView />
 }

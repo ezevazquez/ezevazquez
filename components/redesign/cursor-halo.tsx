@@ -71,11 +71,11 @@ export function CursorHalo() {
     <div
       ref={ref}
       aria-hidden
-      className="pointer-events-none fixed left-0 top-0 z-[90] hidden h-3.5 w-3.5 rounded-full bg-[#F4F1EA] opacity-0 mix-blend-difference md:block data-[state=drag]:h-5 data-[state=drag]:w-5 data-[state=view]:h-5 data-[state=view]:w-5"
+      className="pointer-events-none fixed left-0 top-0 z-[90] hidden h-3.5 w-3.5 rounded-full bg-paper opacity-0 mix-blend-difference md:block data-[state=drag]:h-5 data-[state=drag]:w-5 data-[state=view]:h-5 data-[state=view]:w-5"
     >
       <span
         ref={labelRef}
-        className="absolute left-1/2 top-full mt-2 -translate-x-1/2 whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.16em] text-[#F4F1EA]"
+        className="absolute left-1/2 top-full mt-2 -translate-x-1/2 whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.16em] text-paper"
       />
     </div>
   )

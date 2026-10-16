@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import WorkPage from "@/components/pages/work-page"
+import { WorkView } from "@/components/redesign/work-view"
 import { generatePageMetadata } from "@/lib/redesign/meta"
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -7,5 +7,5 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function Work() {
-  return <WorkPage />
+  return <WorkView />
 }

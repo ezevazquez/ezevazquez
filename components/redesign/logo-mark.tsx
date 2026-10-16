@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import { useReducedMotion } from "@/hooks/use-reduced-motion"
 import { loadGsap } from "@/hooks/use-gsap"
 import { TransitionLink } from "./transition-link"
-import { Signature } from "./signature"
+import { TerminalMark } from "./terminal-mark"
 
 /**
  * Persistent logo that FLIPs from the loader signature into the header slot.
@@ -81,11 +81,11 @@ export function LogoMark() {
       href="/"
       aria-label="Eze Vazquez"
       data-logo-slot
-      className={`fixed left-4 top-4 z-[40] w-[4.5rem] text-[#F4F1EA] mix-blend-difference sm:left-5 sm:w-20 ${
+      className={`fixed left-4 top-4 z-[40] w-[4.5rem] text-paper mix-blend-difference sm:left-5 sm:w-20 ${
         ready ? "opacity-100" : "pointer-events-none opacity-0"
       }`}
     >
-      <Signature data-logo-sig static className="w-full" />
+      <TerminalMark data-logo-sig isStatic className="w-full" />
     </TransitionLink>
   )
 }

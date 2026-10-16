@@ -75,7 +75,7 @@ export function BottomNav() {
     <nav aria-label={t.navLabel} className="fixed bottom-4 left-1/2 z-[60] -translate-x-1/2">
       {previewHref && (
         <p
-          className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/10 bg-[#12131A]/90 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-[#F4F1EA]/80"
+          className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/10 bg-canvas/90 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-paper/80"
           aria-hidden
         >
           {previewHref === "/"
@@ -86,8 +86,7 @@ export function BottomNav() {
       )}
       <div
         ref={trackRef}
-        role="tablist"
-        className="relative flex items-center rounded-full border border-[#F4F1EA]/15 bg-[#12131A]/80 p-1 shadow-[0_16px_40px_-24px_rgba(0,0,0,0.8)] backdrop-blur-md"
+        className="relative flex items-center rounded-full border border-paper/15 bg-canvas/80 p-1 shadow-[0_16px_40px_-24px_rgba(0,0,0,0.8)] backdrop-blur-md"
         onPointerDown={(event) => {
           if ((event.target as HTMLElement).closest("a")) return
           drag.current = { active: true, moved: false, startX: event.clientX }
@@ -140,7 +139,7 @@ export function BottomNav() {
         {box && (
           <span
             aria-hidden
-            className="pointer-events-none absolute top-1 bottom-1 rounded-full bg-[#1F4BFF]"
+            className="pointer-events-none absolute top-1 bottom-1 rounded-full bg-signal"
             style={{
               left: box.left,
               width: box.width,
@@ -157,13 +156,11 @@ export function BottomNav() {
             <TransitionLink
               key={tab.key}
               href={tab.href}
-              role="tab"
-              tabIndex={tabIndex === focusIndex ? 0 : -1}
+              tabIndex={0}
               ref={(node) => {
                 tabRefs.current[tabIndex] = node
               }}
               aria-current={selected ? "page" : undefined}
-              aria-selected={selected}
               onFocus={() => setFocusIndex(tabIndex)}
               onClick={(event) => {
                 if (drag.current.moved) {
@@ -180,7 +177,7 @@ export function BottomNav() {
                 }
               }}
               className={`nav-tab relative z-[1] rounded-full px-3 py-2 font-mono text-[11px] lowercase tracking-wide sm:px-4 sm:text-xs ${
-                tabIndex === index ? "text-white" : "text-[#F4F1EA]/70"
+                tabIndex === index ? "text-white" : "text-paper/70"
               }`}
             >
               {t.nav[tab.key]}

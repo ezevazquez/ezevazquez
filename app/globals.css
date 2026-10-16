@@ -4,6 +4,63 @@
 
 @layer base {
   :root {
+    /* Design system — primitives. Do not use these directly in components. */
+    --primitive-ink: 18 19 26;
+    --primitive-ink-raised: 24 26 34;
+    --primitive-ink-elevated: 22 23 34;
+    --primitive-ink-hover: 24 26 36;
+    --primitive-ink-soft: 35 37 46;
+    --primitive-ink-stack: 35 37 47;
+    --primitive-ink-stack-shadow: 28 30 39;
+    --primitive-black: 8 8 10;
+    --primitive-black-layer: 10 10 12;
+    --primitive-paper: 244 241 234;
+    --primitive-sheet: 239 236 230;
+    --primitive-signal: 36 91 255;
+    --primitive-signal-hover: 23 62 204;
+    --primitive-signal-deep: 0 47 167;
+    --primitive-success: 39 201 63;
+    --primitive-warning: 255 189 46;
+    --primitive-danger: 255 95 86;
+    --primitive-transition-danger: 255 59 48;
+    --primitive-thread-study: 42 157 143;
+    --primitive-thread-side: 233 196 106;
+
+    /* Design system — semantic tokens. */
+    --color-canvas: rgb(var(--primitive-ink));
+    --color-canvas-raised: rgb(var(--primitive-ink-raised));
+    --color-canvas-elevated: rgb(var(--primitive-ink-elevated));
+    --color-paper: rgb(var(--primitive-paper));
+    --color-sheet: rgb(var(--primitive-sheet));
+    --color-action: rgb(var(--primitive-signal));
+    --color-action-hover: rgb(var(--primitive-signal-hover));
+    --color-action-strong: rgb(var(--primitive-signal-deep));
+    --color-success: rgb(var(--primitive-success));
+    --color-warning: rgb(var(--primitive-warning));
+    --color-danger: rgb(var(--primitive-danger));
+    --color-transition-split: rgb(var(--primitive-transition-danger));
+    --color-focus: var(--color-action);
+    --space-page-x: clamp(1.25rem, 4vw, 3rem);
+    --space-section-y: clamp(4.5rem, 10vw, 7rem);
+    --font-display-token: var(--font-display), sans-serif;
+    --font-body-token: var(--font-body), sans-serif;
+    --font-mono-token: var(--font-mono), ui-monospace, monospace;
+    --radius-control: 9999px;
+    --radius-card: 1.7rem;
+    --duration-fast: 140ms;
+    --duration-base: 280ms;
+
+    /* Design system — component tokens. */
+    --hero-bg: var(--color-canvas);
+    --deck-bg: rgb(var(--primitive-black));
+    --deck-border: rgb(var(--primitive-paper) / 0.25);
+    --deck-layer-bg: rgb(var(--primitive-black) / 0.92);
+    --control-primary-bg: var(--color-action);
+    --control-primary-fg: var(--color-paper);
+    --control-inverse-bg: var(--color-paper);
+    --control-inverse-fg: var(--color-canvas);
+    --focus-ring: 2px solid var(--color-focus);
+
     --background: 240 10% 7%;
     --foreground: 40 25% 94%;
     --card: 240 10% 7%;
@@ -24,10 +81,10 @@
     --input: 240 4% 16%;
     --ring: 228 100% 56%;
     --radius: 0.75rem;
-    --ink: #12131a;
-    --paper: #f4f1ea;
-    --sheet: #efece6;
-    --signal: #1f4bff;
+    --ink: var(--color-canvas);
+    --paper: var(--color-paper);
+    --sheet: var(--color-sheet);
+    --signal: var(--color-action);
     --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
     --ease-nav: cubic-bezier(0.16, 1, 0.3, 1);
   }
@@ -41,7 +98,7 @@
   }
 
   body {
-    @apply bg-[#12131A] text-[#F4F1EA] antialiased;
+    @apply bg-canvas text-paper antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 
@@ -63,8 +120,8 @@ html.loader-done [data-loader] {
 
 .canvas-grid {
   background-image:
-    linear-gradient(to right, rgba(244, 241, 234, 0.06) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(244, 241, 234, 0.06) 1px, transparent 1px);
+    linear-gradient(to right, rgb(var(--primitive-paper) / 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(var(--primitive-paper) / 0.06) 1px, transparent 1px);
   background-size: 56px 56px;
 }
 
@@ -80,48 +137,6 @@ html.loader-done [data-loader] {
 .nav-tab:focus-visible {
   outline: 2px solid var(--signal);
   outline-offset: 3px;
-}
-
-.sig-path,
-.sig-path-static {
-  fill: none;
-  stroke: var(--paper);
-  stroke-width: 5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-dasharray: 1;
-}
-
-.sig-path {
-  stroke-dashoffset: 1;
-  animation: sig-draw 0.95s var(--ease-out) forwards;
-}
-
-.sig-path-static {
-  stroke-dashoffset: 0;
-}
-
-.sig-script,
-.sig-script-static {
-  font-size: 168px;
-  fill: #f4f1ea;
-}
-
-.sig-script {
-  clip-path: inset(0 100% 0 -8%);
-  animation: sig-write 1.55s var(--ease-out) forwards;
-}
-
-@keyframes sig-write {
-  to {
-    clip-path: inset(0 0 0 -8%);
-  }
-}
-
-@keyframes sig-draw {
-  to {
-    stroke-dashoffset: 0;
-  }
 }
 
 .loader-curtain {
@@ -162,11 +177,11 @@ html.loader-done [data-loader] {
 }
 
 .band::before {
-  background: #1f4bff;
+  background: var(--color-action);
 }
 
 .band::after {
-  background: #ff3b30;
+  background: var(--color-transition-split);
   mix-blend-mode: screen;
   opacity: 0.55;
   animation-delay: 50ms !important;
@@ -220,20 +235,6 @@ html.loader-done [data-loader] {
 @keyframes rgb-spread-b {
   from { transform: translateX(0); opacity: 1; }
   to { transform: translateX(10px); opacity: 0.85; }
-}
-
-.brand-name.is-docked {
-  position: fixed;
-  left: 50%;
-  top: 1.15rem;
-  z-index: 40;
-  margin: 0;
-  transform: translateX(-50%);
-  font-size: 1.5rem;
-  line-height: 1;
-  letter-spacing: -0.05em;
-  mix-blend-mode: difference;
-  pointer-events: none;
 }
 
 .band:nth-child(even)::before,
@@ -359,7 +360,7 @@ html.has-custom-cursor * {
   content: "";
   position: absolute;
   inset: -6px;
-  border: 2px solid #1f4bff;
+  border: 2px solid var(--color-action);
   border-radius: 1.1rem;
   transform: rotate(-8deg);
   opacity: 0.7;
@@ -406,9 +407,9 @@ html.has-custom-cursor * {
   width: 3.2rem;
   height: 3.2rem;
   border-radius: 1rem;
-  border: 3px solid #fff;
-  background: #f4f1ea;
-  color: #12131a;
+  border: 3px solid var(--color-paper);
+  background: var(--color-paper);
+  color: var(--color-canvas);
   font-family: var(--font-mono), monospace;
   font-size: 0.7rem;
   box-shadow: 4px 6px 0 rgba(0, 0, 0, 0.3);

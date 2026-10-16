@@ -3,23 +3,12 @@
 import { useEffect, useRef, useState } from "react"
 import { useReducedMotion } from "@/hooks/use-reduced-motion"
 import { useCopy } from "@/lib/redesign/use-copy"
-import { Signature } from "./signature"
+import { TerminalMark } from "./terminal-mark"
 
 function shouldSkipLoader() {
   if (typeof document === "undefined") return false
   if (document.documentElement.classList.contains("reduce-motion")) return true
   return false
-}
-
-function scramble(from: string, to: string, t: number) {
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz…·/"
-  const len = Math.max(from.length, to.length)
-  let out = ""
-  for (let i = 0; i < len; i++) {
-    if (i / len < t) out += to[i] ?? ""
-    else out += chars[Math.floor(Math.random() * chars.length)]
-  }
-  return out
 }
 
 /** Non-linear progress that sticks near 47% for the Jira gag. */
@@ -32,11 +21,11 @@ function mapProgress(raw: number) {
 export function Loader() {
   const { t } = useCopy()
   const reduced = useReducedMotion()
-  // Always true on first paint so SSR and hydration match; CSS hides when loader-done.
   const [visible, setVisible] = useState(true)
   const [leaving, setLeaving] = useState(false)
   const [count, setCount] = useState(0)
-  const [phrase, setPhrase] = useState("")
+  const [completedLines, setCompletedLines] = useState<string[]>([])
+  const [currentLine, setCurrentLine] = useState("")
   const phraseIndex = useRef(0)
   const timeouts = useRef<number[]>([])
 
@@ -59,7 +48,7 @@ export function Loader() {
     const phrases = t.loader
 
     phraseIndex.current = 0
-    setPhrase(phrases[0] ?? "")
+    setCurrentLine(phrases[0] ?? "")
 
     const schedule = (fn: () => void, ms: number) => {
       const id = window.setTimeout(fn, ms)
@@ -76,22 +65,14 @@ export function Loader() {
         phrases.length - 1,
         Math.floor(raw * phrases.length),
       )
+
       if (nextPhraseIndex !== phraseIndex.current) {
-        const from = phrases[phraseIndex.current] ?? ""
-        const to = phrases[nextPhraseIndex] ?? ""
-        phraseIndex.current = nextPhraseIndex
-        let scrambleFrame = 0
-        const scrambleSteps = 8
-        const runScramble = () => {
-          scrambleFrame++
-          setPhrase(scramble(from, to, scrambleFrame / scrambleSteps))
-          if (scrambleFrame < scrambleSteps) {
-            schedule(runScramble, 28)
-          } else {
-            setPhrase(to)
-          }
+        const prev = phrases[phraseIndex.current]
+        if (prev) {
+          setCompletedLines((old) => [...old, prev])
         }
-        runScramble()
+        phraseIndex.current = nextPhraseIndex
+        setCurrentLine(phrases[nextPhraseIndex] ?? "")
       }
 
       if (raw < 1) {
@@ -118,36 +99,51 @@ export function Loader() {
 
   if (!visible) return null
 
-  const label =
-    count >= 45 && count <= 52
-      ? phrasesAt47(t.loader)
-      : phrase || t.loader[0]
-
   return (
     <div
       data-loader
-      className={`fixed inset-0 z-[80] flex flex-col bg-[#1F4BFF] text-[#F4F1EA] ${
+      className={`fixed inset-0 z-[80] flex flex-col bg-signal text-paper ${
         leaving ? "loader-curtain" : ""
       }`}
       role="status"
       aria-live="polite"
-      aria-label={label}
+      aria-label="Cargando entorno Ezequiel Vazquez"
     >
+      {/* Center Terminal Box */}
       <div className="flex flex-1 items-center justify-center px-6">
-        <Signature data-loader-sig className="w-[min(78vw,520px)]" />
+        <TerminalMark data-loader-sig className="w-[min(88vw,520px)]" />
       </div>
+
+      {/* Bottom Terminal Log Stack & Percentage */}
       <div className="flex items-end justify-between gap-6 px-6 pb-8 sm:px-10">
-        <p className="max-w-[18rem] font-mono text-sm sm:text-base" aria-hidden>
-          {label}
-        </p>
-        <p className="font-display text-5xl leading-none tracking-[-0.04em] sm:text-7xl" aria-hidden>
+        {/* Terminal Log Stack */}
+        <div className="flex flex-col gap-1 font-mono text-xs sm:text-sm max-w-lg select-none">
+          {completedLines.slice(-3).map((line, idx) => (
+            <div key={idx} className="flex items-center gap-2 text-paper/65 transition-all">
+              <span className="text-success font-bold">✔</span>
+              <span className="text-paper/40">
+                [{String(completedLines.indexOf(line) + 1).padStart(2, "0")}]
+              </span>
+              <span>{line}</span>
+            </div>
+          ))}
+
+          {/* Active Terminal Line */}
+          <div className="flex items-center gap-2 text-paper font-medium pt-0.5">
+            <span className="text-warning animate-pulse">❯</span>
+            <span className="text-paper/50">
+              [{String(completedLines.length + 1).padStart(2, "0")}]
+            </span>
+            <span>{currentLine}</span>
+            <span className="inline-block animate-pulse text-success">▍</span>
+          </div>
+        </div>
+
+        {/* Big Counter */}
+        <p className="font-display text-5xl leading-none tracking-[-0.04em] sm:text-7xl font-bold" aria-hidden>
           {count}
         </p>
       </div>
     </div>
   )
-}
-
-function phrasesAt47(phrases: readonly string[]) {
-  return phrases.find((p) => p.includes("47") || p.includes("Jira")) ?? phrases[phrases.length - 1] ?? ""
 }

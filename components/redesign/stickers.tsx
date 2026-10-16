@@ -8,12 +8,15 @@ import {
   type CSSProperties,
   type PointerEvent as ReactPointerEvent,
 } from "react"
+import Image from "next/image"
 import { EMAIL_URL, GITHUB_URL, LINKEDIN_URL } from "@/lib/constants"
 import { CALENDAR_URL, HAS_CALENDAR, STICKER_STORAGE_KEY } from "@/lib/redesign/config"
 import { useReducedMotion } from "@/hooks/use-reduced-motion"
 import { useCopy } from "@/lib/redesign/use-copy"
 import { useTransitionNav } from "./transition-context"
 import { playBassRiff, stopTune, toggleTune } from "@/lib/redesign/tune"
+import { toggleRadio, stopRadio } from "@/lib/redesign/radio"
+import { useToast } from "./toast-provider"
 
 type Draw =
   | "git"
@@ -47,7 +50,6 @@ type StickerData = {
   draw: Draw
   photo?: string
 }
-
 const STICKERS: StickerData[] = [
   { id: "git", label: "github", href: GITHUB_URL, x: "6%", y: "16%", rotate: -8, mobile: true, draw: "git" },
   { id: "in", label: "linkedin", href: LINKEDIN_URL, x: "74%", y: "12%", rotate: 6, mobile: true, draw: "in" },
@@ -80,6 +82,30 @@ const STICKERS: StickerData[] = [
   { id: "pol-2", label: "polaroid", x: "78%", y: "48%", rotate: 5, draw: "polaroid", photo: "/stickers/polaroids/2.jpg" },
   { id: "pol-3", label: "polaroid", x: "28%", y: "72%", rotate: 3, mobile: true, draw: "polaroid", photo: "/stickers/polaroids/3.jpg" },
 ]
+
+const TOOLTIPS: Record<string, { es: string; en: string }> = {
+  git: { es: "GitHub · Código & Repos", en: "GitHub · Code & Repos" },
+  in: { es: "LinkedIn · Conectar", en: "LinkedIn · Connect" },
+  mail: { es: "Mail · Contacto directo", en: "Mail · Direct contact" },
+  cal: { es: "Agenda · Reservar llamada", en: "Calendar · Book a call" },
+  mate: { es: "Mate · Clic para cebar", en: "Mate · Click to brew" },
+  jira: { es: "Jira · Arrastralo a Excel", en: "Jira · Drag me to Excel" },
+  excel: { es: "Excel · Matriz operativa", en: "Excel · Operational matrix" },
+  stamp: { es: "Buenos Aires · GMT-3", en: "Buenos Aires · GMT-3" },
+  plane: { es: "Avión · Despegar a producción", en: "Plane · Takeoff to prod" },
+  phones: { es: "Auriculares · Radio Lo-Fi en vivo", en: "Headphones · Live Lo-Fi Radio" },
+  gummies: { es: "Gomitas · Azúcar para deployar", en: "Gummies · Brain fuel" },
+  bass: { es: "Bajo · Riff en vivo", en: "Bass · Live bass riff" },
+  lemon: { es: "Limón · Ácido pero necesario", en: "Lemon · Fresh & sharp" },
+  fernet: { es: "Fernet · 70/30 con hielo", en: "Fernet · 70/30 on the rocks" },
+  cordoba: { es: "Córdoba · La Docta", en: "Córdoba · La Docta" },
+  dog: { es: "Salchicha · Guardián del sprint", en: "Dachshund · Sprint guardian" },
+  pizza: { es: "Pizza · Combustible de nocturnas", en: "Pizza · Late night fuel" },
+  boca: { es: "Boca · Esto es Boca", en: "Boca · Esto es Boca" },
+  "pol-1": { es: "Polaroid · Memoria de equipo", en: "Polaroid · Team memory" },
+  "pol-2": { es: "Polaroid · Buenos Aires", en: "Polaroid · Buenos Aires" },
+  "pol-3": { es: "Polaroid · Setup", en: "Polaroid · Desk setup" },
+}
 
 type PosMap = Record<string, { x: number; y: number }>
 
@@ -126,22 +152,24 @@ const ART: Record<Draw, string> = {
 function PolaroidFrame({ src }: { src?: string }) {
   const [ready, setReady] = useState(Boolean(src))
   return (
-    <div className="w-[5.6rem] bg-[#F4F1EA] p-1.5 pb-5 shadow-[4px_8px_0_rgba(0,0,0,0.4)]">
+    <div className="w-[5.6rem] bg-paper p-1.5 pb-5 shadow-[4px_8px_0_rgba(0,0,0,0.4)]">
       {src && ready ? (
-        <img
+        <Image
           src={src}
           alt=""
+          width={224}
+          height={280}
+          sizes="90px"
           draggable={false}
           className="pointer-events-none aspect-[4/5] w-full object-cover"
           onError={() => setReady(false)}
         />
       ) : (
-        <div className="aspect-[4/5] w-full bg-[#23252e]" />
+        <div className="aspect-[4/5] w-full bg-canvas-soft" />
       )}
     </div>
   )
 }
-
 function Drawing({
   kind,
   playing,
@@ -157,9 +185,12 @@ function Drawing({
   const wide = kind === "plane" || kind === "jira" || kind === "dog" || kind === "pizza" || kind === "gummies"
   const tall = kind === "bass" || kind === "fernet"
   return (
-    <img
+    <Image
       src={ART[kind]}
       alt=""
+      width={208}
+      height={128}
+      sizes="(max-width: 640px) 96px, 208px"
       draggable={false}
       className={`pointer-events-none object-contain ${
         kind === "dog" ? "h-24 w-52" : wide ? "h-20 w-36" : tall ? "h-32 w-16" : kind === "boca" ? "h-28 w-24" : "h-24 w-24"
@@ -184,6 +215,7 @@ type StickerProps = {
   lit?: boolean
   playing?: boolean
   reduced: boolean
+  tooltip?: string
 }
 
 function Sticker({
@@ -202,6 +234,7 @@ function Sticker({
   lit,
   playing,
   reduced,
+  tooltip,
 }: StickerProps) {
   const elRef = useRef<HTMLElement | null>(null)
   const moved = useRef(false)
@@ -213,6 +246,7 @@ function Sticker({
   const velocity = useRef({ x: 0, y: 0 })
   const raf = useRef(0)
   const [grabbed, setGrabbed] = useState(false)
+  const [hovered, setHovered] = useState(false)
 
   useEffect(() => {
     live.current = { x: shift.x, y: shift.y }
@@ -322,7 +356,7 @@ function Sticker({
   }
 
   const className = [
-    "sticker absolute touch-none cursor-grab active:cursor-grabbing",
+    "sticker absolute touch-none cursor-grab active:cursor-grabbing focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-signal",
     sticker.mobile ? "flex" : "hidden sm:flex",
     grabbed ? "sticker-grabbed" : "",
     stamped ? "sticker-stamped" : "",
@@ -350,6 +384,8 @@ function Sticker({
     "data-cursor": "drag" as const,
     onPointerDown,
     onPointerMove,
+    onPointerEnter: () => setHovered(true),
+    onPointerLeave: () => setHovered(false),
     onDragStart: (event: React.DragEvent) => event.preventDefault(),
   }
 
@@ -357,8 +393,13 @@ function Sticker({
     <>
       <Drawing kind={sticker.draw} steaming={steaming} lit={lit} playing={playing} photo={sticker.photo} />
       {stamped && (
-        <span className="pointer-events-none absolute inset-0 grid place-items-center rotate-[-18deg] font-display text-sm tracking-widest text-[#1F4BFF]/90">
+        <span className="pointer-events-none absolute inset-0 grid place-items-center rotate-[-18deg] font-display text-sm tracking-widest text-signal/90">
           {stampLabel}
+        </span>
+      )}
+      {hovered && !grabbed && tooltip && (
+        <span className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/20 bg-canvas/95 px-2.5 py-0.5 font-mono text-[10px] font-medium text-white shadow-xl backdrop-blur-md animate-in fade-in zoom-in-95 duration-150 z-50">
+          {tooltip}
         </span>
       )}
     </>
@@ -396,18 +437,21 @@ function Sticker({
 }
 
 export function StickerField() {
-  const { t } = useCopy()
+  const { t, language } = useCopy()
   const { navigate } = useTransitionNav()
+  const { showToast } = useToast()
   const reduced = useReducedMotion()
   const [positions, setPositions] = useState<PosMap>({})
   const [zOrder, setZOrder] = useState<string[]>(STICKERS.map((s) => s.id))
-  const [toast, setToast] = useState<string | null>(null)
   const [steaming, setSteaming] = useState(false)
   const [stamped, setStamped] = useState(false)
   const [lit, setLit] = useState(false)
   const [playing, setPlaying] = useState(false)
 
-  useEffect(() => () => stopTune(), [])
+  useEffect(() => () => {
+    stopRadio()
+    stopTune()
+  }, [])
 
   useEffect(() => {
     setPositions(loadPositions())
@@ -425,11 +469,6 @@ export function StickerField() {
     setZOrder((order) => [...order.filter((item) => item !== id), id])
   }, [])
 
-  const showToast = useCallback((message: string) => {
-    setToast(message)
-    window.setTimeout(() => setToast(null), 2200)
-  }, [])
-
   const onDrop = useCallback(
     (id: string, rect: DOMRect) => {
       if (id !== "jira") return
@@ -437,9 +476,15 @@ export function StickerField() {
       if (!excel) return
       const b = excel.getBoundingClientRect()
       const overlap = !(rect.right < b.left || rect.left > b.right || rect.bottom < b.top || rect.top > b.bottom)
-      if (overlap) showToast(t.eggTicket)
+      if (overlap) {
+        showToast({
+          message: language === "es" ? "Ticket importado a Excel: la pesadilla de todo PM 📊" : "Jira ticket dropped into Excel: PM nightmare 📊",
+          icon: "📊",
+          type: "warning",
+        })
+      }
     },
-    [showToast, t.eggTicket],
+    [showToast, language],
   )
 
   const onOpen = useCallback(
@@ -455,21 +500,37 @@ export function StickerField() {
     (id: string) => {
       if (id === "mate") {
         setSteaming(true)
-        showToast(t.eggMate)
+        showToast({
+          message: language === "es" ? "Mate cebado 🧉 (+10 foco técnico)" : "Mate brewed 🧉 (+10 focus)",
+          icon: "🧉",
+          type: "success",
+        })
         window.setTimeout(() => setSteaming(false), 2800)
       }
       if (id === "stamp") {
         setStamped(true)
-        showToast(t.eggStamp)
+        showToast({
+          message: language === "es" ? "Sellado con pasaporte porteño 🇦🇷" : "Stamped in Buenos Aires 🇦🇷",
+          icon: "🇦🇷",
+          type: "info",
+        })
         window.setTimeout(() => setStamped(false), 2400)
       }
       if (id === "excel") {
         setLit(true)
-        showToast(t.eggExcel)
+        showToast({
+          message: language === "es" ? "VLOOKUP funcionando de milagro 📈" : "VLOOKUP working by a miracle 📈",
+          icon: "📈",
+          type: "info",
+        })
         window.setTimeout(() => setLit(false), 900)
       }
       if (id === "jira") {
-        showToast(t.eggJira)
+        showToast({
+          message: language === "es" ? "Ticket movido a 'In Progress' 🎟️" : "Ticket moved to 'In Progress' 🎟️",
+          icon: "🎟️",
+          type: "info",
+        })
       }
       if (id === "plane") {
         const el = document.querySelector<HTMLElement>('[data-sticker="plane"]')
@@ -487,20 +548,102 @@ export function StickerField() {
         fly.onfinish = () => {
           delete el.dataset.flying
         }
-        showToast(t.eggPlane)
+        showToast({
+          message: language === "es" ? "Vuelo despegado rumbo a producción ✈️" : "Takeoff to production deployed ✈️",
+          icon: "✈️",
+          type: "info",
+        })
       }
       if (id === "phones") {
-        void toggleTune().then((on) => {
-          setPlaying(on)
-          if (on) showToast(t.eggMusic)
-        })
+        const { promise, action } = toggleRadio((on) => setPlaying(on))
+        if (action === "play") {
+          showToast({
+            message: language === "es" ? "Sintonizando Radio Lo-Fi... 📻" : "Tuning in to Lo-Fi radio... 📻",
+            icon: "📻",
+            type: "radio",
+          })
+          promise.then((ok) => {
+            if (ok) {
+              showToast({
+                message: language === "es" ? "Sonando Radio Lo-Fi en vivo 🎵" : "Playing Live Lo-Fi Radio 🎵",
+                icon: "🎵",
+                type: "radio",
+              })
+            } else {
+              void toggleTune().then((on) => {
+                setPlaying(on)
+                if (on) showToast({ message: t.eggMusic, icon: "🎵", type: "radio" })
+              })
+            }
+          })
+        } else {
+          stopTune()
+          showToast({
+            message: language === "es" ? "Radio pausada ⏸" : "Radio paused ⏸",
+            icon: "⏸",
+            type: "radio",
+          })
+        }
       }
       if (id === "bass") {
         void playBassRiff()
-        showToast(t.eggBass)
+        showToast({
+          message: language === "es" ? "Riff de bajo slappeado 🎸" : "Slapped bass riff 🎸",
+          icon: "🎸",
+          type: "info",
+        })
+      }
+      if (id === "fernet") {
+        showToast({
+          message: language === "es" ? "70/30 con hielo. Listo para deployar 🧊" : "Fernet 70/30 on the rocks 🧊",
+          icon: "🧊",
+          type: "info",
+        })
+      }
+      if (id === "pizza") {
+        showToast({
+          message: language === "es" ? "Porción de muzzarella para la nocturna 🍕" : "Slice of pizza for the late shift 🍕",
+          icon: "🍕",
+          type: "info",
+        })
+      }
+      if (id === "dog") {
+        showToast({
+          message: language === "es" ? "Salchicha guardián del sprint 🌭🐶" : "Dachshund sprint guardian 🌭🐶",
+          icon: "🐶",
+          type: "info",
+        })
+      }
+      if (id === "boca") {
+        showToast({
+          message: "Esto es Boca 💙💛💙",
+          icon: "⚽",
+          type: "info",
+        })
+      }
+      if (id === "gummies") {
+        showToast({
+          message: language === "es" ? "Gomitas de eucalipto para el cerebro 🍬" : "Gummies for the brain 🍬",
+          icon: "🍬",
+          type: "info",
+        })
+      }
+      if (id === "lemon") {
+        showToast({
+          message: language === "es" ? "Limón ácido pero fresco 🍋" : "Fresh & sharp lemon 🍋",
+          icon: "🍋",
+          type: "info",
+        })
+      }
+      if (id === "cordoba") {
+        showToast({
+          message: "Córdoba · La Docta 🏛️",
+          icon: "🏛️",
+          type: "info",
+        })
       }
     },
-    [reduced, showToast, t.eggBass, t.eggExcel, t.eggJira, t.eggMate, t.eggMusic, t.eggPlane, t.eggStamp],
+    [reduced, showToast, language, t.eggMusic],
   )
 
   return (
@@ -508,6 +651,7 @@ export function StickerField() {
       {STICKERS.map((sticker) => {
         const z = 20 + zOrder.indexOf(sticker.id)
         const shift = positions[sticker.id] ?? { x: 0, y: 0 }
+        const tooltip = TOOLTIPS[sticker.id]?.[language] || TOOLTIPS[sticker.id]?.es
         return (
           <Sticker
             key={sticker.id}
@@ -526,94 +670,10 @@ export function StickerField() {
             lit={sticker.id === "excel" && lit}
             playing={sticker.id === "phones" && playing}
             reduced={reduced}
+            tooltip={tooltip}
           />
         )
       })}
-      {toast && (
-        <div
-          role="status"
-          className="pointer-events-none absolute left-1/2 top-6 z-50 -translate-x-1/2 rounded-full bg-[#1F4BFF] px-4 py-2 font-mono text-xs text-white shadow-lg"
-        >
-          {toast}
-        </div>
-      )}
     </>
-  )
-}
-
-export function NoteCard() {
-  const { t } = useCopy()
-  const reduced = useReducedMotion()
-  const [index, setIndex] = useState(0)
-  const [typed, setTyped] = useState(0)
-  const [paused, setPaused] = useState(false)
-  const note = t.notes[index] ?? ""
-
-  useEffect(() => {
-    if (reduced) {
-      setTyped(note.length)
-      return
-    }
-    if (paused) return
-    if (typed < note.length) {
-      const id = window.setTimeout(() => setTyped((current) => current + 1), 26)
-      return () => window.clearTimeout(id)
-    }
-    const id = window.setTimeout(() => {
-      setIndex((value) => (value + 1) % t.notes.length)
-      setTyped(0)
-    }, 1400)
-    return () => window.clearTimeout(id)
-  }, [note, typed, reduced, t.notes.length, paused])
-
-  const go = (direction: number) => {
-    setIndex((value) => (value + direction + t.notes.length) % t.notes.length)
-    setTyped(0)
-  }
-
-  return (
-    <div
-      className="relative mx-auto mt-8 w-[min(100%,20rem)] text-left"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-      onFocusCapture={() => setPaused(true)}
-      onBlurCapture={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget as Node)) setPaused(false)
-      }}
-    >
-      <div className="absolute inset-0 translate-x-2 translate-y-2 rotate-2 rounded-2xl bg-[#23252f]" aria-hidden />
-      <div className="absolute inset-0 -translate-x-1 translate-y-1 -rotate-2 rounded-2xl bg-[#1c1e27]" aria-hidden />
-      <div className="relative rounded-2xl border border-white/10 bg-[#16171d] p-4">
-        <div className="flex items-center justify-between gap-2">
-          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[#F4F1EA]/55">{t.noteLabel}</p>
-          <button
-            type="button"
-            className="press rounded-full px-2 py-0.5 font-mono text-[10px] text-[#F4F1EA]/70"
-            aria-pressed={paused}
-            onClick={() => setPaused((value) => !value)}
-          >
-            {paused ? t.notePlay : t.notePause}
-          </button>
-        </div>
-        <p className="mt-2 min-h-[4.5rem] font-mono text-sm leading-relaxed text-[#F4F1EA]" aria-hidden>
-          {reduced ? note : note.slice(0, typed)}
-          <span className="text-[#1F4BFF]">▍</span>
-        </p>
-        <p className="sr-only" aria-live="polite" aria-atomic="true">
-          {note}
-        </p>
-        <div className="mt-3 flex items-center justify-between font-mono text-xs text-[#F4F1EA]/70">
-          <button type="button" className="press rounded-full px-2 py-1" aria-label={t.prevNote} onClick={() => go(-1)}>
-            ‹
-          </button>
-          <span>
-            {index + 1}/{t.notes.length}
-          </span>
-          <button type="button" className="press rounded-full px-2 py-1" aria-label={t.nextNote} onClick={() => go(1)}>
-            ›
-          </button>
-        </div>
-      </div>
-    </div>
   )
 }

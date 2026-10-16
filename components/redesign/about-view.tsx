@@ -12,9 +12,9 @@ const KIND_LABEL = {
 } as const
 
 const KIND_COLOR = {
-  work: "#1F4BFF",
-  study: "#2A9D8F",
-  side: "#E9C46A",
+  work: "var(--color-action)",
+  study: "rgb(var(--primitive-thread-study))",
+  side: "rgb(var(--primitive-thread-side))",
 } as const
 
 const YEARS = new Date().getFullYear() - 2018
@@ -162,7 +162,7 @@ export function AboutView() {
   const resumeChapter = t.chapters.find((c) => c.id === resumeId)
 
   return (
-    <div data-about-root ref={listRef} className="relative min-h-svh bg-[#EFECE6] text-[#12131A]">
+    <div data-about-root ref={listRef} className="relative min-h-svh bg-sheet text-canvas">
       <svg
         className="pointer-events-none absolute left-6 top-0 hidden h-full w-8 lg:block"
         aria-hidden
@@ -172,36 +172,36 @@ export function AboutView() {
           data-thread-path
           d="M16 0 C 8 120, 24 240, 16 360 S 8 600, 16 800 S 24 1100, 16 1400 S 8 1800, 16 2200"
           fill="none"
-          stroke="#1F4BFF"
+          stroke="var(--color-action)"
           strokeWidth="2"
         />
       </svg>
 
       <header className="px-6 pb-16 pt-24 sm:px-12 sm:pt-28">
-        <p className="font-mono text-xs uppercase tracking-[0.18em] text-[#12131A]/50">{t.aboutKicker}</p>
+        <p className="font-mono text-xs uppercase tracking-[0.18em] text-canvas/50">{t.aboutKicker}</p>
         <h1 className="mt-4 max-w-4xl font-display text-[clamp(3.4rem,9vw,7.5rem)] leading-[0.88] tracking-[-0.05em]">
           {t.aboutTitle}
-          <span className="text-[#1F4BFF]">.</span>
+          <span className="text-signal">.</span>
         </h1>
-        <p className="mt-6 max-w-xl text-lg text-[#12131A]/70">{t.aboutSub}</p>
-        <p className="mt-4 font-mono text-sm text-[#1F4BFF]">
-          <span className="font-display text-4xl tracking-[-0.04em] text-[#12131A]">{years}</span>{" "}
+        <p className="mt-6 max-w-xl text-lg text-canvas/70">{t.aboutSub}</p>
+        <p className="mt-4 font-mono text-sm text-signal">
+          <span className="font-display text-4xl tracking-[-0.04em] text-canvas">{years}</span>{" "}
           {t.aboutYears}
         </p>
 
         {resumeChapter && (
           <button
             type="button"
-            className="press mt-6 rounded-2xl border border-[#12131A]/15 bg-white/50 px-4 py-3 text-left"
+            className="press mt-6 rounded-2xl border border-canvas/15 bg-white/50 px-4 py-3 text-left"
             onClick={() => {
               document
                 .querySelector(`[data-chapter-id="${resumeChapter.id}"]`)
                 ?.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "center" })
             }}
           >
-            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[#1F4BFF]">{t.aboutResume}</p>
+            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-signal">{t.aboutResume}</p>
             <p className="mt-1 font-display text-xl tracking-[-0.03em]">{resumeChapter.title}</p>
-            <p className="mt-1 font-mono text-xs text-[#12131A]/60">{t.aboutResumeCta}</p>
+            <p className="mt-1 font-mono text-xs text-canvas/60">{t.aboutResumeCta}</p>
           </button>
         )}
 
@@ -220,8 +220,8 @@ export function AboutView() {
                 onClick={() => void onFilter(item.id)}
                 className={`press rounded-full border px-3 py-1.5 font-mono text-xs ${
                   selected
-                    ? "border-[#1F4BFF] bg-[#1F4BFF] text-white"
-                    : "border-[#12131A]/15 bg-transparent text-[#12131A]"
+                    ? "border-signal bg-signal text-white"
+                    : "border-canvas/15 bg-transparent text-canvas"
                 }`}
               >
                 {item.label} {count}
@@ -232,15 +232,15 @@ export function AboutView() {
       </header>
 
       <ol className="relative px-6 pb-36 sm:px-12">
-        <div className="absolute bottom-28 left-[1.35rem] top-0 w-px bg-[#12131A]/15 sm:left-12 lg:hidden" aria-hidden />
+        <div className="absolute bottom-28 left-[1.35rem] top-0 w-px bg-canvas/15 sm:left-12 lg:hidden" aria-hidden />
         {chapters.map((chapter) => (
           <li
             key={chapter.id}
             data-chapter={chapter.title}
             data-chapter-id={chapter.id}
-            className="relative grid gap-4 border-t border-[#12131A]/10 py-12 md:grid-cols-[180px_1fr] md:gap-12"
+            className="relative grid gap-4 border-t border-canvas/10 py-12 md:grid-cols-[180px_1fr] md:gap-12"
           >
-            <div className="font-mono text-xs uppercase tracking-[0.14em] text-[#12131A]/55">
+            <div className="font-mono text-xs uppercase tracking-[0.14em] text-canvas/55">
               <p>
                 {chapter.year}
                 {chapter.end ? ` — ${chapter.end}` : ""}
@@ -248,7 +248,7 @@ export function AboutView() {
               <p className="mt-2">{chapter.place}</p>
               <p
                 className={`mt-3 inline-flex rounded-full px-2 py-1 text-[10px] ${
-                  chapter.kind === "work" ? "text-white" : "text-[#12131A]"
+                  chapter.kind === "work" ? "text-white" : "text-canvas"
                 }`}
                 style={{ backgroundColor: KIND_COLOR[chapter.kind] }}
               >
@@ -262,7 +262,7 @@ export function AboutView() {
               >
                 {chapter.title}
               </h2>
-              <p className="mt-4 max-w-xl text-lg text-[#12131A]/75">{chapter.body}</p>
+              <p className="mt-4 max-w-xl text-lg text-canvas/75">{chapter.body}</p>
             </div>
           </li>
         ))}
@@ -272,7 +272,7 @@ export function AboutView() {
         aria-label={t.aboutKicker}
         className="pointer-events-auto fixed right-8 top-1/2 z-[3] hidden -translate-y-1/2 lg:block"
       >
-        <p className="mb-4 max-w-[9rem] text-right font-mono text-[11px] uppercase tracking-[0.16em] text-[#1F4BFF]">
+        <p className="mb-4 max-w-[9rem] text-right font-mono text-[11px] uppercase tracking-[0.16em] text-signal">
           {current}
         </p>
         <ol className="space-y-3 text-right font-mono text-[10px] uppercase tracking-[0.14em]">
@@ -282,7 +282,7 @@ export function AboutView() {
               <li key={chapter.id}>
                 <button
                   type="button"
-                  className={`press ${active ? "text-[#12131A]" : "text-[#12131A]/35"}`}
+                  className={`press ${active ? "text-canvas" : "text-canvas/35"}`}
                   onClick={() => {
                     document
                       .querySelector(`[data-chapter-id="${chapter.id}"]`)
@@ -291,7 +291,7 @@ export function AboutView() {
                 >
                   <span
                     className={`mr-2 inline-block h-px align-middle ${
-                      active ? "w-8 bg-[#1F4BFF]" : "w-4 bg-[#12131A]/25"
+                      active ? "w-8 bg-signal" : "w-4 bg-canvas/25"
                     }`}
                   />
                   {chapter.year}

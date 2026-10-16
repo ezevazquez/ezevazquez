@@ -30,8 +30,8 @@ export function EasterEggs() {
     // eslint-disable-next-line no-console
     console.log(
       "%c[ ezevazquez ]%c " + t.consoleHello,
-      "background:#1F4BFF;color:#F4F1EA;padding:4px 8px;border-radius:999px;font-family:monospace",
-      "color:#F4F1EA;padding:4px 8px;font-family:monospace",
+      "background:var(--color-action);color:var(--color-paper);padding:4px 8px;border-radius:999px;font-family:monospace",
+      "color:var(--color-paper);padding:4px 8px;font-family:monospace",
     )
   }, [t.consoleHello])
 

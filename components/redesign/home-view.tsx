@@ -1,62 +1,26 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef } from "react"
 import { EMAIL_URL } from "@/lib/constants"
 import { CALENDAR_URL, HAS_CALENDAR } from "@/lib/redesign/config"
 import { refreshScrollTrigger, useGsap } from "@/hooks/use-gsap"
 import { useCopy } from "@/lib/redesign/use-copy"
-import { NoteCard, StickerField } from "./stickers"
+import { StickerField } from "./stickers"
+import { SlideDeck } from "./slide-deck"
+import { DrawWall } from "./draw-wall"
+import { WallNotes } from "./wall-notes"
 import { TransitionLink } from "./transition-link"
-
-function Clock() {
-  const { t } = useCopy()
-  const [time, setTime] = useState("")
-  const [hover, setHover] = useState(false)
-
-  useEffect(() => {
-    const format = () =>
-      new Intl.DateTimeFormat("en-GB", {
-        hour: "2-digit",
-        minute: "2-digit",
-        hourCycle: "h23",
-        timeZone: "America/Argentina/Buenos_Aires",
-      }).format(new Date())
-    setTime(format())
-    const id = window.setInterval(() => setTime(format()), 15000)
-    return () => window.clearInterval(id)
-  }, [])
-
-  return (
-    <p
-      className="font-mono text-[11px] uppercase tracking-[0.16em] text-[#F4F1EA]/60"
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      title={t.clockHover}
-    >
-      {hover ? t.clockHover : t.clock}
-      {!hover && (
-        <>
-          <span className="mx-2 text-[#1F4BFF]">·</span>
-          {time}
-        </>
-      )}
-    </p>
-  )
-}
 
 export function HomeView() {
   const { t, language } = useCopy()
-  const nameRef = useRef<HTMLParagraphElement>(null)
   const entered = useRef(false)
-  const docked = useRef(false)
-  const firstName = t.brandName.split(" ")[0] || "Eze"
 
   useEffect(() => {
     void refreshScrollTrigger()
   }, [language])
 
   const rootRef = useGsap(
-    (gsap, _root, { Flip, ScrollTrigger }) => {
+    (gsap) => {
       const stickers = gsap.utils.toArray<HTMLElement>(".sticker")
       const titleLines = gsap.utils.toArray<HTMLElement>("[data-hero-line]")
       const card = document.querySelector<HTMLElement>("[data-note-card]")
@@ -89,47 +53,6 @@ export function HomeView() {
       } else {
         onDone = () => entrance()
         window.addEventListener("eze:loader-done", onDone, { once: true })
-      }
-
-      // Real Flip: brand name ↔ [Eze] header slot
-      const name = nameRef.current
-      if (name && Flip) {
-        const dock = () => {
-          if (docked.current) return
-          docked.current = true
-          const state = Flip.getState(name)
-          name.classList.add("is-docked")
-          name.textContent = `[${firstName}]`
-          Flip.from(state, {
-            duration: 0.65,
-            ease: "power2.inOut",
-            absolute: true,
-            scale: true,
-          })
-        }
-        const undock = () => {
-          if (!docked.current) return
-          docked.current = false
-          const state = Flip.getState(name)
-          name.classList.remove("is-docked")
-          name.textContent = t.brandName
-          Flip.from(state, {
-            duration: 0.55,
-            ease: "power2.inOut",
-            absolute: true,
-            scale: true,
-          })
-        }
-
-        ScrollTrigger.create({
-          trigger: "[data-hero]",
-          start: "top top",
-          end: "bottom top",
-          onUpdate: (self) => {
-            if (self.progress > 0.52) dock()
-            else if (self.progress < 0.4) undock()
-          },
-        })
       }
 
       gsap.utils.toArray<HTMLElement>("[data-line]").forEach((line) => {
@@ -211,61 +134,35 @@ export function HomeView() {
 
       return () => {
         if (onDone) window.removeEventListener("eze:loader-done", onDone)
-        docked.current = false
       }
     },
-    [language, t.brandName, firstName],
-    { flip: true },
+    [language],
   )
 
   return (
     <div ref={rootRef}>
-      <section data-hero className="canvas-grid relative min-h-svh overflow-hidden bg-[#12131A]">
+      <section data-hero className="canvas-grid relative min-h-svh overflow-hidden bg-canvas">
+        <DrawWall />
         <StickerField />
-        <div className="pointer-events-none relative z-30 mx-auto flex min-h-svh max-w-3xl flex-col items-center justify-center px-5 pb-36 pt-16 text-center">
-          <Clock />
-          <p
-            ref={nameRef}
-            data-brand-name
-            className="brand-name mt-4 font-display text-[clamp(2rem,5vw,3.4rem)] leading-none tracking-[-0.05em] text-[#F4F1EA] will-change-transform"
-          >
-            {t.brandName}
-          </p>
-          <h1
-            data-hero-title
-            className="mt-3 origin-top font-display text-[clamp(2.8rem,7.5vw,6rem)] leading-[0.88] tracking-[-0.05em] text-[#F4F1EA]"
-          >
-            <span className="line-mask">
-              <span data-hero-line className="block">
-                {t.heroTitle}
-              </span>
-            </span>
-            <span className="line-mask mt-2 block text-[clamp(1.7rem,4.4vw,3.4rem)] leading-[0.95]">
-              <span data-hero-line className="block">
-                {t.heroLine}
-              </span>
-            </span>
-          </h1>
-          <p data-sharpen className="mt-6 max-w-[36rem] text-base leading-relaxed text-[#F4F1EA]/75 sm:text-lg">
-            {t.heroSub}
-          </p>
-          <div className="pointer-events-auto" data-note-card>
-            <NoteCard />
+        <div className="pointer-events-none relative z-30 mx-auto flex min-h-svh max-w-3xl items-center justify-center px-5 pb-28 pt-16 text-center">
+          <h1 className="sr-only">{`${t.heroTitle} ${t.heroLine}`}</h1>
+          <div className="pointer-events-auto w-full" data-note-card>
+            <SlideDeck />
+            <div className="mt-4">
+              <WallNotes />
+            </div>
           </div>
-          <p className="scroll-cue mt-10 font-mono text-[11px] uppercase tracking-[0.18em] text-[#F4F1EA]/55">
-            {t.scroll}
-          </p>
         </div>
       </section>
 
-      <div className="overflow-hidden border-y border-white/10 bg-[#12131A] py-4">
+      <div className="overflow-hidden border-y border-white/10 bg-canvas py-4">
         <div className="marquee-track flex w-max gap-10">
           {Array.from({ length: 2 }, (_, loop) => (
-            <p key={loop} className="flex gap-10 font-display text-4xl tracking-[-0.04em] text-[#F4F1EA]/80">
+            <p key={loop} className="flex gap-10 font-display text-4xl tracking-[-0.04em] text-paper/80">
               {t.what.map((item) => (
                 <span key={`${loop}-${item.n}`} className="flex items-center gap-10">
                   {item.word}
-                  <span className="text-[#1F4BFF]">/</span>
+                  <span className="text-signal">/</span>
                 </span>
               ))}
             </p>
@@ -275,7 +172,7 @@ export function HomeView() {
 
       <section
         data-wipe
-        className="flex min-h-svh items-center bg-[#1F4BFF] px-6 py-28 text-[#F4F1EA] sm:px-12"
+        className="flex min-h-svh items-center bg-signal px-6 py-28 text-paper sm:px-12"
       >
         <div>
           <p className="font-mono text-xs uppercase tracking-[0.18em]">{t.whatKicker}</p>
@@ -294,11 +191,11 @@ export function HomeView() {
           key={item.n}
           data-panel={index < t.what.length - 1 ? "true" : undefined}
           className={`sticky top-0 flex min-h-svh items-center px-6 py-28 sm:px-12 ${
-            index === 2 ? "bg-[#1F4BFF] text-[#F4F1EA]" : index === 1 ? "bg-[#181a22]" : "bg-[#12131A]"
+            index === 2 ? "bg-signal text-paper" : index === 1 ? "bg-canvas-raised" : "bg-canvas"
           }`}
         >
           <div data-panel-blur={index < t.what.length - 1 ? "true" : undefined} className="w-full">
-            <p className="font-mono text-sm text-[#1F4BFF]">[{item.n}]</p>
+            <p className="font-mono text-sm text-signal">[{item.n}]</p>
             <h3 className="mt-4 max-w-4xl font-display text-[clamp(2.6rem,7vw,6rem)] leading-[0.9] tracking-[-0.05em]">
               <span className="line-mask">
                 <span data-line className="block">
@@ -306,15 +203,15 @@ export function HomeView() {
                 </span>
               </span>
             </h3>
-            <p data-sharpen className="mt-6 max-w-xl text-lg text-[#F4F1EA]/75">
+            <p data-sharpen className="mt-6 max-w-xl text-lg text-paper/75">
               {item.body}
             </p>
           </div>
         </article>
       ))}
 
-      <section data-how className="relative bg-[#EFECE6] px-6 py-24 text-[#12131A] sm:px-12 sm:py-32">
-        <p className="font-mono text-xs uppercase tracking-[0.18em] text-[#12131A]/55">{t.howKicker}</p>
+      <section data-how className="relative bg-sheet px-6 py-24 text-canvas sm:px-12 sm:py-32">
+        <p className="font-mono text-xs uppercase tracking-[0.18em] text-canvas/55">{t.howKicker}</p>
         <h2 className="mt-4 max-w-3xl font-display text-[clamp(2.8rem,7vw,5.5rem)] leading-[0.9] tracking-[-0.05em]">
           <span className="line-mask">
             <span data-line className="block">
@@ -332,22 +229,22 @@ export function HomeView() {
             data-how-line
             d="M80 40 C 280 10, 420 70, 500 40 S 780 10, 920 40"
             fill="none"
-            stroke="#1F4BFF"
+            stroke="var(--color-action)"
             strokeWidth="2"
           />
         </svg>
         <ol className="relative mt-16 grid gap-12 md:grid-cols-3">
           {t.how.map((step) => (
             <li key={step.n}>
-              <p className="font-mono text-sm text-[#1F4BFF]">[{step.n}]</p>
+              <p className="font-mono text-sm text-signal">[{step.n}]</p>
               <h3 className="mt-3 font-display text-3xl leading-none tracking-[-0.04em]">{step.title}</h3>
-              <p className="mt-3 max-w-xs text-[#12131A]/75">{step.body}</p>
+              <p className="mt-3 max-w-xs text-canvas/75">{step.body}</p>
             </li>
           ))}
         </ol>
       </section>
 
-      <section className="relative flex min-h-svh flex-col justify-center overflow-hidden bg-[#1F4BFF] px-6 py-28 text-[#F4F1EA] sm:px-12">
+      <section className="relative flex min-h-svh flex-col justify-center overflow-hidden bg-signal px-6 py-28 text-paper sm:px-12">
         <p
           aria-hidden
           className="pointer-events-none absolute bottom-8 right-6 font-display text-[28vw] leading-none tracking-[-0.08em] text-white/10"
@@ -361,7 +258,7 @@ export function HomeView() {
           {HAS_CALENDAR ? (
             <a
               href={CALENDAR_URL}
-              className="press magnetic rounded-full bg-[#F4F1EA] px-6 py-3 font-mono text-sm text-[#12131A]"
+              className="press magnetic rounded-full bg-paper px-6 py-3 font-mono text-sm text-canvas"
               target="_blank"
               rel="noreferrer"
             >
@@ -370,14 +267,14 @@ export function HomeView() {
           ) : (
             <TransitionLink
               href="/contact"
-              className="press magnetic rounded-full bg-[#F4F1EA] px-6 py-3 font-mono text-sm text-[#12131A]"
+              className="press magnetic rounded-full bg-paper px-6 py-3 font-mono text-sm text-canvas"
             >
               {t.ctaButton}
             </TransitionLink>
           )}
           <a
             href={EMAIL_URL}
-            className="press font-mono text-sm text-[#F4F1EA] underline-offset-4 hover:underline"
+            className="press font-mono text-sm text-paper underline-offset-4 hover:underline"
           >
             {t.ctaNote}
           </a>

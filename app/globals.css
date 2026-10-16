@@ -132,12 +132,8 @@ html.loader-done [data-loader] {
   background-size: 42px 42px;
 }
 
-.canvas-grid::after {
-  content: "";
+.canvas-vignette {
   pointer-events: none;
-  position: absolute;
-  inset: 0;
-  z-index: 2;
   background: radial-gradient(ellipse at center, transparent 42%, rgb(var(--primitive-black) / 0.28) 72%, rgb(var(--primitive-black) / 0.86) 100%);
 }
 
@@ -305,6 +301,7 @@ html.loader-done [data-loader] {
 
 .marquee-track {
   animation: marquee 28s linear infinite;
+  will-change: transform;
 }
 
 @keyframes marquee {
@@ -379,6 +376,11 @@ html.has-custom-cursor [data-hero] .sticker:active {
 }
 
 html.has-custom-cursor .utility-control {
+  cursor: pointer !important;
+}
+
+html.has-custom-cursor [data-cursor="click"],
+html.has-custom-cursor [data-cursor="click"] * {
   cursor: pointer !important;
 }
 

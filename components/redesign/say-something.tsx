@@ -27,6 +27,18 @@ export function SaySomething() {
   useEffect(() => () => window.clearTimeout(timerRef.current), [])
 
   useEffect(() => {
+    const reset = () => {
+      window.clearTimeout(timerRef.current)
+      setEditing(false)
+      setMessage("")
+      setDraft("")
+      setPosition({ x: 0, y: 0 })
+    }
+    window.addEventListener("eze:reset-hero", reset)
+    return () => window.removeEventListener("eze:reset-hero", reset)
+  }, [])
+
+  useEffect(() => {
     const startAtPointer = (event: Event) => {
       const detail = (event as CustomEvent<CursorPosition>).detail
       if (detail) setPosition(detail)
@@ -70,7 +82,7 @@ export function SaySomething() {
           style={{ left: position.x + 12, top: position.y + 12 }}
         >
           {editing ? (
-            <label className="flex items-center gap-2 rounded-full border-2 border-paper bg-paper px-3 py-2 shadow-xl">
+            <label className="flex items-center gap-2 rounded-full border-2 border-signal bg-paper px-3 py-2 shadow-[0_0_0_4px_rgb(var(--primitive-signal)/0.16),0_12px_32px_rgb(var(--primitive-black)/0.35)] transition-shadow focus-within:shadow-[0_0_0_5px_rgb(var(--primitive-signal)/0.24),0_14px_36px_rgb(var(--primitive-black)/0.4)]">
               <input
                 ref={inputRef}
                 value={draft}

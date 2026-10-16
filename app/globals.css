@@ -101,6 +101,23 @@ html.loader-done [data-loader] {
   stroke-dashoffset: 0;
 }
 
+.sig-script,
+.sig-script-static {
+  font-size: 168px;
+  fill: #f4f1ea;
+}
+
+.sig-script {
+  clip-path: inset(0 100% 0 -8%);
+  animation: sig-write 1.55s var(--ease-out) forwards;
+}
+
+@keyframes sig-write {
+  to {
+    clip-path: inset(0 0 0 -8%);
+  }
+}
+
 @keyframes sig-draw {
   to {
     stroke-dashoffset: 0;
@@ -266,6 +283,61 @@ html.loader-done [data-loader] {
 
 .scroll-cue {
   animation: cue 1.6s var(--ease-out) infinite;
+}
+
+.contact-card {
+  display: grid;
+  animation: card-drop 0.7s var(--ease-out) both;
+}
+
+.contact-face {
+  grid-area: 1 / 1;
+}
+
+.contact-back {
+  visibility: hidden;
+}
+
+.contact-card.is-flipped .contact-face:first-child {
+  visibility: hidden;
+}
+
+.contact-card.is-flipped .contact-back {
+  visibility: visible;
+}
+
+@keyframes card-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-48px) rotate(-6deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(-2deg);
+  }
+}
+
+html.has-custom-cursor,
+html.has-custom-cursor * {
+  cursor: none !important;
+}
+
+.phones-on {
+  animation: phones-pulse 1.2s var(--ease-out) infinite;
+}
+
+@keyframes phones-pulse {
+  50% { transform: scale(1.08); }
+}
+
+.hero-bump {
+  animation: hero-bump 0.45s var(--ease-out);
+}
+
+@keyframes hero-bump {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.04); }
+  100% { transform: scale(1); }
 }
 
 @keyframes cue {

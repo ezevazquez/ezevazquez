@@ -158,7 +158,7 @@ export function WorkView() {
       {items.map((item, index) => {
         const hasHref = Boolean(item.placeholder?.href)
         return (
-          <section key={item.n} className="relative min-h-[140svh] overflow-hidden">
+          <section key={item.n} className="relative min-h-[140svh]">
             <p
               data-stroke-word
               aria-hidden

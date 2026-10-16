@@ -130,7 +130,9 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
     return () => window.clearTimeout(id)
   }, [phase, router])
 
-  // Complete programmed navigation (exit → pathname match → enter)
+  // Exit finished once the new route is on screen. Do not schedule the
+  // enter timeout here: this effect re-runs when phase flips to "enter"
+  // and would cancel it before it fires, leaving navigation stuck.
   useEffect(() => {
     if (phase !== "exit") return
     if (pending.current !== pathname) return
@@ -138,9 +140,13 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
     rgbCleanup.current?.()
     rgbCleanup.current = null
     setPhase("enter")
+  }, [pathname, phase])
+
+  useEffect(() => {
+    if (phase !== "enter") return
     const id = window.setTimeout(finishEnter, 580)
     return () => window.clearTimeout(id)
-  }, [pathname, phase, finishEnter])
+  }, [phase, finishEnter])
 
   // Reduced-motion push: focus + scroll after pathname changes
   useEffect(() => {

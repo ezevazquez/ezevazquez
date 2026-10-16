@@ -1,24 +1,16 @@
-/**
- * Multi-path signature placeholder.
- * Replace the paths below with Eze's real signature SVG when ready —
- * keep multiple <path> elements so the loader can stagger the draw.
- */
-const PATHS = [
-  // E
-  "M72 148 C58 52 118 28 148 72 C162 96 132 118 108 96 C128 88 168 112 156 148",
-  // V
-  "M196 68 C210 68 218 72 228 148 C236 88 262 60 298 68 C318 74 328 108 318 148",
-  // flourish
-  "M340 118 C400 78 470 70 560 92 C500 108 430 142 360 138",
-]
-
 type SignatureProps = {
   className?: string
-  /** When true, CSS draw animation is skipped (GSAP drives the paths). */
   static?: boolean
   "data-loader-sig"?: boolean
   "data-logo-sig"?: boolean
 }
+
+const STROKES = [
+  "M46 118 C62 46 118 34 136 78 C146 104 104 118 86 92 C112 86 158 104 142 146",
+  "M168 104 C214 62 268 58 286 102 C298 132 248 142 262 104 C292 78 332 92 318 128",
+  "M338 118 C372 74 452 72 468 116 C478 146 408 162 386 132 C372 114 412 104 446 118",
+  "M72 156 C190 188 360 176 548 128",
+]
 
 export function Signature({
   className = "",
@@ -27,24 +19,25 @@ export function Signature({
 }: SignatureProps) {
   return (
     <svg
-      viewBox="0 0 640 200"
+      viewBox="0 0 600 210"
       className={className}
-      aria-hidden
+      role="img"
+      aria-label="Eze"
       fill="none"
       {...(dataAttrs["data-loader-sig"] ? { "data-loader-sig": "" } : {})}
       {...(dataAttrs["data-logo-sig"] ? { "data-logo-sig": "" } : {})}
     >
-      {PATHS.map((d, index) => (
+      {STROKES.map((d, index) => (
         <path
           key={index}
-          className={isStatic ? "sig-path-static" : "sig-path"}
-          pathLength={1}
           d={d}
-          style={isStatic ? undefined : { animationDelay: `${index * 0.28}s` }}
+          pathLength={1}
+          className={isStatic ? "sig-path-static" : "sig-path"}
+          style={isStatic ? undefined : { animationDelay: `${index * 0.32}s` }}
         />
       ))}
     </svg>
   )
 }
 
-export const SIGNATURE_PATH_COUNT = PATHS.length
+export const SIGNATURE_PATH_COUNT = STROKES.length

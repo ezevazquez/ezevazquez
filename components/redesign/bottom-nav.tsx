@@ -140,7 +140,7 @@ export function BottomNav() {
         {box && (
           <span
             aria-hidden
-            className="absolute top-1 bottom-1 rounded-full bg-[#1F4BFF]"
+            className="pointer-events-none absolute top-1 bottom-1 rounded-full bg-[#1F4BFF]"
             style={{
               left: box.left,
               width: box.width,

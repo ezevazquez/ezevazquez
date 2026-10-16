@@ -37,3 +37,7 @@ next-env.d.ts
 
 # Redesign research (local only)
 docs/redesign/
+
+# Agent skills (local only — Cursor, Codex, Agy)
+.agents/skills/
+.cursor/skills/

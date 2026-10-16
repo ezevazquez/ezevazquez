@@ -222,18 +222,18 @@ export function HomeView() {
     <div ref={rootRef}>
       <section data-hero className="canvas-grid relative min-h-svh overflow-hidden bg-[#12131A]">
         <StickerField />
-        <div className="pointer-events-none relative z-30 mx-auto flex min-h-svh max-w-3xl flex-col items-center justify-center px-5 pb-28 pt-20 text-center">
+        <div className="pointer-events-none relative z-30 mx-auto flex min-h-svh max-w-3xl flex-col items-center justify-center px-5 pb-36 pt-16 text-center">
           <Clock />
           <p
             ref={nameRef}
             data-brand-name
-            className="brand-name mt-5 font-display text-[clamp(2.4rem,6vw,4.2rem)] leading-none tracking-[-0.05em] text-[#F4F1EA] will-change-transform"
+            className="brand-name mt-4 font-display text-[clamp(2rem,5vw,3.4rem)] leading-none tracking-[-0.05em] text-[#F4F1EA] will-change-transform"
           >
             {t.brandName}
           </p>
           <h1
             data-hero-title
-            className="mt-4 origin-top font-display text-[clamp(3.2rem,9vw,7.4rem)] leading-[0.88] tracking-[-0.05em] text-[#F4F1EA]"
+            className="mt-3 origin-top font-display text-[clamp(2.8rem,7.5vw,6rem)] leading-[0.88] tracking-[-0.05em] text-[#F4F1EA]"
           >
             <span className="line-mask">
               <span data-hero-line className="block">

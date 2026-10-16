@@ -2,19 +2,13 @@
 
 import { useEffect, useRef, useState } from "react"
 import { useReducedMotion } from "@/hooks/use-reduced-motion"
-import { LOADER_STORAGE_KEY } from "@/lib/redesign/config"
 import { useCopy } from "@/lib/redesign/use-copy"
 import { Signature } from "./signature"
 
 function shouldSkipLoader() {
   if (typeof document === "undefined") return false
-  if (document.documentElement.classList.contains("loader-done")) return true
   if (document.documentElement.classList.contains("reduce-motion")) return true
-  try {
-    return !!sessionStorage.getItem(LOADER_STORAGE_KEY)
-  } catch {
-    return false
-  }
+  return false
 }
 
 function scramble(from: string, to: string, t: number) {
@@ -106,11 +100,6 @@ export function Loader() {
         setLeaving(true)
         window.dispatchEvent(new CustomEvent("eze:sig-flip"))
         schedule(() => {
-          try {
-            sessionStorage.setItem(LOADER_STORAGE_KEY, "1")
-          } catch {
-            /* ignore */
-          }
           document.documentElement.classList.add("loader-done")
           setVisible(false)
           document.documentElement.style.overflow = ""

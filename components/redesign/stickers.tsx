@@ -64,7 +64,7 @@ function getDialogContent(sticker: StickerData, t: ReturnType<typeof useCopy>["t
       return { intro: t.stickerDialog.mail.intro, href: EMAIL_URL, linkLabel: t.stickerDialog.mail.link }
     case "polaroid": {
       const index = Math.max(0, Number(sticker.id.split("-")[1]) - 1)
-      return { intro: t.stickerDialog.polaroids[index] ?? t.stickerDialog.polaroids[0] }
+      return { intro: t.stickerDialog.polaroids[index] ?? t.stickerDialog.polaroids[0], hearts: true }
     }
     case "linkedin":
     default:
@@ -482,6 +482,7 @@ export function StickerField({ entered, zoom }: { entered: boolean; zoom: number
     }
     if (id === "fernet") playAudio(id, "/audio/cuarteto.mp3")
     if (id === "bass") playAudio(id, "/audio/bass.mp3")
+    if (id === "boca") playAudio(id, "/audio/boca.mp3")
     if (id === "phones") {
       const tracks = ["/audio/cuarteto.mp3", "/audio/bass.mp3"]
       playAudio(id, tracks[Math.floor(Math.random() * tracks.length)])

@@ -5,43 +5,43 @@ import { getRequestLanguage } from "./request-language"
 const META = {
   home: {
     es: {
-      title: "Eze Vazquez | Technical PM",
+      title: "Eze Vazquez",
       description:
         "Technical PM. Armo sistemas que trabajan por vos. Ordeno equipos, procesos y operaciones con IA.",
     },
     en: {
-      title: "Eze Vazquez | Technical PM",
+      title: "Eze Vazquez",
       description:
         "Technical PM. I build systems that work for you. Teams, processes, and operations with AI.",
     },
   },
   about: {
     es: {
-      title: "About | Eze Vazquez",
+      title: "Eze Vazquez",
       description: "Desde 2018 hasta ahora. Trabajo, estudios y proyectos en paralelo.",
     },
     en: {
-      title: "About | Eze Vazquez",
+      title: "Eze Vazquez",
       description: "From 2018 to now. Work, studies, and side projects.",
     },
   },
   work: {
     es: {
-      title: "Work | Eze Vazquez",
+      title: "Eze Vazquez",
       description: "Gestión de proyectos técnicos, automatización con IA y sistemas a medida.",
     },
     en: {
-      title: "Work | Eze Vazquez",
+      title: "Eze Vazquez",
       description: "Technical project management, AI automation, and custom systems.",
     },
   },
   contact: {
     es: {
-      title: "Contacto | Eze Vazquez",
+      title: "Eze Vazquez",
       description: "Laburemos juntos. Charla corta. Me contás el problema.",
     },
     en: {
-      title: "Contact | Eze Vazquez",
+      title: "Eze Vazquez",
       description: "Let's work together. A short call. Tell me the problem.",
     },
   },

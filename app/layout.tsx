@@ -8,10 +8,7 @@ import { BOOT_SCRIPT } from "@/lib/redesign/boot-script"
 import { getRequestLanguage } from "@/lib/redesign/request-language"
 
 export const metadata: Metadata = {
-  title: {
-    default: "Eze Vazquez | Technical PM",
-    template: "%s | Eze Vazquez",
-  },
+  title: "Eze Vazquez",
   description:
     "Technical PM. Armo sistemas que trabajan por vos. / I build systems that work for you.",
   alternates: {
@@ -21,7 +18,7 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Eze Vazquez | Technical PM",
+    title: "Eze Vazquez",
     description:
       "Technical PM. Armo sistemas que trabajan por vos. / I build systems that work for you.",
     locale: "es_AR",

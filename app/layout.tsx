@@ -1,5 +1,6 @@
 import type { ReactNode } from "react"
 import type { Metadata } from "next"
+import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 import { LanguageProvider } from "@/components/language-provider"
 import { SiteFrame } from "@/components/redesign/site-frame"
@@ -45,6 +46,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <LanguageProvider initialLanguage={language}>
           <SiteFrame>{children}</SiteFrame>
         </LanguageProvider>
+        <Analytics />
       </body>
     </html>
   )

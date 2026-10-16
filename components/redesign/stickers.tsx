@@ -28,14 +28,13 @@ type StickerData = {
   x: string
   y: string
   rotate: number
-  mobile?: boolean
   asset: string
   size: StickerSize
   dialog?: "linkedin"
 }
 const STICKERS: StickerData[] = [
   { id: "git", label: "github", href: GITHUB_URL, asset: "/stickers/git.png", size: "small", x: "4%", y: "8%", rotate: -8 },
-  { id: "in", label: "linkedin", href: LINKEDIN_URL, asset: "/stickers/linkedin.png", size: "medium", x: "83%", y: "7%", rotate: 6, mobile: true, dialog: "linkedin" },
+  { id: "in", label: "linkedin", href: LINKEDIN_URL, asset: "/stickers/linkedin.png", size: "medium", x: "83%", y: "7%", rotate: 6, dialog: "linkedin" },
   { id: "mail", label: "mail", href: EMAIL_URL, asset: "/stickers/letter.png", size: "wide", x: "30%", y: "80%", rotate: 4 },
   { id: "mate", label: "mate", asset: "/stickers/mate.png", size: "tall", x: "3%", y: "31%", rotate: -12 },
   { id: "jira", label: "jira", asset: "/stickers/jira.png", size: "small", x: "90%", y: "22%", rotate: 8 },
@@ -45,7 +44,7 @@ const STICKERS: StickerData[] = [
   { id: "fernet", label: "fernet", asset: "/stickers/fernet.png", size: "medium", x: "15%", y: "3%", rotate: 4 },
   { id: "cordoba", label: "cordoba", asset: "/stickers/cba.png", size: "tall", x: "43%", y: "1%", rotate: -4 },
   { id: "dog", label: "dog", asset: "/stickers/dog.png", size: "medium", x: "15%", y: "74%", rotate: -6 },
-  { id: "boca", label: "boca", asset: "/stickers/boca.png", size: "medium", x: "83%", y: "47%", rotate: -3, mobile: true },
+  { id: "boca", label: "boca", asset: "/stickers/boca.png", size: "medium", x: "83%", y: "47%", rotate: -3 },
   { id: "cooper", label: "cooper", asset: "/stickers/cooper.png", size: "medium", x: "3%", y: "46%", rotate: 7 },
   { id: "lomito", label: "lomito", asset: "/stickers/lomito.png", size: "wide", x: "82%", y: "34%", rotate: -5 },
   { id: "notion", label: "notion", asset: "/stickers/notion.png", size: "tiny", x: "15%", y: "23%", rotate: -9 },
@@ -279,7 +278,9 @@ function Sticker({
   const onPointerDown = (event: ReactPointerEvent<HTMLElement>) => {
     if (event.button !== 0) return
     event.preventDefault()
-    event.currentTarget.style.transformOrigin = `${event.nativeEvent.offsetX}px ${event.nativeEvent.offsetY}px`
+    if (sticker.id !== "cooper") {
+      event.currentTarget.style.transformOrigin = `${event.nativeEvent.offsetX}px ${event.nativeEvent.offsetY}px`
+    }
     moved.current = false
     dragging.current = true
     setGrabbed(true)
@@ -329,9 +330,9 @@ function Sticker({
 
   const className = [
     "sticker absolute select-none touch-none cursor-grab active:cursor-grabbing focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-signal",
-    sticker.mobile ? "flex" : "hidden lg:flex",
+    "hidden lg:flex",
     layoutReady && !basePosition ? "invisible" : "",
-    grabbed ? "sticker-grabbed" : "",
+    grabbed && sticker.id !== "cooper" ? "sticker-grabbed" : "",
   ]
     .filter(Boolean)
     .join(" ")

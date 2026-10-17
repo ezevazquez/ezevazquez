@@ -169,7 +169,7 @@ export function HomeView() {
           <StickerField entered={heroEntered} zoom={zoom} />
           <AgentTerminal />
           <div className="pointer-events-none relative z-30 mx-auto flex h-full max-w-3xl items-center justify-center px-5 pb-24 pt-14 text-center sm:pb-16">
-            <h1 className="sr-only">{`${t.heroTitle} ${t.heroLine}`}</h1>
+            <h1 className="sr-only">{`${t.brandName}. ${t.heroTitle} ${t.heroLine}`}</h1>
             <div className="pointer-events-auto flex w-full flex-col items-center" data-note-card>
               <SlideDeck entered={heroEntered} />
             </div>

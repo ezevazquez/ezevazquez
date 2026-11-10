@@ -6,20 +6,6 @@
 
 <p>Buenos Aires · remote · GMT−3</p>
 
-<p>
-  <a href="https://ezevazquez.com">
-    <img src="https://img.shields.io/badge/ezevazquez.com-245BFF?style=for-the-badge" alt="ezevazquez.com" />
-  </a>
-  &nbsp;
-  <a href="https://www.linkedin.com/in/ezevazquez">
-    <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" />
-  </a>
-  &nbsp;
-  <a href="mailto:hi@ezevazquez.com">
-    <img src="https://img.shields.io/badge/hi@ezevazquez.com-111111?style=for-the-badge" alt="hi@ezevazquez.com" />
-  </a>
-</p>
-
 <br/>
 
 <p>

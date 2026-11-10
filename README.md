@@ -82,9 +82,11 @@ while (busywork) {
 
 <br/>
 
+<div align="center">
 ## Ping
 
 [ezevazquez.com](https://ezevazquez.com) · [LinkedIn](https://www.linkedin.com/in/ezevazquez) · [hi@ezevazquez.com](mailto:hi@ezevazquez.com) · [hola@ezevazquez.com](mailto:hola@ezevazquez.com)
+</div>
 
 <div align="center">
 

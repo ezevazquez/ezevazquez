@@ -83,7 +83,7 @@ while (busywork) {
 <br/>
 
 <div align="center">
-## Ping
+<h1>ping</h1>
 
 [ezevazquez.com](https://ezevazquez.com) · [LinkedIn](https://www.linkedin.com/in/ezevazquez) · [hi@ezevazquez.com](mailto:hi@ezevazquez.com) · [hola@ezevazquez.com](mailto:hola@ezevazquez.com)
 </div>

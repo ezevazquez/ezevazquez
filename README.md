@@ -1,7 +1,5 @@
 <div align="center">
 
-<img src="https://ezevazquez.com/profile.png" width="148" alt="Eze Vazquez" />
-
 <h1>Eze Vazquez</h1>
 
 <p>Technical PM. I build systems that work for you.</p>
